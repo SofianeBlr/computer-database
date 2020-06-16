@@ -1,6 +1,9 @@
 package com.excilys.computerDatabase.Dao;
 
 
+import java.sql.Date;
+import java.sql.Types;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +12,14 @@ import java.util.ArrayList;
 import com.excilys.computerDatabase.Model.Computer;
 
 public class ComputerDao extends DAO<Computer> {
+	
+	private final static String INSERT = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES(?,?,?,?);";
+	private final static String DELETE = "DELETE FROM computer WHERE id = ?;";
+	private final static String UPDATE = "UPDATE computer SET name = ?, introduced = ? , discontinued = ? , company_id = ? WHERE id = ?;";
+	private final static String FINDALL = "select * from computer";
+	private final static String FIND = "select * from computer where id=";
+	private final static String MAXID = "select MAX(id) from computer ";
+
 
 	@Override
 	public ArrayList<Computer> getAll() {
@@ -16,7 +27,7 @@ public class ComputerDao extends DAO<Computer> {
 		Statement myStmt;
 		try {
 			myStmt = connect.createStatement();
-			ResultSet myRs = myStmt.executeQuery("select * from computer");
+			ResultSet myRs = myStmt.executeQuery(FINDALL);
 			
 			while(myRs.next()) {
 				Computer computer = new Computer(myRs.getInt("id"),myRs.getString("name"),myRs.getInt("company_id"));
@@ -37,21 +48,87 @@ public class ComputerDao extends DAO<Computer> {
 	}
 
 	@Override
-	public boolean create(Computer obj) {
-		// TODO Auto-generated method stub
-		return false;
+	public Computer create(Computer obj) {
+		try {
+           
+            PreparedStatement preparedStatement = connect.prepareStatement(INSERT);
+            
+            preparedStatement.setString(1, obj.getName());
+            if( obj.getIntroduced()!=null) {
+            	preparedStatement.setDate(2, Date.valueOf(obj.getIntroduced()));
+            }
+            else {
+            	preparedStatement.setNull(2, Types.DATE);;
+            }
+            if( obj.getDiscontinued()!=null) {
+            	preparedStatement.setDate(3, Date.valueOf(obj.getDiscontinued()));
+            }
+            else {
+            	preparedStatement.setNull(3, Types.DATE);
+            }
+            if( obj.getCompanyId()!=0) {
+            	preparedStatement.setInt(4,obj.getCompanyId());
+            }
+            else {
+            	preparedStatement.setNull(4, Types.BIGINT);
+            }
+            System.out.println(preparedStatement.toString());
+
+            preparedStatement.executeUpdate();
+            return find(maxId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+		return null;
 	}
 
 	@Override
 	public boolean delete(Computer obj) {
-		// TODO Auto-generated method stub
+		try {
+	           
+            PreparedStatement preparedStatement = connect.prepareStatement(DELETE);
+            preparedStatement.setInt(1, obj.getId());
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 		return false;
 	}
 
 	@Override
-	public boolean update(Computer obj) {
-		// TODO Auto-generated method stub
-		return false;
+	public Computer update(Computer obj) {
+		try {
+	           
+            PreparedStatement preparedStatement = connect.prepareStatement(UPDATE);
+            
+            preparedStatement.setString(1, obj.getName());
+            if( obj.getIntroduced()!=null) {
+            	preparedStatement.setDate(2, Date.valueOf(obj.getIntroduced()));
+            }
+            else {
+            	preparedStatement.setNull(2, Types.DATE);
+            }
+            if( obj.getDiscontinued()!=null) {
+            	preparedStatement.setDate(3, Date.valueOf(obj.getDiscontinued()));
+            }
+            else {
+            	preparedStatement.setNull(3, Types.DATE);
+            }
+            if( obj.getCompanyId()!=0) {
+            	preparedStatement.setInt(4,obj.getCompanyId());
+            }
+            else {
+            	preparedStatement.setNull(4, Types.BIGINT);
+            }
+            preparedStatement.setInt(5,obj.getId());
+
+            preparedStatement.executeUpdate();
+            return find(obj.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+		return null;
 	}
 
 	@Override
@@ -61,7 +138,7 @@ public class ComputerDao extends DAO<Computer> {
 		Statement myStmt;
 		try {
 			myStmt = connect.createStatement();
-			ResultSet myRs = myStmt.executeQuery("select * from company");
+			ResultSet myRs = myStmt.executeQuery(FIND + id);
 			myRs.next();
 			comp = new Computer(myRs.getInt("id"),myRs.getString("name"),myRs.getInt("company_id"));
 			if(myRs.getDate("introduced") != null) {
@@ -76,6 +153,15 @@ public class ComputerDao extends DAO<Computer> {
 		}
 		
 		return comp;
+	}
+	
+	@Override
+	public int maxId() throws SQLException {
+		Statement myStmt;
+		myStmt = connect.createStatement();
+		ResultSet myRs = myStmt.executeQuery(MAXID);
+		myRs.next();
+		return myRs.getInt("MAX(id)");
 	}
 
 }

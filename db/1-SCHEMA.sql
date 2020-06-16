@@ -14,8 +14,8 @@ drop schema if exists `computer-database-db`;
   create table computer (
     id                        bigint not null auto_increment,
     name                      varchar(255),
-    introduced                date NULL,
-    discontinued              date NULL,
+    introduced                datetime NULL,
+    discontinued              datetime NULL,
     company_id                bigint default NULL,
     constraint pk_computer primary key (id))
   ;

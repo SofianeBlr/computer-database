@@ -30,9 +30,9 @@ public abstract class DAO<T> {
   /**
   * Méthode de creation
   * @param obj
-  * @return boolean 
+  * @return Obj created
   */
-  public abstract boolean create(T obj);
+  public abstract T create(T obj);
 
   /**
   * Méthode pour effacer
@@ -44,9 +44,9 @@ public abstract class DAO<T> {
   /**
   * Méthode de mise à jour
   * @param obj
-  * @return boolean
+  * @return Obj updated
   */
-  public abstract boolean update(T obj);
+  public abstract T update(T obj);
 
   /**
   * Méthode de recherche des informations
@@ -54,4 +54,11 @@ public abstract class DAO<T> {
   * @return T
   */
   public abstract T find(int id);
+  
+  /**
+   * Méthode qui return maxId
+   * @param id
+   * @return T
+   */
+  public abstract int maxId() throws SQLException;
 }
