@@ -2,10 +2,10 @@
 
 import java.time.LocalDate;
 
-import com.excilys.computerDatabase.Dao.CompanyDao;
-import com.excilys.computerDatabase.Dao.ComputerDao;
-import com.excilys.computerDatabase.Model.Company;
-import com.excilys.computerDatabase.Model.Computer;
+import com.excilys.computerDatabase.dao.CompanyDao;
+import com.excilys.computerDatabase.dao.ComputerDao;
+import com.excilys.computerDatabase.model.Company;
+import com.excilys.computerDatabase.model.Computer;
 
 public class TestDao {
 	public static void main(String[] args) {
@@ -27,16 +27,20 @@ public class TestDao {
 		System.out.printf("  %d  %50s%n",c.getId(),c.getName());
 		companyDao.delete(test);*/
 		
-		Computer test = new Computer(0,"LENOVO",LocalDate.now(),LocalDate.now(),14);
+		Computer test = new Computer(0,"LENOVO",LocalDate.now());
 		test = computerDao.create(test);
 		for(Computer c : computerDao.getAll()) {
 			String i = c.getIntroduced()!=null?c.getIntroduced().toString():"null";
-			String d = c.getIntroduced()!=null?c.getIntroduced().toString():"null";
+			String d = c.getDiscontinued()!=null?c.getDiscontinued().toString():"null";
 			System.out.printf("  %d  %70s  %20s%20s%5d%n",c.getId(),c.getName(),i,d,c.getCompanyId());
 		}
 		test.setName("LENOVO2");
 		test = computerDao.update(test);
-		System.out.printf("  %d  %50s%n",test.getId(),test.getName());
+		for(Computer c : computerDao.getAll()) {
+			String i = c.getIntroduced()!=null?c.getIntroduced().toString():"null";
+			String d = c.getDiscontinued()!=null?c.getDiscontinued().toString():"null";
+			System.out.printf("  %d  %70s  %20s%20s%5d%n",c.getId(),c.getName(),i,d,c.getCompanyId());
+		}
 		computerDao.delete(test);
 		
 	}

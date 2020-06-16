@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.Dao;
+package com.excilys.computerDatabase.dao;
 
 
 import java.sql.Date;
@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.excilys.computerDatabase.Model.Computer;
+import com.excilys.computerDatabase.model.Computer;
+import com.excilys.computerDatabase.mapper.ComputerMapper;
+
 
 public class ComputerDao extends DAO<Computer> {
 	
@@ -30,13 +32,7 @@ public class ComputerDao extends DAO<Computer> {
 			ResultSet myRs = myStmt.executeQuery(FINDALL);
 			
 			while(myRs.next()) {
-				Computer computer = new Computer(myRs.getInt("id"),myRs.getString("name"),myRs.getInt("company_id"));
-				if(myRs.getDate("introduced") != null) {
-					computer.setIntroduced(myRs.getDate("introduced").toLocalDate());
-				}
-				if(myRs.getDate("discontinued") != null) {
-					computer.setIntroduced(myRs.getDate("discontinued").toLocalDate());
-				}
+				Computer computer = ComputerMapper.mapComputer(myRs);
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
@@ -72,7 +68,6 @@ public class ComputerDao extends DAO<Computer> {
             else {
             	preparedStatement.setNull(4, Types.BIGINT);
             }
-            System.out.println(preparedStatement.toString());
 
             preparedStatement.executeUpdate();
             return find(maxId());
@@ -101,7 +96,6 @@ public class ComputerDao extends DAO<Computer> {
 		try {
 	           
             PreparedStatement preparedStatement = connect.prepareStatement(UPDATE);
-            
             preparedStatement.setString(1, obj.getName());
             if( obj.getIntroduced()!=null) {
             	preparedStatement.setDate(2, Date.valueOf(obj.getIntroduced()));
@@ -140,13 +134,7 @@ public class ComputerDao extends DAO<Computer> {
 			myStmt = connect.createStatement();
 			ResultSet myRs = myStmt.executeQuery(FIND + id);
 			myRs.next();
-			comp = new Computer(myRs.getInt("id"),myRs.getString("name"),myRs.getInt("company_id"));
-			if(myRs.getDate("introduced") != null) {
-				comp.setIntroduced(myRs.getDate("introduced").toLocalDate());
-			}
-			if(myRs.getDate("discontinued") != null) {
-				comp.setIntroduced(myRs.getDate("discontinued").toLocalDate());
-			}
+			comp =  ComputerMapper.mapComputer(myRs);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

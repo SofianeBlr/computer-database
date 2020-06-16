@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.Model;
+package com.excilys.computerDatabase.model;
 
 import java.time.LocalDate;
 
@@ -45,10 +45,31 @@ public class Computer {
 		this.discontinued = discontinued;
 		this.companyId = companyId;
 	}
+	public Computer(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	public Computer(int id, String name, LocalDate introduced, int companyId) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.companyId = companyId;
+	}
+	public Computer(int id, String name, LocalDate introduced) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+	}
 	public Computer(int id, String name, int companyId) {
 		this.id = id;
 		this.name = name;
 		this.companyId = companyId;
+	}
+	public Computer(int id) {
+		this.id = id;
 	}
 	
 

@@ -1,4 +1,5 @@
-package com.excilys.computerDatabase.Dao;
+package com.excilys.computerDatabase.dao;
+
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,7 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.excilys.computerDatabase.Model.Company;
+import com.excilys.computerDatabase.model.Company;
+import com.excilys.computerDatabase.mapper.CompanyMapper;
 
 public class CompanyDao extends DAO<Company> {
 	
@@ -28,7 +30,7 @@ public class CompanyDao extends DAO<Company> {
 			myStmt = connect.createStatement();
 			ResultSet myRs = myStmt.executeQuery(FINDALL);
 			while(myRs.next()) {
-				comps.add(new Company(myRs.getInt("id"),myRs.getString("name")));
+				comps.add(CompanyMapper.mapCompany(myRs));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -89,7 +91,7 @@ public class CompanyDao extends DAO<Company> {
 			myStmt = connect.createStatement();
 			ResultSet myRs = myStmt.executeQuery(FIND+id);
 			myRs.next();
-			company=new Company(myRs.getInt("id"),myRs.getString("name"));
+			company= CompanyMapper.mapCompany(myRs);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

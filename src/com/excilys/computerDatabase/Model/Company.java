@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.Model;
+package com.excilys.computerDatabase.model;
 
 public class Company {
 	private int id;
