@@ -75,7 +75,7 @@ public class Computer {
 	public String toString() {
 		String i = getIntroduced()!=null?getIntroduced().toString():"null";
 		String d = getDiscontinued()!=null?getDiscontinued().toString():"null";
-		return String.format("  %d  %70s  %20s%20s%5d%n",getId(),getName(),i,d,getCompanyId());
+		return String.format("  %d  %40s  %20s%20s%5d%n",getId(),getName(),i,d,getCompanyId());
 	}
 
 }

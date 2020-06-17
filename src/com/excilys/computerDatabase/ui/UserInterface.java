@@ -54,7 +54,7 @@ public class UserInterface {
 	
 	public static int mainMenu() {
 		int option = 0;
-		System.out.printf("%20s Computer/Company application %n","");
+		System.out.printf("%n%n%20s Computer/Company application %n","");
 		System.out.printf("%20s          Main Menu %n","");
 		System.out.printf("%n%n%n%10s -Press 1 to list all computer %n","");
 		System.out.printf("%10s -Press 2 to list all company %n","");
@@ -85,14 +85,28 @@ public class UserInterface {
 	}
 	
 	public static void updateComputer() {
+		Computer comp = null;
+		int computerId=0;
 		System.out.println("  -Update a computer:");
-		int computerId = getInt("the id of the computer to update");
+		
+		while(comp==null) {
+			computerId = getInt("the id of the computer to update");
+			comp = computerDao.find(computerId);
+			if(comp== null) {
+				System.out.println("wrong id : Unable to find");
+			}
+			else {
+				System.out.println(comp);
+			}
+		}
+		
 		String name = getString("new computer name");
 		LocalDate introduced = getDate("new introduced");
 		LocalDate discontinued = getDate("new discontinued");
 		int companyId = getInt("new company id");
-		Computer comp = new Computer(computerId,name,introduced,discontinued,companyId);
+		comp = new Computer(computerId,name,introduced,discontinued,companyId);
 		comp = computerDao.update(comp);
+		System.out.println("updated computer : ");
 		displayComputer(comp);
 	}
 	
