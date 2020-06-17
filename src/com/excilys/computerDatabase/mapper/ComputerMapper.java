@@ -13,7 +13,7 @@ public class ComputerMapper {
 			comp.setIntroduced(resultset.getDate("introduced").toLocalDate());
 		}
 		if(resultset.getDate("discontinued") != null) {
-			comp.setIntroduced(resultset.getDate("discontinued").toLocalDate());
+			comp.setDiscontinued(resultset.getDate("discontinued").toLocalDate());
 		}
 		return comp;
 	}
