@@ -10,6 +10,7 @@ import com.excilys.computerDatabase.dao.CompanyDao;
 import com.excilys.computerDatabase.dao.ComputerDao;
 import com.excilys.computerDatabase.model.Company;
 import com.excilys.computerDatabase.model.Computer;
+import com.excilys.computerDatabase.service.PageService;
 
 public class UserInterface {
 	static Scanner input =new Scanner(System.in);
@@ -46,8 +47,6 @@ public class UserInterface {
 				if (exit()) return;
 				break;
 			}
-
-			
 		}
 		
 	}
@@ -67,10 +66,12 @@ public class UserInterface {
 	}
 	
 	public static void displayAllComputer() {
-		Pages.display(computerDao, input);
+		PageService<Computer> pg =new PageService<Computer>(computerDao);
+		PageDisplay.display(pg, input);
 	}
 	public static void displayAllCompany() {
-		Pages.display(companyDao, input);
+		PageService<Company> pg =new PageService<Company>(companyDao);
+		PageDisplay.display(pg, input);
 	}
 	
 	public static void createComputer() {

@@ -3,20 +3,20 @@ package com.excilys.computerDatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.computerDatabase.dao.DAO;
+import com.excilys.computerDatabase.service.PageService;
 
-public class Pages {
-	static final int NUMBER_PER_PAGE = 10;
+public class PageDisplay {
+	public static final int NUMBER_PER_PAGE = 10;
 	
 	
 	
-	static <T> void display(DAO<T> dao, Scanner input) {
+	static <T> void display(PageService<T> pageService, Scanner input) {
 		int page=0;
-		int length = dao.size();
+		int length = pageService.getMaxPage();
 		int numberOfPage= (int) Math.ceil(length/(float)NUMBER_PER_PAGE);
 		List<T> list;
 		while(true) {
-			list = dao.getPage(page*10, NUMBER_PER_PAGE);
+			list = pageService.getPage(page);
 			for (T l : list) {
 				System.out.print(l);
 			}
