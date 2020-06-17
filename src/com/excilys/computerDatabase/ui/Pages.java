@@ -20,6 +20,7 @@ public class Pages {
 			if (choice == 0) page--;
 			if (choice == 1) page++;
 			if(choice ==2) return;
+			if(choice ==3) page = numberOfPage-1;
 			page %= numberOfPage;
 			
 		}
@@ -53,9 +54,10 @@ public class Pages {
 			}
 			String inputString = input.next();
 			
-			if (inputString.equals("<")) return 0;
+			if (inputString.equals("<") && page>0) return 0;
 			if (inputString.equals(">")) return 1;
 			if (inputString.equals("exit")) return 2;
+			if (inputString.equals("<") && page==0) return 3;
 			
 		}
 	}

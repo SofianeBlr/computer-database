@@ -69,18 +69,8 @@ public class UserInterface {
 	public static void displayAllComputer() {
 		Pages.display(computerDao.getAll(), input);
 	}
-	public static void displayAllComputerNoPage() {
-		for(Computer c : computerDao.getAll()) {
-			System.out.println(c);
-		}
-	}
 	public static void displayAllCompany() {
 		Pages.display(companyDao.getAll(), input);
-	}
-	public static void displayAllCompanyNoPage() {
-		for(Company c : companyDao.getAll()) {
-			System.out.println(c);
-		}
 	}
 	
 	public static void createComputer() {
@@ -109,8 +99,9 @@ public class UserInterface {
 	public static void deleteComputer() {
 		System.out.println("  -Delete a computer:");
 		int computerId = getInt("the id of the computer to delete");
-		Computer comp = new Computer(computerId);
-		if(computerDao.delete(comp)) {
+		Computer comp = computerDao.find(computerId);
+		if(comp!= null) {
+			computerDao.delete(comp);
 			displayComputer(comp);
 		}
 		else {
@@ -135,23 +126,22 @@ public class UserInterface {
 	}
 	
 	public static LocalDate getDate(String valueName) {
-		boolean run = true;
 		LocalDate localdate = null;
-		while(run) {
-			run = false;
-			System.out.printf("%n enter "+ valueName +" date dd/mm/yyyy (leave empty for null) : ");
+		while(true) {
+			System.out.printf("%n enter "+ valueName +" date dd/mm/yyyy (enter n for null) : ");
 			String date =input.next();
-			if(!date.isEmpty()) {
+			if(!date.equals("n")) {
 				try {
 					localdate =LocalDate.parse(date,formatter); 
+					return localdate;
 				}catch(DateTimeParseException e){
 					System.out.println("Invalid input : date cannot be parsed");
-					run = true;
 				}
 			}
+			else return null;
 		}
 		
-		return localdate;
+		
 	}
 	
 	public static int getInt(String valueName) {

@@ -37,7 +37,7 @@ public class ComputerDao extends DAO<Computer> {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		return computers;
@@ -72,7 +72,7 @@ public class ComputerDao extends DAO<Computer> {
             preparedStatement.executeUpdate();
             return find(maxId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 		return null;
 	}
@@ -80,13 +80,12 @@ public class ComputerDao extends DAO<Computer> {
 	@Override
 	public boolean delete(Computer obj) {
 		try {
-	           
             PreparedStatement preparedStatement = connect.prepareStatement(DELETE);
             preparedStatement.setInt(1, obj.getId());
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 		return false;
 	}
@@ -137,7 +136,7 @@ public class ComputerDao extends DAO<Computer> {
 			comp =  ComputerMapper.mapComputer(myRs);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		return comp;
