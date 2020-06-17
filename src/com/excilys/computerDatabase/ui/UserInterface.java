@@ -67,10 +67,10 @@ public class UserInterface {
 	}
 	
 	public static void displayAllComputer() {
-		Pages.display(computerDao.getAll(), input);
+		Pages.display(computerDao, input);
 	}
 	public static void displayAllCompany() {
-		Pages.display(companyDao.getAll(), input);
+		Pages.display(companyDao, input);
 	}
 	
 	public static void createComputer() {

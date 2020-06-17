@@ -61,4 +61,7 @@ public abstract class DAO<T> {
    * @return T
    */
   public abstract int maxId() throws SQLException;
+  public abstract int size();
+  public abstract ArrayList<T> getPage(int debut,int number);
+  
 }

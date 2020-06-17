@@ -3,18 +3,22 @@ package com.excilys.computerDatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.computerDatabase.dao.DAO;
+
 public class Pages {
 	static final int NUMBER_PER_PAGE = 10;
 	
 	
 	
-	static <T> void display(List<T> list, Scanner input) {
+	static <T> void display(DAO<T> dao, Scanner input) {
 		int page=0;
-		int length = list.size();
+		int length = dao.size();
 		int numberOfPage= (int) Math.ceil(length/(float)NUMBER_PER_PAGE);
+		List<T> list;
 		while(true) {
-			for (int i = page*10; i < upperValue(length, page); i++) {
-				System.out.print(list.get(i));
+			list = dao.getPage(page*10, NUMBER_PER_PAGE);
+			for (T l : list) {
+				System.out.print(l);
 			}
 			int choice = pageNav(page, numberOfPage, input);
 			if (choice == 0) page--;

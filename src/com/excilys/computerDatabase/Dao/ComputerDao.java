@@ -21,6 +21,8 @@ public class ComputerDao extends DAO<Computer> {
 	private final static String FINDALL = "select * from computer";
 	private final static String FIND = "select * from computer where id=";
 	private final static String MAXID = "select MAX(id) from computer ";
+	private final static String SIZE = "select count(*) from computer";
+	private final static String GET_PAGE = "select * from computer LIMIT ?,?";
 
 
 	@Override
@@ -149,6 +151,43 @@ public class ComputerDao extends DAO<Computer> {
 		ResultSet myRs = myStmt.executeQuery(MAXID);
 		myRs.next();
 		return myRs.getInt("MAX(id)");
+	}
+
+	@Override
+	public int size() {
+		Statement myStmt;
+		try {
+			myStmt = connect.createStatement();
+			ResultSet myRs = myStmt.executeQuery(SIZE);
+			myRs.next();
+			return myRs.getInt("count(*)");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public ArrayList<Computer> getPage(int debut, int number) {
+        ArrayList<Computer> computers = new ArrayList<Computer>();
+		try {
+			PreparedStatement preparedStatement = connect.prepareStatement(GET_PAGE);
+	        preparedStatement.setInt(1, debut);
+	        preparedStatement.setInt(2, number);
+			
+			ResultSet myRs = preparedStatement.executeQuery();
+			
+			while(myRs.next()) {
+				Computer computer = ComputerMapper.mapComputer(myRs);
+				computers.add(computer);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		
+		return computers;
 	}
 
 }

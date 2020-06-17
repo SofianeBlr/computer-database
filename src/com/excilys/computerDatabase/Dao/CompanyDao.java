@@ -18,6 +18,10 @@ public class CompanyDao extends DAO<Company> {
 	private final static String FINDALL = "select * from company";
 	private final static String FIND = "select * from company where id=";
 	private final static String MAXID = "select MAX(id) from company ";
+	private final static String SIZE = "select count(*) from company";
+	private final static String GET_PAGE = "select * from company LIMIT ?,?";
+
+
 
 
 	
@@ -107,6 +111,39 @@ public class CompanyDao extends DAO<Company> {
 		ResultSet myRs = myStmt.executeQuery(MAXID);
 		myRs.next();
 		return myRs.getInt("MAX(id)");
+	}
+	@Override
+	public int size() {
+		Statement myStmt;
+		try {
+			myStmt = connect.createStatement();
+			ResultSet myRs = myStmt.executeQuery(SIZE);
+			myRs.next();
+			return myRs.getInt("count(*)");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public ArrayList<Company> getPage(int debut, int number) {
+		ArrayList<Company> comps = new ArrayList<Company>();
+		try {
+			PreparedStatement preparedStatement = connect.prepareStatement(GET_PAGE);
+	        preparedStatement.setInt(1, debut);
+	        preparedStatement.setInt(2, number);
+			ResultSet myRs = preparedStatement.executeQuery();
+			while(myRs.next()) {
+				comps.add(CompanyMapper.mapCompany(myRs));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return comps;
 	}
 
 	

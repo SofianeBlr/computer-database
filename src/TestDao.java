@@ -9,7 +9,6 @@ import com.excilys.computerDatabase.model.Computer;
 
 public class TestDao {
 	public static void main(String[] args) {
-		CompanyDao companyDao = new CompanyDao();
 		
 		ComputerDao computerDao = new ComputerDao();
 		
@@ -42,6 +41,11 @@ public class TestDao {
 			System.out.printf("  %d  %70s  %20s%20s%5d%n",c.getId(),c.getName(),i,d,c.getCompanyId());
 		}
 		computerDao.delete(test);
+		for(Computer c : computerDao.getPage(50, 100)) {
+			String i = c.getIntroduced()!=null?c.getIntroduced().toString():"null";
+			String d = c.getDiscontinued()!=null?c.getDiscontinued().toString():"null";
+			System.out.printf("  %d  %70s  %20s%20s%5d%n",c.getId(),c.getName(),i,d,c.getCompanyId());
+		}
 		
 	}
 	
