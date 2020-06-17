@@ -20,5 +20,10 @@ public class Company {
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return String.format("  %d  %50s%n",id,name);
+	}
 
 }

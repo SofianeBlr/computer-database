@@ -22,11 +22,11 @@ public class UserInterface {
 			int d =mainMenu();
 			switch (d) {
 			case 1:
-				displayAllCompany();
+				displayAllComputer();
 				if (exit()) return;
 				break;
 			case 2:
-				displayAllComputer();
+				displayAllCompany();
 				if (exit()) return;
 				break;
 			case 3:
@@ -67,14 +67,19 @@ public class UserInterface {
 	}
 	
 	public static void displayAllComputer() {
-		for(Company c : companyDao.getAll()) {
-			displayCompany(c);
+		Pages.display(computerDao.getAll(), input);
+	}
+	public static void displayAllComputerNoPage() {
+		for(Computer c : computerDao.getAll()) {
+			System.out.println(c);
 		}
 	}
-	
 	public static void displayAllCompany() {
-		for(Computer c : computerDao.getAll()) {
-			displayComputer(c);
+		Pages.display(companyDao.getAll(), input);
+	}
+	public static void displayAllCompanyNoPage() {
+		for(Company c : companyDao.getAll()) {
+			System.out.println(c);
 		}
 	}
 	
@@ -186,9 +191,7 @@ public class UserInterface {
 			System.out.println("computer not found");
 			return;
 		}
-		String i = c.getIntroduced()!=null?c.getIntroduced().toString():"null";
-		String d = c.getDiscontinued()!=null?c.getDiscontinued().toString():"null";
-		System.out.printf("  %d  %70s  %20s%20s%5d%n",c.getId(),c.getName(),i,d,c.getCompanyId());
+		System.out.print(c);
 	}
 	
 	public static void displayCompany(Company c) {
@@ -196,6 +199,6 @@ public class UserInterface {
 			System.out.println("company not found");
 			return;
 		}
-		System.out.printf("  %d  %50s%n",c.getId(),c.getName());
+		System.out.print(c);
 	}
 }
