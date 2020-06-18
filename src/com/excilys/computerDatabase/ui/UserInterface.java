@@ -6,17 +6,16 @@ import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.excilys.computerDatabase.dao.CompanyDao;
-import com.excilys.computerDatabase.dao.ComputerDao;
 import com.excilys.computerDatabase.model.Company;
 import com.excilys.computerDatabase.model.Computer;
-import com.excilys.computerDatabase.service.PageService;
+import com.excilys.computerDatabase.service.CompanyService;
+import com.excilys.computerDatabase.service.ComputerService;
 
 public class UserInterface {
 	static Scanner input =new Scanner(System.in);
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-	static ComputerDao computerDao = new ComputerDao();
-	static CompanyDao companyDao = new CompanyDao();
+	static ComputerService computerService = ComputerService.getInstance();
+	static CompanyService companyService = CompanyService.getInstance();
 
 	public static void main(String[] args) {
 		while(true) {
@@ -66,12 +65,10 @@ public class UserInterface {
 	}
 	
 	public static void displayAllComputer() {
-		PageService<Computer> pg =new PageService<Computer>(computerDao);
-		PageDisplay.display(pg, input);
+		PageDisplay.display(computerService, input);
 	}
 	public static void displayAllCompany() {
-		PageService<Company> pg =new PageService<Company>(companyDao);
-		PageDisplay.display(pg, input);
+		PageDisplay.display(companyService, input);
 	}
 	
 	public static void createComputer() {
@@ -81,7 +78,7 @@ public class UserInterface {
 		LocalDate discontinued = getDate("discontinued");
 		int companyId = getInt("company id");
 		Computer comp = new Computer(0,name,introduced,discontinued,companyId);
-		comp = computerDao.create(comp);
+		comp = computerService.create(comp);
 		displayComputer(comp);
 	}
 	
@@ -92,7 +89,7 @@ public class UserInterface {
 		
 		while(comp==null) {
 			computerId = getInt("the id of the computer to update");
-			comp = computerDao.find(computerId);
+			comp = computerService.find(computerId);
 			if(comp== null) {
 				System.out.println("wrong id : Unable to find");
 			}
@@ -106,7 +103,7 @@ public class UserInterface {
 		LocalDate discontinued = getDate("new discontinued");
 		int companyId = getInt("new company id");
 		comp = new Computer(computerId,name,introduced,discontinued,companyId);
-		comp = computerDao.update(comp);
+		comp = computerService.update(comp);
 		System.out.println("updated computer : ");
 		displayComputer(comp);
 	}
@@ -114,9 +111,9 @@ public class UserInterface {
 	public static void deleteComputer() {
 		System.out.println("  -Delete a computer:");
 		int computerId = getInt("the id of the computer to delete");
-		Computer comp = computerDao.find(computerId);
+		Computer comp = computerService.find(computerId);
 		if(comp!= null) {
-			computerDao.delete(comp);
+			computerService.delete(comp);
 			displayComputer(comp);
 		}
 		else {
@@ -128,7 +125,7 @@ public class UserInterface {
 		System.out.println("  -Show a computer:");
 		int computerId = getInt("the id of the computer to show");
 		Computer comp = new Computer(computerId);
-		comp = computerDao.find(computerId);
+		comp = computerService.find(computerId);
 		displayComputer(comp);
 	}
 	

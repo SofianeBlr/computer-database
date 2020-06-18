@@ -12,6 +12,7 @@ import com.excilys.computerDatabase.mapper.CompanyMapper;
 
 public class CompanyDao extends DAO<Company> {
 	
+	
 	private final static String INSERT = "INSERT INTO company(name) VALUES(?);";
 	private final static String DELETE = "DELETE FROM company WHERE id = ?;";
 	private final static String UPDATE = "UPDATE company SET name = ? WHERE id = ?;";
@@ -20,7 +21,7 @@ public class CompanyDao extends DAO<Company> {
 	private final static String MAXID = "select MAX(id) from company ";
 	private final static String SIZE = "select count(*) from company";
 	private final static String GET_PAGE = "select * from company LIMIT ?,?";
-
+	
 
 
 

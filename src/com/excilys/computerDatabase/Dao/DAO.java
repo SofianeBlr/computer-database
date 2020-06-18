@@ -19,7 +19,6 @@ public abstract class DAO<T> {
 		}
     }
   }
-  
   /**
    * GetAll database
    * @return list of object from database 

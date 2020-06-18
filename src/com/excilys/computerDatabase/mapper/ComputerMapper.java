@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import com.excilys.computerDatabase.model.Computer;
 
-public class ComputerMapper {
+public abstract class ComputerMapper {
 
 	public static Computer mapComputer(ResultSet resultset) throws SQLException {
 		Computer comp = new Computer(resultset.getInt("id"),resultset.getString("name"),resultset.getInt("company_id"));

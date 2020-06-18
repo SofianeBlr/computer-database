@@ -23,6 +23,7 @@ public class ComputerDao extends DAO<Computer> {
 	private final static String MAXID = "select MAX(id) from computer ";
 	private final static String SIZE = "select count(*) from computer";
 	private final static String GET_PAGE = "select * from computer LIMIT ?,?";
+	
 
 
 	@Override

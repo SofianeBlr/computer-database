@@ -3,17 +3,17 @@ package com.excilys.computerDatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.computerDatabase.service.PageService;
+import com.excilys.computerDatabase.service.ServiceDao;
+
 
 public class PageDisplay {
 	public static final int NUMBER_PER_PAGE = 10;
 	
 	
 	
-	static <T> void display(PageService<T> pageService, Scanner input) {
+	static <T> void display(ServiceDao<T> pageService, Scanner input) {
 		int page=0;
-		int length = pageService.getMaxPage();
-		int numberOfPage= (int) Math.ceil(length/(float)NUMBER_PER_PAGE);
+		int numberOfPage= pageService.getMaxPage();
 		List<T> list;
 		while(true) {
 			list = pageService.getPage(page);
