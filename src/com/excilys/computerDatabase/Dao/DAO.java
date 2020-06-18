@@ -3,6 +3,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 
 
@@ -11,13 +14,22 @@ public abstract class DAO<T> {
    
   public DAO(){
     if (connect== null) {
-    	try {
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC&autoReconnect=true&useSSL=false", "admincdb","qwerty1234");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	init();
     }
+  }
+  private void init() {
+	  
+	  Properties properties = new Properties();
+      try {
+          properties.load(new FileInputStream("src/ressource/database.properties"));
+      } catch (IOException e) {
+    	  System.out.println("Unable to find to find the database.properties file");
+      }
+      try {
+			connect = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("user"),properties.getProperty("password"));
+		} catch (SQLException e) {
+			System.out.println("Unable to establish connection to database");
+		}
   }
   /**
    * GetAll database
