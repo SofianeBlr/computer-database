@@ -1,12 +1,9 @@
 .metadata
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
 local.properties
 .settings/
 .loadpath
 .recommenders
-build/
+/build/
+.project
+.classpath
+/WebContent/
