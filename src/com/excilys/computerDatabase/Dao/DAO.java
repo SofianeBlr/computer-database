@@ -21,47 +21,57 @@ public abstract class DAO<T> {
   }
   
   /**
-   * GetAll
-   * @param obj
-   * @return boolean 
+   * GetAll database
+   * @return list of object from database 
    */
    public abstract ArrayList<T> getAll();
    
   /**
-  * Méthode de creation
-  * @param obj
-  * @return Obj created
+  * Create a new object in database
+  * @param obj to create
+  * @return obj created
   */
   public abstract T create(T obj);
 
   /**
-  * Méthode pour effacer
-  * @param obj
-  * @return boolean 
+  * delete object in database
+  * @param object to delete
+  * @return boolean (true if deleted)
   */
   public abstract boolean delete(T obj);
 
   /**
-  * Méthode de mise à jour
-  * @param obj
+  * update an object in database
+  * @param obj to update
   * @return Obj updated
   */
   public abstract T update(T obj);
 
   /**
-  * Méthode de recherche des informations
+  * find an object from id
   * @param id
-  * @return T
+  * @return T obj find
   */
   public abstract T find(int id);
   
   /**
-   * Méthode qui return maxId
-   * @param id
-   * @return T
+   * Method to get max id in database
+   * @return int maxId
    */
   public abstract int maxId() throws SQLException;
+  
+  
+  /**
+   * Get nbr of object in database
+   * @return nbr of object
+   */
   public abstract int size();
+  /**
+   * Method get a precise page from database
+   * @param debut start of the page(offset)
+   * @param number number of element to return
+   * @return List<T> page
+   */
   public abstract ArrayList<T> getPage(int debut,int number);
   
 }
