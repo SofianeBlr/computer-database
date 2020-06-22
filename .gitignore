@@ -1,11 +1,7 @@
 .metadata
 local.properties
 .settings/
-.loadpath
-.recommenders
-/build/
 .project
 .classpath
-/WebContent/
 /db/
-/lib/
+/target/

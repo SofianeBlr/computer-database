@@ -25,7 +25,7 @@ public abstract class DAO<T> {
 	  
 	  Properties properties = new Properties();
       try {
-          properties.load(new FileInputStream("src/ressources/database.properties"));
+          properties.load(new FileInputStream("src/main/resources/database.properties"));
       } catch (IOException e) {
     	  System.out.println("Unable to find to find the database.properties file");
       }
