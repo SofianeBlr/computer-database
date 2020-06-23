@@ -14,9 +14,9 @@ public class CompanyService extends ServiceDao<Company> {
 		super(dao);
 	}
 	
-	public static CompanyService getInstance() {
+	public static synchronized CompanyService getInstance() {
 		if(companyService == null) {
-			companyService = new CompanyService(new CompanyDao());
+			companyService = new CompanyService(CompanyDao.getInstance());
 		}
 		return companyService;
 	}

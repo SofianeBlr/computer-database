@@ -23,6 +23,19 @@ public class CompanyDao extends DAO<Company> {
 	private final static String SIZE = "select count(*) from company";
 	private final static String GET_PAGE = "select * from company LIMIT ?,?";
 	
+    private static CompanyDao companyDao;
+	
+    
+    /**
+     * Instance of the singleton CompanyDao.
+     * @return the instance of CompanyDao
+     */
+    public static synchronized CompanyDao getInstance() {
+        if (companyDao == null) {
+            companyDao = new CompanyDao();
+        }
+        return companyDao;
+    }
 
 
 
@@ -38,8 +51,7 @@ public class CompanyDao extends DAO<Company> {
 				comps.add(CompanyMapper.mapCompany(myRs));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("error get all companies");
 		}
 		
 		return comps;
@@ -53,7 +65,7 @@ public class CompanyDao extends DAO<Company> {
             preparedStatement.executeUpdate();
             return find(maxId());
         } catch (SQLException e) {
-            e.printStackTrace();
+        	logger.error("error in create");
         }
 		return null;
 	}
@@ -66,7 +78,7 @@ public class CompanyDao extends DAO<Company> {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+        	logger.error("error in delete");
         }
 		return false;
 	}
@@ -80,7 +92,8 @@ public class CompanyDao extends DAO<Company> {
             preparedStatement.executeUpdate();
             return find(obj.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+        	logger.error("error in update");
+
         }
 		return null;
 	}
@@ -95,8 +108,7 @@ public class CompanyDao extends DAO<Company> {
 			myRs.next();
 			company= CompanyMapper.mapCompany(myRs);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.error("error in find(id");
 		}
 		
 		return company;
@@ -119,8 +131,7 @@ public class CompanyDao extends DAO<Company> {
 			myRs.next();
 			return myRs.getInt("count(*)");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			logger.error("error in size()");
 			return 0;
 		}
 	}
@@ -138,9 +149,8 @@ public class CompanyDao extends DAO<Company> {
 			}
 			close(myRs);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			logger.error("error in getPage()");		
+			}
 		
 		return comps;
 	}

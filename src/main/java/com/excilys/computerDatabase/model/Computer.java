@@ -71,11 +71,58 @@ public class Computer {
 	public Computer(int id) {
 		this.id = id;
 	}
+	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+	}
+	public Computer() {
+	}
 	@Override
 	public String toString() {
 		String i = getIntroduced()!=null?getIntroduced().toString():"null";
 		String d = getDiscontinued()!=null?getDiscontinued().toString():"null";
 		return String.format("  %d  %40s  %20s%20s%5d%n",getId(),getName(),i,d,getCompanyId());
 	}
+	@Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Computer other = (Computer) obj;
+        if (companyId!=other.companyId) {
+            return false;
+        }
+        if (discontinued == null) {
+            if (other.discontinued != null) {
+                return false;
+            }
+        } else if (!discontinued.equals(other.discontinued)) {
+            return false;
+        }
+        if (introduced == null) {
+            if (other.introduced != null) {
+                return false;
+            }
+        } else if (!introduced.equals(other.introduced)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        return true;
+    }
 
 }

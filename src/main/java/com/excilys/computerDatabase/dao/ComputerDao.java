@@ -25,6 +25,19 @@ public class ComputerDao extends DAO<Computer> {
 	private final static String SIZE = "select count(*) from computer";
 	private final static String GET_PAGE = "select * from computer LIMIT ?,?";
 	
+	private static ComputerDao computerDao;
+	
+    
+    /**
+     * Instance of the singleton ComputerDao.
+     * @return the instance of ComputerDao
+     */
+    public static synchronized ComputerDao getInstance() {
+        if (computerDao == null) {
+            computerDao = new ComputerDao();
+        }
+        return computerDao;
+    }
 
 
 	@Override
@@ -40,7 +53,7 @@ public class ComputerDao extends DAO<Computer> {
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			logger.error("error in getAll()");
 		}
 		
 		
@@ -77,7 +90,7 @@ public class ComputerDao extends DAO<Computer> {
             preparedStatement.executeUpdate();
             return find(maxId());
         } catch (SQLException e) {
-            //e.printStackTrace();
+        	logger.error("error in create()");
         }
 		return null;
 	}
@@ -90,8 +103,8 @@ public class ComputerDao extends DAO<Computer> {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            //e.printStackTrace();
-        }
+        	logger.error("error in delete()");
+        	}
 		return false;
 	}
 
@@ -124,7 +137,7 @@ public class ComputerDao extends DAO<Computer> {
             preparedStatement.executeUpdate();
             return find(obj.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+        	logger.error("error in update()");
         }
 		return null;
 	}
@@ -140,7 +153,7 @@ public class ComputerDao extends DAO<Computer> {
 			myRs.next();
 			comp =  ComputerMapper.mapComputer(myRs);
 		} catch (SQLException e) {
-			//e.printStackTrace();
+        	logger.error("error in fin(id)");
 		}
 		
 		return comp;
@@ -164,7 +177,7 @@ public class ComputerDao extends DAO<Computer> {
 			myRs.next();
 			return myRs.getInt("count(*)");
 		} catch (SQLException e) {
-			//e.printStackTrace();
+        	logger.error("error in size()");
 			return 0;
 		}
 		
@@ -189,7 +202,7 @@ public class ComputerDao extends DAO<Computer> {
 			
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+        	logger.error("error in getPage()");
 		}
 		
 		return computers;

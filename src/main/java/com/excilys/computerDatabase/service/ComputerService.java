@@ -14,9 +14,9 @@ public class ComputerService extends ServiceDao<Computer> {
 		super(dao);
 	}
 	
-	public static ComputerService getInstance() {
+	public static synchronized ComputerService getInstance() {
 		if(computerService == null) {
-			computerService = new ComputerService(new ComputerDao());
+			computerService = new ComputerService(ComputerDao.getInstance());
 		}
 		return computerService;
 	}
