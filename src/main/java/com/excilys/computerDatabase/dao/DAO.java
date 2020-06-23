@@ -15,7 +15,7 @@ import com.zaxxer.hikari.HikariDataSource;
 public abstract class DAO<T> {
 	protected static Logger logger = LoggerFactory.getLogger(DAO.class);
 	protected static Connection connect = null;
-    private HikariDataSource dataSource;
+    private static HikariDataSource dataSource;
 
 	public DAO(){
 		if (connect== null) {

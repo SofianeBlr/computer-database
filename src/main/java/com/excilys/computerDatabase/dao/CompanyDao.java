@@ -42,7 +42,6 @@ public class CompanyDao extends DAO<Company> {
 	
 	@Override
 	public ArrayList<Company> getAll() {
-		// TODO Auto-generated method stub
 		ArrayList<Company> comps = new ArrayList<Company>();
 		try (Connection connect = getConnection();
 				Statement myStmt = connect.createStatement();
@@ -100,7 +99,6 @@ public class CompanyDao extends DAO<Company> {
 
 	@Override
 	public Company find(int id) {
-		// TODO Auto-generated method stub
 		Company company = null;
 		try (Connection connect = getConnection();
 				Statement myStmt= connect.createStatement();

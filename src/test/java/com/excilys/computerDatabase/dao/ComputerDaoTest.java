@@ -15,14 +15,7 @@ import com.excilys.computerDatabase.model.Computer;
 
 public class ComputerDaoTest {
 	
-	/**
-     * Reset computerDao.
-     *
-     * @throws SecurityException
-     * @throws NoSuchFieldException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
+	
     @Before
     public void setup()
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {

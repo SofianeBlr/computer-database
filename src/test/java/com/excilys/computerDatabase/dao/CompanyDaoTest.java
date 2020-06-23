@@ -14,14 +14,7 @@ import com.excilys.computerDatabase.model.Company;
 
 public class CompanyDaoTest {
 	
-	/**
-     * Reset companyDao.
-     *
-     * @throws SecurityException
-     * @throws NoSuchFieldException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
+	
     @Before
     public void setup()
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
