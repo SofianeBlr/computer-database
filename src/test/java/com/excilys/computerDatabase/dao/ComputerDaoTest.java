@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.computerDatabase.model.Computer;
+import com.excilys.computerDatabase.daos.ComputerDao;
+import com.excilys.computerDatabase.daos.DAO;
+import com.excilys.computerDatabase.models.Computer;
 
 public class ComputerDaoTest {
 	

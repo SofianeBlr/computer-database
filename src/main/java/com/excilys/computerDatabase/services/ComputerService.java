@@ -1,10 +1,10 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
 
 
-import com.excilys.computerDatabase.dao.ComputerDao;
-import com.excilys.computerDatabase.dao.DAO;
-import com.excilys.computerDatabase.model.Computer;
+import com.excilys.computerDatabase.daos.ComputerDao;
+import com.excilys.computerDatabase.daos.DAO;
+import com.excilys.computerDatabase.models.Computer;
 
 public class ComputerService extends ServiceDao<Computer> {
 	

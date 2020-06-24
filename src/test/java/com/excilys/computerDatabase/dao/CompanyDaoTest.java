@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.computerDatabase.model.Company;
+import com.excilys.computerDatabase.daos.CompanyDao;
+import com.excilys.computerDatabase.daos.DAO;
+import com.excilys.computerDatabase.models.Company;
 
 public class CompanyDaoTest {
 	

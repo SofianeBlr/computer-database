@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.dao;
+package com.excilys.computerDatabase.daos;
 
 
 import java.sql.Connection;
@@ -10,8 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.excilys.computerDatabase.model.Computer;
-import com.excilys.computerDatabase.mapper.ComputerMapper;
+import com.excilys.computerDatabase.mappers.ComputerMapper;
+import com.excilys.computerDatabase.models.Computer;
 
 
 public class ComputerDao extends DAO<Computer> {

@@ -3,7 +3,7 @@ package com.excilys.computerDatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.computerDatabase.service.ServiceDao;
+import com.excilys.computerDatabase.services.ServiceDao;
 
 
 public class PageDisplay {

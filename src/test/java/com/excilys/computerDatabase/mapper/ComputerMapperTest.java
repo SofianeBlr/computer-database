@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.excilys.computerDatabase.model.Computer;
+import com.excilys.computerDatabase.mappers.ComputerMapper;
+import com.excilys.computerDatabase.models.Computer;
 
 
 public class ComputerMapperTest {

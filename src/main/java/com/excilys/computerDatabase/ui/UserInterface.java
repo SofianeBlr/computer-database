@@ -6,10 +6,10 @@ import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.excilys.computerDatabase.model.Company;
-import com.excilys.computerDatabase.model.Computer;
-import com.excilys.computerDatabase.service.CompanyService;
-import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.models.Company;
+import com.excilys.computerDatabase.models.Computer;
+import com.excilys.computerDatabase.services.CompanyService;
+import com.excilys.computerDatabase.services.ComputerService;
 
 public class UserInterface {
 	static Scanner input =new Scanner(System.in);
@@ -167,6 +167,7 @@ public class UserInterface {
 			}catch(InputMismatchException e){
 				System.out.println("Invalid input : input must be a number");
 				run = true;
+				input.next();
 			}
 		}
 		

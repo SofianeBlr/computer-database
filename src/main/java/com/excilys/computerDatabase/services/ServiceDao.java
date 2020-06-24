@@ -1,10 +1,10 @@
-package com.excilys.computerDatabase.service;
+package com.excilys.computerDatabase.services;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.computerDatabase.dao.DAO;
+import com.excilys.computerDatabase.daos.DAO;
 import com.excilys.computerDatabase.ui.PageDisplay;
 
 public abstract class ServiceDao<T> {

@@ -10,7 +10,8 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import com.excilys.computerDatabase.model.Company;
+import com.excilys.computerDatabase.mappers.CompanyMapper;
+import com.excilys.computerDatabase.models.Company;
 
 
 
