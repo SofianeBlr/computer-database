@@ -55,7 +55,7 @@ public abstract class ServiceDao<T> {
 	  * @param id
 	  * @return T obj find
 	  */
-	  public T find(int id) {
+	  public T find(Long id) {
 		  return dao.find(id);
 	  }
 	  
@@ -63,7 +63,7 @@ public abstract class ServiceDao<T> {
 	   * Method to get max id in database
 	   * @return int maxId
 	   */
-	  public int maxId() throws SQLException{
+	  public Long maxId() throws SQLException{
 		  return dao.maxId();
 	  }
 	  
@@ -72,7 +72,7 @@ public abstract class ServiceDao<T> {
 	   * Get nbr of object in database
 	   * @return nbr of object
 	   */
-	  public int size() {
+	  public Long size() {
 		  return dao.size();
 	  }
 	  
@@ -82,8 +82,7 @@ public abstract class ServiceDao<T> {
 			return list;
 	 }
 		public int getMaxPage(){
-			int length = size();
-			int numberOfPage= (int) Math.ceil(length/(float) PageDisplay.NUMBER_PER_PAGE);
+			int numberOfPage= (int) Math.ceil(size()/(float) PageDisplay.NUMBER_PER_PAGE);
 			return numberOfPage;
 		}
 

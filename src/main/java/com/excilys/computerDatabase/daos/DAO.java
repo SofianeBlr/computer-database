@@ -72,20 +72,20 @@ public abstract class DAO<T> {
 	 * @param id
 	 * @return T obj find
 	 */
-	public abstract T find(int id);
+	public abstract T find(Long id);
 
 	/**
 	 * Method to get max id in database
 	 * @return int maxId
 	 */
-	public abstract int maxId() throws SQLException;
+	public abstract Long maxId() throws SQLException;
 
 
 	/**
 	 * Get nbr of object in database
 	 * @return nbr of object
 	 */
-	public abstract int size();
+	public abstract Long size();
 	/**
 	 * Method get a precise page from database
 	 * @param debut start of the page(offset)

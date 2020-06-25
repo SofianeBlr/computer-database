@@ -73,7 +73,7 @@ public class CompanyDao extends DAO<Company> {
 	public boolean delete(Company obj) {
 		try (Connection connect = getConnection();
 				PreparedStatement preparedStatement = connect.prepareStatement(DELETE)){
-            preparedStatement.setInt(1, obj.getId());
+            preparedStatement.setLong(1, obj.getId());
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class CompanyDao extends DAO<Company> {
 		try (Connection connect = getConnection();
 				PreparedStatement preparedStatement = connect.prepareStatement(UPDATE)){
             preparedStatement.setString(1, obj.getName());
-            preparedStatement.setInt(2, obj.getId());
+            preparedStatement.setLong(2, obj.getId());
             preparedStatement.executeUpdate();
             return find(obj.getId());
         } catch (SQLException e) {
@@ -98,7 +98,7 @@ public class CompanyDao extends DAO<Company> {
 	}
 
 	@Override
-	public Company find(int id) {
+	public Company find(Long id) {
 		Company company = null;
 		try (Connection connect = getConnection();
 				Statement myStmt= connect.createStatement();
@@ -113,24 +113,24 @@ public class CompanyDao extends DAO<Company> {
 	}
 
 	@Override
-	public int maxId() throws SQLException{
+	public Long maxId() throws SQLException{
 		try(Connection connect = getConnection();
 				Statement myStmt= connect.createStatement();
 				ResultSet myRs = myStmt.executeQuery(MAXID);) {
 			myRs.next();
-			return myRs.getInt("MAX(id)");
+			return myRs.getLong("MAX(id)");
 		}
 	}
 	@Override
-	public int size() {
+	public Long size() {
 		try (Connection connect = getConnection();
 				Statement myStmt= connect.createStatement();
 				ResultSet myRs = myStmt.executeQuery(SIZE);) {
 			myRs.next();
-			return myRs.getInt("count(*)");
+			return myRs.getLong("count(*)");
 		} catch (SQLException e) {
 			logger.error("error in size()");
-			return 0;
+			return null;
 		}
 	}
 

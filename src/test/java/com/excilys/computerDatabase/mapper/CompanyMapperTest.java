@@ -20,7 +20,7 @@ public class CompanyMapperTest {
     private static final String ATTRIBUT_ID_COMPANY = "id";
     private static final String ATTRIBUT_NAME = "name";
 
-    private final int id = 42;
+    private final Long id = 42L;
     private final String name = "name";
 
     private ResultSet resultSet = mock(ResultSet.class);
@@ -32,7 +32,7 @@ public class CompanyMapperTest {
     public void testMap() {
     	Company company= new Company();
         try {
-            when(resultSet.getInt(ATTRIBUT_ID_COMPANY)).thenReturn(id);
+            when(resultSet.getLong(ATTRIBUT_ID_COMPANY)).thenReturn(id);
             when(resultSet.getString(ATTRIBUT_NAME)).thenReturn(name);
             company = CompanyMapper.mapCompany(resultSet);
         } catch (SQLException e) {
@@ -52,12 +52,12 @@ public class CompanyMapperTest {
     	 Company company= new Company();
         try {
             when(resultSet.getString(ATTRIBUT_NAME)).thenReturn(name);
-            when(resultSet.getInt(ATTRIBUT_ID_COMPANY)).thenReturn(0);
+            when(resultSet.getLong(ATTRIBUT_ID_COMPANY)).thenReturn(0L);
             company = CompanyMapper.mapCompany(resultSet);
         } catch (SQLException e) {
             fail("sql exception :" + e.getMessage());
         }
-		Company expCompany = new Company(0,name);
+		Company expCompany = new Company(0L,name);
         assertEquals(expCompany.getId(), company.getId());
         assertEquals(expCompany.getName(), company.getName());
         
@@ -70,7 +70,7 @@ public class CompanyMapperTest {
     public void testMapNameNull() {
     	Company company = new Company();
         try {
-            when(resultSet.getInt(ATTRIBUT_ID_COMPANY)).thenReturn(id);
+            when(resultSet.getLong(ATTRIBUT_ID_COMPANY)).thenReturn(id);
             company = CompanyMapper.mapCompany(resultSet);
         } catch (SQLException e) {
             fail("sql exception :" + e.getMessage());

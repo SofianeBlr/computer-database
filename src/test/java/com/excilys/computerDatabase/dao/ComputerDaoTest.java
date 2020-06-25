@@ -41,7 +41,7 @@ public class ComputerDaoTest {
 	@Test
 	public void testCreateComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
-		Computer computer = new Computer(0,"test",LocalDate.now());
+		Computer computer = new Computer(0L,"test",LocalDate.now());
 		Computer computerExc = computerDao.create(computer);
 	    assertEquals(computerExc, computer);
 	}
@@ -49,7 +49,7 @@ public class ComputerDaoTest {
 	@Test
 	public void testDeleteComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
-		Computer computer = new Computer(42,"test");
+		Computer computer = new Computer(42L,"test");
 		computerDao.delete(computer);
 	    assertNull(computerDao.find(computer.getId()));
 	}

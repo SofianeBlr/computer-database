@@ -9,7 +9,8 @@ import com.excilys.computerDatabase.models.Company;
 public abstract class CompanyMapper {
 
 	public static Company mapCompany(ResultSet resultset) throws SQLException {
-		Company company=new Company(resultset.getInt("id"),resultset.getString("name"));
+		Long id = Long.valueOf(resultset.getLong("id"));
+		Company company=new Company(id,resultset.getString("name"));
 		return company;
 	}
 }

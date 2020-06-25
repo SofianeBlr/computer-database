@@ -23,11 +23,11 @@ public class ComputerMapperTest {
 	private static final String ATTRIBUT_DISCONTINUED = "discontinued";
 	private static final String ATTRIBUT_COMPANY_ID = "company_id";
 
-	private final int idComputer = 10;
+	private final Long idComputer = 10L;
 	private final String computerName = "computer name";
 	private final Date introduced = Date.valueOf(LocalDate.of( 2014 , 2 , 11 ));
 	private final Date discontinued = Date.valueOf(LocalDate.of( 2020 , 4 , 2 ));
-	private final int idCompany = 15;
+	private final Long idCompany = 15L;
 
 	private ResultSet resultSet = Mockito.mock(ResultSet.class);
 
@@ -35,11 +35,11 @@ public class ComputerMapperTest {
 	public void testMapper() {
 		Computer computer = new Computer();
 		try {
-			Mockito.when(resultSet.getInt(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
+			Mockito.when(resultSet.getLong(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
 			Mockito.when(resultSet.getString(ATTRIBUT_NAME)).thenReturn(computerName);
 			Mockito.when(resultSet.getDate(ATTRIBUT_INTRODUCED)).thenReturn(introduced);
 			Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(discontinued);
-			Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
+			Mockito.when(resultSet.getLong(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
 			computer = ComputerMapper.mapComputer(resultSet);
 		} catch (SQLException e) {
 			fail("sql exception :" + e.getMessage());
@@ -55,10 +55,10 @@ public class ComputerMapperTest {
 	public void testMapIntroducedNull() {
 		Computer computer = new Computer();
 		try {
-			Mockito.when(resultSet.getInt(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
+			Mockito.when(resultSet.getLong(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
 			Mockito.when(resultSet.getString(ATTRIBUT_NAME)).thenReturn(computerName);
 			Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(discontinued);
-			Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
+			Mockito.when(resultSet.getLong(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
 			computer = ComputerMapper.mapComputer(resultSet);
 		} catch (SQLException e) {
 			fail("sql exception :" + e.getMessage());
@@ -72,10 +72,10 @@ public class ComputerMapperTest {
 	public void testMapdiscontinuedNull() {
 		Computer computer = new Computer();
 		try {
-			Mockito.when(resultSet.getInt(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
+			Mockito.when(resultSet.getLong(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
 			Mockito.when(resultSet.getString(ATTRIBUT_NAME)).thenReturn(computerName);
 			Mockito.when(resultSet.getDate(ATTRIBUT_INTRODUCED)).thenReturn(introduced);
-			Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
+			Mockito.when(resultSet.getLong(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
 			computer = ComputerMapper.mapComputer(resultSet);
 		} catch (SQLException e) {
 			fail("sql exception :" + e.getMessage());
@@ -88,7 +88,7 @@ public class ComputerMapperTest {
 	public void testMapCompanyIdNull() {
 		Computer computer = new Computer();
 		try {
-			Mockito.when(resultSet.getInt(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
+			Mockito.when(resultSet.getLong(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
 			Mockito.when(resultSet.getString(ATTRIBUT_NAME)).thenReturn(computerName);
 			Mockito.when(resultSet.getDate(ATTRIBUT_INTRODUCED)).thenReturn(introduced);
 			Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(discontinued);

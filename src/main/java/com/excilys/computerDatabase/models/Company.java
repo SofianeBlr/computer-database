@@ -1,19 +1,19 @@
 package com.excilys.computerDatabase.models;
 
 public class Company {
-	private int id;
+	private Long id;
 	private String name;
 	
-	public Company(int id, String name) {
+	public Company(Long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 	public Company() {
 	}
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -24,7 +24,6 @@ public class Company {
 	}
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return String.format("  %d  %50s%n",id,name);
 	}
 

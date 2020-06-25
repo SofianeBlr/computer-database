@@ -8,13 +8,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/dashboard")
-public class Dashboard extends HttpServlet{
+import com.excilys.computerDatabase.services.ComputerService;
 
+@WebServlet("/addComputer")
+public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static int computerPerPage = 10;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+		
+		request.getRequestDispatcher("/views/addComputer.jsp").forward(request, response);
 	}
+
 }

@@ -3,15 +3,17 @@ package com.excilys.computerDatabase.models;
 import java.time.LocalDate;
 
 public class Computer {
-	private int id;
+	private Long id;
 	private String name;
 	private LocalDate introduced= null;
 	private LocalDate discontinued = null;
-	private int companyId;
-	public int getId() {
+	private Company company = new Company();
+	
+	
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -49,48 +51,54 @@ public class Computer {
 		}
 
 	}
-	public int getCompanyId() {
-		return companyId;
+	public Long getCompanyId() {
+		return company.getId();
 	}
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
+	public void setCompanyId(Long companyId) {
+		this.company.setId(companyId);
 	}
-	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, int companyId) throws IllegalArgumentException {
+	public String getCompanyName() {
+		return company.getName();
+	}
+	public void setCompanyName(String name) {
+		this.company.setName(name);
+	}
+	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) throws IllegalArgumentException {
 		this.id = id;
 		this.name = name;
-		this.companyId = companyId;
+		this.company.setId(companyId);
 		setIntroduced(introduced);
 		setDiscontinued(discontinued);
 	}
-	public Computer(int id, String name) {
+	public Computer(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
-	public Computer(int id, String name, LocalDate introduced, int companyId) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.companyId = companyId;
-	}
-	public Computer(int id, String name, LocalDate introduced) {
+	public Computer(Long id, String name, LocalDate introduced, Long companyId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
+		this.company.setId(companyId);
 	}
-	public Computer(int id, String name, int companyId) {
+	public Computer(Long id, String name, LocalDate introduced) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.companyId = companyId;
+		this.introduced = introduced;
 	}
-	public Computer(int id) {
+	public Computer(Long id, String name, Long companyId) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.company.setId(companyId);
+	}
+	public Computer(Long id) {
 		super();
 		this.id = id;
 	}
-	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued)throws IllegalArgumentException {
+	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued)throws IllegalArgumentException {
 		super();
 		this.id = id;
 		this.name = name;
@@ -103,7 +111,8 @@ public class Computer {
 	public String toString() {
 		String i = getIntroduced()!=null?getIntroduced().toString():"null";
 		String d = getDiscontinued()!=null?getDiscontinued().toString():"null";
-		return String.format("  %d  %40s  %20s%20s%5d%n",getId(),getName(),i,d,getCompanyId());
+		String companyId = getCompanyId()!=null?getCompanyId().toString():"null";
+		return String.format("  %d  %40s  %20s%20s%5s%n",getId(),getName(),i,d,companyId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -117,7 +126,7 @@ public class Computer {
 			return false;
 		}
 		Computer other = (Computer) obj;
-		if (companyId!=other.companyId) {
+		if (this.getCompanyId()!=other.getCompanyId()) {
 			return false;
 		}
 		if (discontinued == null) {

@@ -40,7 +40,7 @@ public class CompanyDaoTest {
 	@Test
 	public void testCreateCompany() {
 		CompanyDao companyDao= CompanyDao.getInstance();
-		Company company = new Company(0,"test");
+		Company company = new Company(0L,"test");
 		Company companyExc = companyDao.create(company);
 	    assertEquals(companyExc.getName(), company.getName());
 	}
@@ -48,7 +48,7 @@ public class CompanyDaoTest {
 	@Test
 	public void testDeleteCompany() {
 		CompanyDao companyDao= CompanyDao.getInstance();
-		Company company = new Company(42,"test");
+		Company company = new Company(42L,"test");
 		companyDao.delete(company);
 	    assertNull(companyDao.find(company.getId()));
 	}

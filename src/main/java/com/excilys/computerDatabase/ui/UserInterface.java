@@ -76,19 +76,19 @@ public class UserInterface {
 		String name = getString("computer name");
 		LocalDate introduced = getDate("introduced");
 		LocalDate discontinued = getDate("discontinued");
-		int companyId = getInt("company id");
-		Computer comp = new Computer(0,name,introduced,discontinued,companyId);
+		Long companyId = getLong("company id");
+		Computer comp = new Computer(0L,name,introduced,discontinued,companyId);
 		comp = computerService.create(comp);
 		displayComputer(comp);
 	}
 	
 	public static void updateComputer() {
 		Computer comp = null;
-		int computerId=0;
+		Long computerId=null;
 		System.out.println("  -Update a computer:");
 		
 		while(comp==null) {
-			computerId = getInt("the id of the computer to update");
+			computerId = getLong("the id of the computer to update");
 			comp = computerService.find(computerId);
 			if(comp== null) {
 				System.out.println("wrong id : Unable to find");
@@ -101,7 +101,7 @@ public class UserInterface {
 		String name = getString("new computer name");
 		LocalDate introduced = getDate("new introduced");
 		LocalDate discontinued = getDate("new discontinued");
-		int companyId = getInt("new company id");
+		Long companyId = getLong("new company id");
 		comp = new Computer(computerId,name,introduced,discontinued,companyId);
 		comp = computerService.update(comp);
 		System.out.println("updated computer : ");
@@ -110,7 +110,7 @@ public class UserInterface {
 	
 	public static void deleteComputer() {
 		System.out.println("  -Delete a computer:");
-		int computerId = getInt("the id of the computer to delete");
+		Long computerId = getLong("the id of the computer to delete");
 		Computer comp = computerService.find(computerId);
 		if(comp!= null) {
 			computerService.delete(comp);
@@ -123,7 +123,7 @@ public class UserInterface {
 	}
 	public static void getComputer() {
 		System.out.println("  -Show a computer:");
-		int computerId = getInt("the id of the computer to show");
+		Long computerId = getLong("the id of the computer to show");
 		Computer comp = new Computer(computerId);
 		comp = computerService.find(computerId);
 		displayComputer(comp);
@@ -164,6 +164,24 @@ public class UserInterface {
 			System.out.printf("%n enter "+ valueName +" : ");
 			try {
 				number =input.nextInt();
+			}catch(InputMismatchException e){
+				System.out.println("Invalid input : input must be a number");
+				run = true;
+				input.next();
+			}
+		}
+		
+		return number;
+	}
+	
+	public static Long getLong(String valueName) {
+		boolean run = true;
+		Long number=null;
+		while(run) {
+			run = false;
+			System.out.printf("%n enter "+ valueName +" : ");
+			try {
+				number =input.nextLong();
 			}catch(InputMismatchException e){
 				System.out.println("Invalid input : input must be a number");
 				run = true;
