@@ -4,12 +4,9 @@
 
 <web-app>
 	<display-name>Computer Database</display-name>
-	<servlet>
-		<servlet-name>test</servlet-name>
-		<servlet-class>com.excilys.computerDatabase.servlets.Dashboard</servlet-class>
-	</servlet>
-	<servlet-mapping>
-	<servlet-name>test</servlet-name>
-	<url-pattern>/test</url-pattern>
-	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>Dashboard</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
 </web-app>
