@@ -27,6 +27,18 @@ public class ComputerDao extends DAO<Computer> {
 	private final static String GET_PAGE_W_COMPANY = "select computer.id,computer.name,introduced,discontinued,company_id,cp.name as company_name"
 			+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
 			+ "Order By id LIMIT ?,?";
+	private static String getPageWithSearch(String search) {
+		return "select computer.id,computer.name,introduced,discontinued,company_id,cp.name as company_name"
+				+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
+				+ "where computer.name like '%"+search + "%' Order By id LIMIT ?,?";
+	}
+	private static String getMaxWithSearch(String search) {
+		return "select count(computer.id)"
+				+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
+				+ "where computer.name like '%"+search + "%' Order By computer.id LIMIT ?,?";
+	}
+		
+			
 
 	private static ComputerDao computerDao;
 
@@ -210,6 +222,47 @@ public class ComputerDao extends DAO<Computer> {
 		}
 
 		return computers;
+	}
+	
+	@Override
+	public ArrayList<Computer> getPageWithSearch(int debut, int number,String search) {
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+		ResultSet myRs;
+
+		try(Connection connect = getConnection();
+				PreparedStatement preparedStatement = connect.prepareStatement(getPageWithSearch(search));) {
+
+			preparedStatement.setInt(1, debut);
+			preparedStatement.setInt(2, number);
+			myRs = preparedStatement.executeQuery();
+
+			while(myRs.next()) {
+				Computer computer = ComputerMapper.mapComputerWithCompany(myRs);
+				computers.add(computer);
+				logger.info(computer.getName());
+			}
+
+
+		} catch (SQLException e) {
+			logger.error("error in getPage()");
+			e.printStackTrace();
+		}
+
+		return computers;
+	}
+
+
+	@Override
+	public Long sizeWithSearch(String search) {
+		try(Connection connect = getConnection();
+				Statement myStmt= connect.createStatement();
+				ResultSet myRs = myStmt.executeQuery(getMaxWithSearch(search));) {
+			myRs.next();
+			return myRs.getLong("count(computer.id)");
+		} catch (SQLException e) {
+			logger.error("error in size()");
+			return null;
+		}
 	}
 
 }

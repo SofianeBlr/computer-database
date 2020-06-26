@@ -13,10 +13,10 @@ public class PageDisplay {
 	
 	static <T> void display(ServiceDao<T> pageService, Scanner input) {
 		int page=0;
-		int numberOfPage= pageService.getMaxPage();
+		int numberOfPage= pageService.getMaxPage(NUMBER_PER_PAGE);
 		List<T> list;
 		while(true) {
-			list = pageService.getPage(page);
+			list = pageService.getPage(page,NUMBER_PER_PAGE);
 			for (T l : list) {
 				System.out.print(l);
 			}

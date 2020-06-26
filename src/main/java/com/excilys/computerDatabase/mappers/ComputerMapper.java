@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 import com.excilys.computerDatabase.models.Computer;
 
+import dtos.ComputerDto;
+
 public abstract class ComputerMapper {
 
 	public static Computer mapComputer(ResultSet resultset) throws SQLException {
@@ -37,6 +39,11 @@ public abstract class ComputerMapper {
 			comp.setDiscontinued(resultset.getDate("discontinued").toLocalDate());
 		}
 		return comp;
+	}
+	public static ComputerDto mapComputerDto(Computer computer) {
+		
+		ComputerDto computerDto= new ComputerDto(computer);
+		return computerDto;
 	}
 
 }

@@ -86,13 +86,19 @@ public abstract class DAO<T> {
 	 * @return nbr of object
 	 */
 	public abstract Long size();
+	
+	
+	public abstract Long sizeWithSearch(String search);
 	/**
+	 * 
 	 * Method get a precise page from database
 	 * @param debut start of the page(offset)
 	 * @param number number of element to return
 	 * @return List<T> page
 	 */
 	public abstract ArrayList<T> getPage(int debut,int number);
+	
+	public abstract ArrayList<T> getPageWithSearch(int debut,int number,String search);
 
 
 

@@ -153,6 +153,22 @@ public class CompanyDao extends DAO<Company> {
 		return comps;
 	}
 
+
+
+
+	@Override
+	public ArrayList<Company> getPageWithSearch(int debut, int number, String search) {
+		return null;
+	}
+
+
+
+
+	@Override
+	public Long sizeWithSearch(String search) {
+		return null;
+	}
+
 	
 
 }

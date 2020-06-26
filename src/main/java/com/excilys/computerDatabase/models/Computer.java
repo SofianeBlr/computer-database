@@ -63,6 +63,9 @@ public class Computer {
 	public void setCompanyName(String name) {
 		this.company.setName(name);
 	}
+	public Company getCompany() {
+		return company;
+	}
 	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) throws IllegalArgumentException {
 		this.id = id;
 		this.name = name;
