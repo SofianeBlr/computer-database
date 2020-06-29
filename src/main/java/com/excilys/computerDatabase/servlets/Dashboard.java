@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerDatabase.dtos.ComputerDto;
 import com.excilys.computerDatabase.mappers.ComputerMapper;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.services.ComputerService;
-
-import dtos.ComputerDto;
 
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet{
@@ -45,6 +44,9 @@ public class Dashboard extends HttpServlet{
 		List<ComputerDto> computerDtoPage = new ArrayList<ComputerDto>();
 		if (request.getParameter("search") == null||request.getParameter("search").isEmpty()) {
 			maxPage =computerService.getMaxPage(numberPerPage);
+			if (currentPage>maxPage) {
+				currentPage = maxPage;
+			}
 			numberOfComputer = computerService.size();
 			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage);
 			for (Computer c : computerPage) {
@@ -55,15 +57,16 @@ public class Dashboard extends HttpServlet{
 			search =request.getParameter("search");
 			numberOfComputer = computerService.sizeWithSearch(search);
 			maxPage =computerService.getMaxPageWithSearch(numberPerPage, search);
+			if (currentPage>maxPage) {
+				currentPage = maxPage;
+			}
 			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage,search);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
 			}
 
 		}
-		if (currentPage>maxPage) {
-			currentPage = maxPage;
-		}
+	
 		if(currentPage>2){
 			navMaxPageIndex =currentPage+2;
 		}

@@ -1,14 +1,14 @@
-package dtos;
+package com.excilys.computerDatabase.dtos;
 
 import com.excilys.computerDatabase.models.Company;
 
 public class CompanyDto {
-	private Long id;
+	private String id;
 	private String name;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -17,13 +17,17 @@ public class CompanyDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public CompanyDto(Long id, String name) {
+	public CompanyDto(String id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 	public CompanyDto(Company company) {
-		this.id = company.getId();
-		this.name= company.getName();
+		if(company.getId()!=null) {
+			this.id = company.getId().toString();
+			this.name= company.getName();
+		}
+	}
+	public CompanyDto() {
 	}
 }

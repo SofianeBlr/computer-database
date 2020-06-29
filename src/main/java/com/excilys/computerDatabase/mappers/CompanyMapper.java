@@ -3,6 +3,7 @@ package com.excilys.computerDatabase.mappers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.excilys.computerDatabase.dtos.CompanyDto;
 import com.excilys.computerDatabase.models.Company;
 
 
@@ -12,5 +13,10 @@ public abstract class CompanyMapper {
 		Long id = Long.valueOf(resultset.getLong("id"));
 		Company company=new Company(id,resultset.getString("name"));
 		return company;
+	}
+	public static CompanyDto mapCompanyDto(Company company) {
+		
+		CompanyDto companyDto= new CompanyDto(company);
+		return companyDto;
 	}
 }
