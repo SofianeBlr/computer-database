@@ -33,9 +33,9 @@ public class ComputerDao extends DAO<Computer> {
 				+ "where computer.name like '%"+search + "%' Order By id LIMIT ?,?";
 	}
 	private static String getMaxWithSearch(String search) {
-		return "select count(computer.id)"
-				+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
-				+ "where computer.name like '%"+search + "%' Order By computer.id LIMIT ?,?";
+		return "select count(id)"
+				+ " from computer"
+				+ " where name like '%"+search + "%';";
 	}
 		
 			
@@ -239,7 +239,6 @@ public class ComputerDao extends DAO<Computer> {
 			while(myRs.next()) {
 				Computer computer = ComputerMapper.mapComputerWithCompany(myRs);
 				computers.add(computer);
-				logger.info(computer.getName());
 			}
 
 
@@ -258,10 +257,11 @@ public class ComputerDao extends DAO<Computer> {
 				Statement myStmt= connect.createStatement();
 				ResultSet myRs = myStmt.executeQuery(getMaxWithSearch(search));) {
 			myRs.next();
-			return myRs.getLong("count(computer.id)");
+			return myRs.getLong("count(id)");
 		} catch (SQLException e) {
 			logger.error("error in size()");
-			return null;
+			e.printStackTrace();
+			return 0l;
 		}
 	}
 

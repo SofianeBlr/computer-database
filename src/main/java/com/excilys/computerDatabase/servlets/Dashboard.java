@@ -28,6 +28,8 @@ public class Dashboard extends HttpServlet{
 		int numberPerPage =10;
 		String search = "";
 		int navMaxPageIndex=5;
+		int maxPage =0;
+		Long numberOfComputer= 0L;
 
 		if (request.getParameter("page") != null) {
 			currentPage = Integer.parseInt(request.getParameter("page"));
@@ -39,12 +41,11 @@ public class Dashboard extends HttpServlet{
 		if (currentPage < 1) {
 			currentPage = 1;
 		}
-		int maxPage =computerService.getMaxPage(numberPerPage);
+		
 		List<ComputerDto> computerDtoPage = new ArrayList<ComputerDto>();
 		if (request.getParameter("search") == null||request.getParameter("search").isEmpty()) {
-			if (currentPage>maxPage) {
-				currentPage = maxPage;
-			}
+			maxPage =computerService.getMaxPage(numberPerPage);
+			numberOfComputer = computerService.size();
 			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
@@ -52,26 +53,23 @@ public class Dashboard extends HttpServlet{
 		}
 		else {
 			search =request.getParameter("search");
+			numberOfComputer = computerService.sizeWithSearch(search);
 			maxPage =computerService.getMaxPageWithSearch(numberPerPage, search);
-			if (currentPage>maxPage) {
-				currentPage = maxPage;
-			}
 			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage,search);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
 			}
 
 		}
-		
-		if(currentPage>2) {
-			if((currentPage+2)<maxPage){
-				navMaxPageIndex =currentPage+2;
-			}
-			else {
-				navMaxPageIndex=maxPage;
-			}
+		if (currentPage>maxPage) {
+			currentPage = maxPage;
 		}
-		Long numberOfComputer = computerService.size();
+		if(currentPage>2){
+			navMaxPageIndex =currentPage+2;
+		}
+		if (maxPage<navMaxPageIndex) {
+			navMaxPageIndex=maxPage;
+		}
 		request.setAttribute("numberOfComputer",numberOfComputer);
 		request.setAttribute("computers", computerDtoPage);
 		request.setAttribute("search", search);

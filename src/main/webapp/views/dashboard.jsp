@@ -25,10 +25,10 @@
 			<h1 id="homeTitle">${numberOfComputer} computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
+							class="form-control" placeholder="Search name"  value="${search}"/> <input
 							type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
@@ -106,7 +106,7 @@
 						       <span aria-hidden="true">&laquo;</span></a>
 				        </li>
                     </c:if>
-					<c:forEach var="i" begin="${navMaxPageIndex-4}" end="${navMaxPageIndex}" step="1">
+					<c:forEach var="i" begin="${navMaxPageIndex-4>0?navMaxPageIndex-4:1}" end="${navMaxPageIndex}" step="1">
 					   <c:set var="activePage" value=""/>                             
 					    <c:if test="${i == currentPage}"> 
 					       <c:set var="activePage" value="active"/>                             
@@ -128,7 +128,7 @@
 				<button type="button" class="btn btn-default"
 					onclick="window.location.href='?numberPerPage=10&search=${search}'">10</button>
 				<button type="button" class="btn btn-default"
-					onclick="window.location.href='?numberPerPage=50&search=${searchV}'">50</button>
+					onclick="window.location.href='?numberPerPage=50&search=${search}'">50</button>
 				<button type="button" class="btn btn-default"
 					onclick="window.location.href='?numberPerPage=100&search=${search}'">100</button>
 			</div>
