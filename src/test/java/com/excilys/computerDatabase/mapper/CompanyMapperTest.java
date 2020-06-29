@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
+import com.excilys.computerDatabase.dtos.CompanyDto;
 import com.excilys.computerDatabase.mappers.CompanyMapper;
 import com.excilys.computerDatabase.models.Company;
 
@@ -80,6 +81,17 @@ public class CompanyMapperTest {
 
         assertEquals(expCompany.getId(), company.getId());
         assertEquals(expCompany.getName(), company.getName());
+    }
+    /**
+     * Test map from company to companyDto.
+     */
+    @Test
+    public void testMapToDto() {
+    	Company company = new Company(10L,"test");  
+        CompanyDto companyDto = CompanyMapper.mapCompanyDto(company);
+
+        assertEquals(companyDto.getId(), company.getId().toString());
+        assertEquals(companyDto.getName(), company.getName());
     }
 
    

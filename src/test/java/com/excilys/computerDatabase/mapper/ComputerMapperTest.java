@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.excilys.computerDatabase.dtos.ComputerDto;
 import com.excilys.computerDatabase.mappers.ComputerMapper;
 import com.excilys.computerDatabase.models.Computer;
 
@@ -85,7 +86,7 @@ public class ComputerMapperTest {
 	}
 
 	@Test
-	public void testMapCompanyIdNull() {
+	public void testMapComputerIdNull() {
 		Computer computer = new Computer();
 		try {
 			Mockito.when(resultSet.getLong(ATTRIBUT_ID_COMPUTER)).thenReturn(idComputer);
@@ -101,5 +102,28 @@ public class ComputerMapperTest {
 
 		assertEquals(expComputer, computer);
 	}
+	
+	@Test
+	public void testMapComputerToComputerDto() {		
+
+		Computer computer = new Computer(idComputer,computerName,introduced.toLocalDate(),discontinued.toLocalDate());
+		ComputerDto computerDto = ComputerMapper.mapComputerDto(computer);
+		assertEquals(computerDto.getId(), computer.getId().toString());
+		assertEquals(computerDto.getName(), computer.getName());
+		assertEquals(computerDto.getIntroduced(), computer.getIntroduced().toString());
+		assertEquals(computerDto.getDiscontinued(), computer.getDiscontinued().toString());
+
+	}
+	
+	@Test
+	public void testMapComputerDtoToComputer() {		
+
+		Computer computer = new Computer(idComputer,computerName,introduced.toLocalDate(),discontinued.toLocalDate(),10L);
+		ComputerDto computerDto = ComputerMapper.mapComputerDto(computer);
+		Computer fromDto = ComputerMapper.toComputer(computerDto);
+		assertEquals(fromDto, computer);
+
+	}
+	
 
 }
