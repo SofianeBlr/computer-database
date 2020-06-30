@@ -57,8 +57,10 @@ public class EditComputer extends HttpServlet {
 				computerDto = ComputerMapper.mapComputerDto(comp);
 			}
 		}
-		System.out.println(computerDto.getId());
-		request.setAttribute("computerDto", computerDto);
+		if(request.getAttribute("computerDto")==null) {
+			request.setAttribute("computerDto", computerDto);
+		}
+		
 		request.getRequestDispatcher("/views/editComputer.jsp").forward(request, response);
 
 	}
@@ -88,12 +90,16 @@ public class EditComputer extends HttpServlet {
 			Computer computer = ComputerMapper.toComputer(computerDto);
 			ComputerService computerService = ComputerService.getInstance();
 			computerService.update(computer);
+			request.setAttribute("computerDto", computerDto);
+			request.setAttribute("sucess", "computer updated");
 		} catch (DateTimeParseException e) {
 			logger.error("invalid date format ");
-			logger.error("computer creation not allowed");
+			logger.error("computer update not allowed");
+			request.setAttribute("error", "computer update not allowed");
 		} catch (IllegalArgumentException e) {
 			logger.error("Illegal arguments");
-			logger.error("computer creation not allowed");
+			logger.error("computer update not allowed");
+			request.setAttribute("error", "computer update not allowed");
 		}
 		doGet(request, response);
 	}

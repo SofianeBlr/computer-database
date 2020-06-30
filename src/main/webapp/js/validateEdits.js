@@ -26,9 +26,6 @@ function validateDates() {
 		valid = false;
 		alert("introduced date must be defined to set discontinued date");
 	}
-	if(valid){
-		alert("Computer updated");
-	}
 	return valid;
 }
 
