@@ -57,6 +57,7 @@ public class EditComputer extends HttpServlet {
 				computerDto = ComputerMapper.mapComputerDto(comp);
 			}
 		}
+		System.out.println(computerDto.getId());
 		request.setAttribute("computerDto", computerDto);
 		request.getRequestDispatcher("/views/editComputer.jsp").forward(request, response);
 
@@ -84,7 +85,6 @@ public class EditComputer extends HttpServlet {
 			computerDto.setDiscontinued(request.getParameter("discontinued"));
 		}
 		try {
-			System.out.println(computerDto.getId() +" "+computerDto.getName()+" " + computerDto.getIntroduced()+ " "+ computerDto.getDiscontinued()+ " " + computerDto.getCompany().getId());
 			Computer computer = ComputerMapper.toComputer(computerDto);
 			ComputerService computerService = ComputerService.getInstance();
 			computerService.update(computer);

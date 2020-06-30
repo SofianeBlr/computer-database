@@ -21,11 +21,11 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<div class="label label-default pull-right">id: 0</div>
+					<div class="label label-default pull-right">id: ${computerDto.id}</div>
 					<h1>Edit Computer</h1>
 
 					<form action="editComputer" method="POST" onsubmit = "return validateDates()">
-						<input type="hidden" value="${computerDto.id}" id="id" name="id" />
+						<input type="hidden" id="id" name="id" value="${computerDto.id}"/>
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
@@ -50,7 +50,7 @@
 									<option value="0">--</option>
 									<c:forEach items="${companies}" var="company">
 										<c:set var="selected" value="" />
-										<c:if test="${company.id == computerDto.id}">
+										<c:if test="${company.id == computerDto.company.id}">
 											<c:set var="selected" value="selected" />
 										</c:if>
 										<option value="${company.id}" ${selected}><c:out
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 	</section>
-	<script src="./js/validateDates.js"></script>
+	<script src="./js/validateEdits.js"></script>
 
 </body>
 </html>
