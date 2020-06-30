@@ -36,8 +36,8 @@ public abstract class ServiceDao<T> {
 	 * @param object to delete
 	 * @return boolean (true if deleted)
 	 */
-	public boolean delete(T obj) {
-		return dao.delete(obj);
+	public boolean delete(Long id) {
+		return dao.delete(id);
 	}
 
 	/**

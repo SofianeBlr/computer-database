@@ -94,11 +94,11 @@ public class EditComputer extends HttpServlet {
 			request.setAttribute("sucess", "computer updated");
 		} catch (DateTimeParseException e) {
 			logger.error("invalid date format ");
-			logger.error("computer update not allowed");
+			logger.error("computer update not allowed",e);
 			request.setAttribute("error", "computer update not allowed");
 		} catch (IllegalArgumentException e) {
 			logger.error("Illegal arguments");
-			logger.error("computer update not allowed");
+			logger.error("computer update not allowed",e);
 			request.setAttribute("error", "computer update not allowed");
 		}
 		doGet(request, response);

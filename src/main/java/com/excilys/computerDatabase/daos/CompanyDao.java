@@ -70,10 +70,10 @@ public class CompanyDao extends DAO<Company> {
 	}
 
 	@Override
-	public boolean delete(Company obj) {
+	public boolean delete(Long id) {
 		try (Connection connect = getConnection();
 				PreparedStatement preparedStatement = connect.prepareStatement(DELETE)){
-            preparedStatement.setLong(1, obj.getId());
+            preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
