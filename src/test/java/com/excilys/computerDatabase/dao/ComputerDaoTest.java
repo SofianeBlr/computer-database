@@ -50,7 +50,7 @@ public class ComputerDaoTest {
 	public void testDeleteComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
 		Computer computer = new Computer(42L,"test");
-		computerDao.delete(computer);
+		computerDao.delete(computer.getId());
 	    assertNull(computerDao.find(computer.getId()));
 	}
 	

@@ -49,15 +49,22 @@ public class CompanyDaoTest {
 	public void testDeleteCompany() {
 		CompanyDao companyDao= CompanyDao.getInstance();
 		Company company = new Company(42L,"test");
-		companyDao.delete(company);
+		companyDao.delete(company.getId());
 	    assertNull(companyDao.find(company.getId()));
+	}
+	
+	@Test
+	public void testDeleteCompanyWithComputers() {
+		CompanyDao companyDao= CompanyDao.getInstance();
+		companyDao.delete(1L);
+	    assertEquals(new Long(9), companyDao.size());
 	}
 	
 	@Test
 	public void testGetPageCompany() {
 		CompanyDao companyDao= CompanyDao.getInstance();
 		ArrayList<Company> c = companyDao.getPage(0, 10);
-	    assertEquals( 10, c.size());
+	    assertEquals(10, c.size());
 	    
 	}
 	
