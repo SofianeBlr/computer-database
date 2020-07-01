@@ -29,18 +29,21 @@ public class Dashboard extends HttpServlet{
 		ComputerService computerService = ComputerService.getInstance();
 
 		int currentPage=1;
-		int numberPerPage =10;
-		String search = "";
+		int numberPerPage = 10;
 		int navMaxPageIndex=5;
 		int maxPage =0;
 		Long numberOfComputer= 0L;
-
+		String search = "";
+		String orderBy=null;
+		
+		if (request.getParameter("orderBy")!=null){
+			orderBy=request.getParameter("orderBy");
+		}
 		if (request.getParameter("page") != null) {
 			currentPage = Integer.parseInt(request.getParameter("page"));
 		}
 		if (request.getParameter("numberPerPage") != null) {
 			numberPerPage = Integer.parseInt(request.getParameter("numberPerPage"));
-			request.setAttribute("numberPerPage", numberPerPage);
 		}
 		if (currentPage < 1) {
 			currentPage = 1;
@@ -53,7 +56,7 @@ public class Dashboard extends HttpServlet{
 				currentPage = maxPage;
 			}
 			numberOfComputer = computerService.size();
-			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage);
+			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage,orderBy);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
 			}
@@ -65,7 +68,7 @@ public class Dashboard extends HttpServlet{
 			if (currentPage>maxPage) {
 				currentPage = maxPage;
 			}
-			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage,search);
+			List<Computer> computerPage = computerService.getPageWithSearch(currentPage-1,numberPerPage,search,orderBy);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
 			}
@@ -84,6 +87,8 @@ public class Dashboard extends HttpServlet{
 		request.setAttribute("maxPage", maxPage);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("navMaxPageIndex", navMaxPageIndex);
+		request.setAttribute("numberPerPage", numberPerPage);
+		request.setAttribute("orderBy", orderBy);
 		request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 	}
 	
@@ -103,4 +108,5 @@ public class Dashboard extends HttpServlet{
 		}
 		doGet(request, response);
 	}
+	
 }

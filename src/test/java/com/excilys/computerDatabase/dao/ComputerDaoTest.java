@@ -57,7 +57,7 @@ public class ComputerDaoTest {
 	@Test
 	public void testGetPageComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
-		ArrayList<Computer> c = computerDao.getPage(0, 10);
+		ArrayList<Computer> c = computerDao.getPage(0, 10,null);
 	    assertEquals( 10, c.size());
 	    
 	}
@@ -72,7 +72,7 @@ public class ComputerDaoTest {
 	@Test
 	public void testGetPageWithSearchComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
-		ArrayList<Computer> c = computerDao.getPageWithSearch(0, 100, "App");
+		ArrayList<Computer> c = computerDao.getPageWithSearch(0, 100, "App","computer.id");
 	    assertEquals( 9, c.size());
 	    
 	}

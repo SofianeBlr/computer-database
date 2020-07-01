@@ -63,7 +63,7 @@ public class CompanyDaoTest {
 	@Test
 	public void testGetPageCompany() {
 		CompanyDao companyDao= CompanyDao.getInstance();
-		ArrayList<Company> c = companyDao.getPage(0, 10);
+		ArrayList<Company> c = companyDao.getPage(0, 10,null);
 	    assertEquals(10, c.size());
 	    
 	}

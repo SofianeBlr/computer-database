@@ -161,7 +161,7 @@ public class CompanyDao extends DAO<Company> {
 	}
 
 	@Override
-	public ArrayList<Company> getPage(int debut, int number) {
+	public ArrayList<Company> getPage(int debut, int number,String orderBy) {
 		ArrayList<Company> comps = new ArrayList<Company>();
 		try(Connection connect = getConnection();
 				PreparedStatement preparedStatement = connect.prepareStatement(GET_PAGE);) {
@@ -183,7 +183,7 @@ public class CompanyDao extends DAO<Company> {
 
 
 	@Override
-	public ArrayList<Company> getPageWithSearch(int debut, int number, String search) {
+	public ArrayList<Company> getPageWithSearch(int debut, int number, String search,String orderBy) {
 		return null;
 	}
 

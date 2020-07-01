@@ -13,6 +13,18 @@
 <link href="./css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
+	<c:set var="searchValue" value="" />
+	<c:if test="${search != null}">
+		<c:set var="searchValue" value="&search=${search}" />
+	</c:if>
+	<c:set var="nbPerPage" value="" />
+	<c:if test="${numberPerPage != null}">
+		<c:set var="nbPerPage" value="&numberPerPage=${numberPerPage}" />
+	</c:if>
+	<c:set var="orderByValue" value="" />
+	<c:if test="${orderBy != null}">
+		<c:set var="orderByValue" value="&orderBy=${orderBy}" />
+	</c:if>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="dashboard"> Application - Computer
@@ -28,8 +40,8 @@
 					<form id="searchForm" action="" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name"  value="${search}"/> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="Search name" value="${search}" />
+						<input type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
 				</div>
@@ -59,12 +71,28 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th onclick="window.location.href='?orderBy=${orderBy=='cnASC'?'cnDSC': 'cnASC'}${searchValue}${nbPerPage}'">Computer name 
+						<c:if test="${orderBy == 'cnASC'}"><span class="pull-right">⬆</span></c:if>
+						<c:if test="${orderBy == 'cnDSC'}"><span class="pull-right">⬇</span></c:if>
+						<c:if test="${orderBy != 'cnASC'&& orderBy != 'cnDSC'}"><span class="pull-right">⬆⬇</span></c:if>
+						</th>
+						<th onclick="window.location.href='?orderBy=${orderBy=='diASC'?'diDSC': 'diASC'}${searchValue}${nbPerPage}'">Introduced date 
+						<c:if test="${orderBy == 'diASC'}"><span class="pull-right">⬆</span></c:if>
+						<c:if test="${orderBy == 'diDSC'}"><span class="pull-right">⬇</span></c:if>
+						<c:if test="${orderBy != 'diASC'&& orderBy != 'diDSC'}"><span class="pull-right">⬆⬇</span></c:if>
+						</th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th  onclick="window.location.href='?orderBy=${orderBy=='ddASC'?'ddDSC': 'ddASC'}${searchValue}${nbPerPage}'">Discontinued date 
+						<c:if test="${orderBy == 'ddASC'}"><span class="pull-right">⬆</span></c:if>
+						<c:if test="${orderBy == 'ddDSC'}"><span class="pull-right">⬇</span></c:if>
+						<c:if test="${orderBy != 'ddASC'&& orderBy != 'ddDSC'}"><span class="pull-right">⬆⬇</span></c:if>
+						</th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th  onclick="window.location.href='?orderBy=${orderBy=='ciASC'?'ciDSC': 'ciASC'}${searchValue}${nbPerPage}'">Company
+						<c:if test="${orderBy == 'ciASC'}"><span class="pull-right">⬆</span></c:if>
+						<c:if test="${orderBy == 'ciDSC'}"><span class="pull-right">⬇</span></c:if>
+						<c:if test="${orderBy != 'ciASC'&& orderBy != 'ciDSC'}"><span class="pull-right">⬆⬇</span></c:if>
+						</th>
 
 					</tr>
 				</thead>
@@ -88,56 +116,67 @@
 	</section>
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<c:set var="searchValue" value=""/>                             
-			<c:if test="${search != null}"> 
-				<c:set var="searchValue" value="&search=${search}"/>                             
-			</c:if> 
-			<c:set var="nbPerPage" value=""/>                             
-			<c:if test="${numberPerPage != null}"> 
-				<c:set var="nbPerPage" value="&numberPerPage=${numberPerPage}"/>                             
-			</c:if> 
-			 <c:if test="${maxPage > 0}">
+			<c:if test="${maxPage > 0}">
 				<ul class="pagination">
-				    <c:if test="${currentPage > 1}">	
-				    	<li class="page-item"> <a href="dashboard?page=1${searchValue}${nbPerPage}" aria-label="First">
-						       <span aria-hidden="true">&laquo;&laquo;</span></a>
-				        </li>		
-					    <li class="page-item"> <a href="dashboard?page=${currentPage-1}${searchValue}${nbPerPage}" aria-label="Previous">
-						       <span aria-hidden="true">&laquo;</span></a>
-				        </li>
-                    </c:if>
-					<c:forEach var="i" begin="${navMaxPageIndex-4>0?navMaxPageIndex-4:1}" end="${navMaxPageIndex}" step="1">
-					   <c:set var="activePage" value=""/>                             
-					    <c:if test="${i == currentPage}"> 
-					       <c:set var="activePage" value="active"/>                             
- 					    </c:if>   
-						<li class="page-item ${activePage}"><a href="dashboard?page=${i}${searchValue}${nbPerPage}"><c:out value="${i}" /></a></li>
+					<c:if test="${currentPage > 1}">
+						<li class="page-item"><a
+							href="dashboard?page=1${searchValue}${nbPerPage}${orderByValue}"
+							aria-label="First"> <span aria-hidden="true">&laquo;&laquo;</span></a>
+						</li>
+						<li class="page-item"><a
+							href="dashboard?page=${currentPage-1}${searchValue}${nbPerPage}${orderByValue}"
+							aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
+						</li>
+					</c:if>
+					<c:forEach var="i"
+						begin="${navMaxPageIndex-4>0?navMaxPageIndex-4:1}"
+						end="${navMaxPageIndex}" step="1">
+						<c:set var="activePage" value="" />
+						<c:if test="${i == currentPage}">
+							<c:set var="activePage" value="active" />
+						</c:if>
+						<li class="page-item ${activePage}"><a
+							href="dashboard?page=${i}${searchValue}${nbPerPage}${orderByValue}"><c:out
+									value="${i}" /></a></li>
 					</c:forEach>
 					<c:if test="${currentPage < maxPage}">
-					   <li class="page-item"><a href="dashboard?page=${currentPage+1}${searchValue}${nbPerPage}" aria-label="Next">
-					       <span aria-hidden="true">&raquo;</span></a>
-					   </li>
-					   <li class="page-item"><a href="dashboard?page=${maxPage}${searchValue}${nbPerPage}" aria-label="Last">
-					       <span aria-hidden="true">&raquo;&raquo;</span></a>
-					   </li>
+						<li class="page-item"><a
+							href="dashboard?page=${currentPage+1}${searchValue}${nbPerPage}${orderByValue}"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span></a></li>
+						<li class="page-item"><a
+							href="dashboard?page=${maxPage}${searchValue}${nbPerPage}${orderByValue}"
+							aria-label="Last"> <span aria-hidden="true">&raquo;&raquo;</span></a>
+						</li>
 					</c:if>
 				</ul>
 			</c:if>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default"
-					onclick="window.location.href='?numberPerPage=10&search=${search}'">10</button>
-				<button type="button" class="btn btn-default"
-					onclick="window.location.href='?numberPerPage=50&search=${search}'">50</button>
-				<button type="button" class="btn btn-default"
-					onclick="window.location.href='?numberPerPage=100&search=${search}'">100</button>
+				<c:set var="activeNumber" value="" />
+				<c:if test="${numberPerPage == 10}">
+					<c:set var="activeNumber" value="active" />
+				</c:if>
+				<button type="button" class="btn btn-default ${activeNumber}"
+					onclick="window.location.href='?numberPerPage=10&search=${search}${orderByValue}'">10</button>
+				<c:set var="activeNumber" value="" />
+				<c:if test="${numberPerPage == 50}">
+					<c:set var="activeNumber" value="active" />
+				</c:if>
+				<button type="button" class="btn btn-default ${activeNumber}"
+					onclick="window.location.href='?numberPerPage=50&search=${search}${orderByValue}'">50</button>
+				<c:set var="activeNumber" value="" />
+				<c:if test="${numberPerPage == 100}">
+					<c:set var="activeNumber" value="active" />
+				</c:if>
+				<button type="button" class="btn btn-default ${activeNumber}"
+					onclick="window.location.href='?numberPerPage=100&search=${search}${orderByValue}'">100</button>
 			</div>
 		</div>
 	</footer>
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
 	<script src="./js/dashboard.js"></script>
-	
+
 
 </body>
 </html>
