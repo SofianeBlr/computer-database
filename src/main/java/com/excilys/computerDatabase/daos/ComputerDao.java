@@ -30,12 +30,12 @@ public class ComputerDao extends DAO<Computer> {
 	private static String getPageWithSearch(String search) {
 		return "select computer.id,computer.name,introduced,discontinued,company_id,cp.name as company_name"
 				+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
-				+ "where computer.name like '%"+search + "%' Order By id LIMIT ?,?";
+				+ "where computer.name like '%"+search + "%' "+"or cp.name like '%"+search+"%'"+" Order By computer.id LIMIT ?,?;";
 	}
 	private static String getMaxWithSearch(String search) {
-		return "select count(id)"
-				+ " from computer"
-				+ " where name like '%"+search + "%';";
+		return "select count(computer.id)" 
+				+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "  
+				+ "where computer.name like '%"+search + "%' "+"or cp.name like '%"+search+"%';";
 	}
 		
 			
@@ -257,7 +257,7 @@ public class ComputerDao extends DAO<Computer> {
 				Statement myStmt= connect.createStatement();
 				ResultSet myRs = myStmt.executeQuery(getMaxWithSearch(search));) {
 			myRs.next();
-			return myRs.getLong("count(id)");
+			return myRs.getLong("count(computer.id)");
 		} catch (SQLException e) {
 			logger.error("error in size()");
 			e.printStackTrace();
