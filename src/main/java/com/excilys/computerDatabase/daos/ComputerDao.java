@@ -230,7 +230,6 @@ public class ComputerDao extends DAO<Computer> {
 				PreparedStatement preparedStatement = connect.prepareStatement(String.format(GET_PAGE_W_SEARCH, orderBy!=null?orderBy:"computer.id"));) {
 			preparedStatement.setString(1, search!=null?"%"+search+"%":"%%");
 			preparedStatement.setString(2, search!=null?"%"+search+"%":"%%");
-			System.out.println(orderBy!=null?orderBy:"computer.id");
 			preparedStatement.setInt(3, debut);
 			preparedStatement.setInt(4, number);
 			myRs = preparedStatement.executeQuery();
