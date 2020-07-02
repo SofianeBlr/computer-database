@@ -52,6 +52,15 @@ public class CompanyDaoTest {
 		companyDao.delete(company.getId());
 	    assertNull(companyDao.find(company.getId()));
 	}
+	@Test
+	public void testUpdateCompany() {
+		CompanyDao companyDao= CompanyDao.getInstance();
+		Company company = companyDao.find(1L);
+		company.setName("test");
+		Company expCompany = companyDao.update(company);
+	    assertEquals(company.getName(),expCompany.getName());
+	    assertEquals(company.getId(),expCompany.getId());
+	}
 	
 	@Test
 	public void testDeleteCompanyWithComputers() {

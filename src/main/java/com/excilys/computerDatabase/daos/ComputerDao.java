@@ -270,19 +270,19 @@ public class ComputerDao extends DAO<Computer> {
 		}
 		String converted ="";
 		if(order.substring(0,2).equals("cn")) {
-			converted += "ISNULL(computer.name), computer.name ";
+			converted += " computer.name ";
 		}
 		else if(order.substring(0,2).equals("di")) {
-			converted += "ISNULL(computer.introduced), computer.introduced ";
+			converted += " computer.introduced ";
 		}
 		else if(order.substring(0,2).equals("dd")) {
-			converted += "ISNULL(computer.discontinued),computer.discontinued ";
+			converted += " computer.discontinued ";
 		}
 		else if(order.substring(0,2).equals("ci")) {
-			converted += "ISNULL(company_name),company_name ";
+			converted += " company_name ";
 		}
 		if(order.substring(2,5).equals("ASC")) {
-			converted += "ASC";
+			converted = converted + "IS NULL," + converted + " ASC";
 		}
 		else if(order.substring(2,5).equals("DSC")) {
 			converted += "DESC";
