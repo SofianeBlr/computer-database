@@ -58,7 +58,6 @@ public class AddComputer extends HttpServlet {
 			computerDto.setDiscontinued(request.getParameter("discontinued"));
 		}
 		try {
-			System.out.println(computerDto.getId()+computerDto.getName()+" " + computerDto.getIntroduced());
 			Computer computer = ComputerMapper.toComputer(computerDto);
 			ComputerService computerService = ComputerService.getInstance();
 			computerService.create(computer);

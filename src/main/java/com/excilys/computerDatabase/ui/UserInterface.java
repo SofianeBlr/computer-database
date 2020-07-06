@@ -113,7 +113,7 @@ public class UserInterface {
 		Long computerId = getLong("the id of the computer to delete");
 		Computer comp = computerService.find(computerId);
 		if(comp!= null) {
-			computerService.delete(comp);
+			computerService.delete(comp.getId());
 			displayComputer(comp);
 		}
 		else {

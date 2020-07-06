@@ -3,6 +3,7 @@ package com.excilys.computerDatabase.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -45,19 +46,42 @@ public class ComputerDaoTest {
 		Computer computerExc = computerDao.create(computer);
 	    assertEquals(computerExc, computer);
 	}
+	@Test
+	public void testCreateComputerWNull() {
+		ComputerDao computerDao= ComputerDao.getInstance();
+		Computer computer = new Computer(0L,"test",null,LocalDate.now(),10L);
+		Computer computerExc = computerDao.create(computer);
+	    assertEquals(computerExc, computer);
+	}
+	
+	@Test
+	public void testUpdateComputer() {
+		ComputerDao computerDao= ComputerDao.getInstance();
+		Computer computer = new Computer(10L,"test",null,LocalDate.now(),10L);
+		Computer computerExc = computerDao.update(computer);
+	    assertEquals(computerExc, computer);
+	}
+	
+	@Test
+	public void testUpdateComputerWNull() {
+		ComputerDao computerDao= ComputerDao.getInstance();
+		Computer computer = new Computer(10L,"test",LocalDate.now(),null,null);
+		Computer computerExc = computerDao.update(computer);
+	    assertEquals(computerExc, computer);
+	}
 	
 	@Test
 	public void testDeleteComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
 		Computer computer = new Computer(42L,"test");
-		computerDao.delete(computer);
+		computerDao.delete(computer.getId());
 	    assertNull(computerDao.find(computer.getId()));
 	}
 	
 	@Test
 	public void testGetPageComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
-		ArrayList<Computer> c = computerDao.getPage(0, 10);
+		ArrayList<Computer> c = computerDao.getPage(0, 10,null);
 	    assertEquals( 10, c.size());
 	    
 	}
@@ -70,17 +94,30 @@ public class ComputerDaoTest {
 	}
 	
 	@Test
-	public void testGetPageWithSearchComputer() {
+	public void testGetPageWithSearchComputerWithOrderBy() {
 		ComputerDao computerDao= ComputerDao.getInstance();
-		ArrayList<Computer> c = computerDao.getPageWithSearch(0, 100, "App");
-	    assertEquals( 9, c.size());
-	    
+		ArrayList<Computer> c = computerDao.getPageWithSearch(0, 100, "App","cnASC");
+		assertTrue(c.get(10).getName().compareTo(c.get(11).getName())<=0); 
 	}
 	@Test
 	public void testGetMaxPageWithSearchComputer() {
 		ComputerDao computerDao= ComputerDao.getInstance();
 		Long c = computerDao.sizeWithSearch("App");
-	    assertEquals( new Long(9), c);
+	    assertEquals( new Long(23), c);
+	    
+	}
+	
+	@Test
+	public void testGetMaxPageWithWithOrderBy() {
+		ComputerDao computerDao= ComputerDao.getInstance();
+		ArrayList<Computer> c = computerDao.getPage(0, 20, "cnDSC");
+	    assertTrue(c.get(1).getName().compareTo(c.get(2).getName())>=0); 
+	}
+	@Test
+	public void testGetSize() {
+		ComputerDao computerDao= ComputerDao.getInstance();
+		Long c = computerDao.size();
+	    assertEquals( new Long(50), c);
 	    
 	}
 

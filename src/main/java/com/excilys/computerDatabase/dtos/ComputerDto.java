@@ -7,7 +7,7 @@ public class ComputerDto {
 	private String name;
 	private String introduced;
 	private String discontinued;
-	private CompanyDto company;
+	private CompanyDto company = new CompanyDto();
 	public ComputerDto(Computer computer) {
 		super();
 		this.id = computer.getId().toString();

@@ -22,6 +22,8 @@ public class CompanyDao extends DAO<Company> {
 	private final static String MAXID = "select MAX(id) from company ";
 	private final static String SIZE = "select count(*) from company";
 	private final static String GET_PAGE = "select * from company LIMIT ?,?";
+	private final static String GET_COMPANY_COMPUTERS = "select id from computer where company_id = ?";
+	private final static String DELETE_COMPUTERS = "DELETE FROM computer WHERE id IN (";
 	
     private static CompanyDao companyDao;
 	
@@ -70,15 +72,39 @@ public class CompanyDao extends DAO<Company> {
 	}
 
 	@Override
-	public boolean delete(Company obj) {
-		try (Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(DELETE)){
-            preparedStatement.setLong(1, obj.getId());
-            preparedStatement.executeUpdate();
+	public boolean delete(Long id) {
+		try (Connection connect = getConnection()){
+			connect.setAutoCommit(false);
+			//computers ids
+			PreparedStatement getComputers = connect.prepareStatement(GET_COMPANY_COMPUTERS);
+			getComputers.setLong(1, id);
+            ResultSet getComputersRs= getComputers.executeQuery();
+            String ids = getComputersRs.next() ? String.valueOf(getComputersRs.getLong("id"))  :"";
+			while(getComputersRs.next()) {
+				ids+= "," + getComputersRs.getLong("id");
+			}
+			close(getComputers);
+			close(getComputersRs);
+			//delete computers
+			
+			PreparedStatement deleteComputers = connect.prepareStatement(DELETE_COMPUTERS+ids+");");
+			deleteComputers.executeUpdate();
+			close(deleteComputers);
+			//delete companies
+			PreparedStatement deleteCompany = connect.prepareStatement(DELETE);
+			deleteCompany.setLong(1, id);
+			deleteCompany.executeUpdate();
+			close(deleteCompany);
+			//commit
+			connect.commit();
+			
             return true;
         } catch (SQLException e) {
-        	logger.error("error in delete");
+        	logger.error("error in delete",e);
+        	
+        	//if no commit the connection rollback on connection.close()
         }
+		
 		return false;
 	}
 
@@ -135,7 +161,7 @@ public class CompanyDao extends DAO<Company> {
 	}
 
 	@Override
-	public ArrayList<Company> getPage(int debut, int number) {
+	public ArrayList<Company> getPage(int debut, int number,String orderBy) {
 		ArrayList<Company> comps = new ArrayList<Company>();
 		try(Connection connect = getConnection();
 				PreparedStatement preparedStatement = connect.prepareStatement(GET_PAGE);) {
@@ -157,7 +183,7 @@ public class CompanyDao extends DAO<Company> {
 
 
 	@Override
-	public ArrayList<Company> getPageWithSearch(int debut, int number, String search) {
+	public ArrayList<Company> getPageWithSearch(int debut, int number, String search,String orderBy) {
 		return null;
 	}
 

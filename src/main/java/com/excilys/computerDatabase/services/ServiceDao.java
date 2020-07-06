@@ -36,8 +36,8 @@ public abstract class ServiceDao<T> {
 	 * @param object to delete
 	 * @return boolean (true if deleted)
 	 */
-	public boolean delete(T obj) {
-		return dao.delete(obj);
+	public boolean delete(Long id) {
+		return dao.delete(id);
 	}
 
 	/**
@@ -80,12 +80,23 @@ public abstract class ServiceDao<T> {
 
 	public List<T> getPage(int page,int number) {
 		List<T> list;
-		list = dao.getPage(page*number, number);
+		list = dao.getPage(page*number, number,null);
 		return list;
 	}
-	public List<T> getPage(int page,int number,String search) {
+	public List<T> getPage(int page,int number,String orderBy) {
 		List<T> list;
-		list = dao.getPageWithSearch(page*number, number,search);
+		list = dao.getPage(page*number, number,orderBy);
+		return list;
+	}
+	
+	public List<T> getPageWithSearch(int page,int number,String search,String orderBy) {
+		List<T> list;
+		list = dao.getPageWithSearch(page*number, number,search,orderBy);
+		return list;
+	}
+	public List<T> getPageWithSearch(int page,int number,String search) {
+		List<T> list;
+		list = dao.getPageWithSearch(page*number, number,search,"computer.id");
 		return list;
 	}
 	public int getMaxPage(int number){

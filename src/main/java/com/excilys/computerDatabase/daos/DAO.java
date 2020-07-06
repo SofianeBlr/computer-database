@@ -58,7 +58,7 @@ public abstract class DAO<T> {
 	 * @param object to delete
 	 * @return boolean (true if deleted)
 	 */
-	public abstract boolean delete(T obj);
+	public abstract boolean delete(Long id);
 
 	/**
 	 * update an object in database
@@ -96,9 +96,9 @@ public abstract class DAO<T> {
 	 * @param number number of element to return
 	 * @return List<T> page
 	 */
-	public abstract ArrayList<T> getPage(int debut,int number);
+	public abstract ArrayList<T> getPage(int debut,int number,String orderBy);
 	
-	public abstract ArrayList<T> getPageWithSearch(int debut,int number,String search);
+	public abstract ArrayList<T> getPageWithSearch(int debut,int number,String search,String orderBy);
 
 
 
