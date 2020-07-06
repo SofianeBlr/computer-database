@@ -9,35 +9,41 @@ import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.validators.ComputerValidator;
 
 public abstract class ComputerMapper {
+	
+	private static final String ATTRIBUT_ID_COMPUTER = "id";
+	private static final String ATTRIBUT_NAME = "name";
+	private static final String ATTRIBUT_INTRODUCED = "introduced";
+	private static final String ATTRIBUT_DISCONTINUED = "discontinued";
+	private static final String ATTRIBUT_COMPANY_ID = "company_id";
 
 	public static Computer mapComputer(ResultSet resultset) throws SQLException {
-		Computer comp = new Computer(resultset.getLong("id"),resultset.getString("name"));
+		Computer comp = new Computer(resultset.getLong(ATTRIBUT_ID_COMPUTER),resultset.getString(ATTRIBUT_NAME));
 
-		if(Long.valueOf(resultset.getLong("company_id"))!=0L) {
-			comp.setCompanyId(resultset.getLong("company_id"));
+		if(Long.valueOf(resultset.getLong(ATTRIBUT_COMPANY_ID))!=0L) {
+			comp.setCompanyId(resultset.getLong(ATTRIBUT_COMPANY_ID));
 		}
-		if(resultset.getDate("introduced") != null) {
-			comp.setIntroduced(resultset.getDate("introduced").toLocalDate());
+		if(resultset.getDate(ATTRIBUT_INTRODUCED) != null) {
+			comp.setIntroduced(resultset.getDate(ATTRIBUT_INTRODUCED).toLocalDate());
 		}
-		if(resultset.getDate("discontinued") != null) {
-			comp.setDiscontinued(resultset.getDate("discontinued").toLocalDate());
+		if(resultset.getDate(ATTRIBUT_DISCONTINUED) != null) {
+			comp.setDiscontinued(resultset.getDate(ATTRIBUT_DISCONTINUED).toLocalDate());
 		}
 		return comp;
 	}
 	public static Computer mapComputerWithCompany(ResultSet resultset) throws SQLException {
-		Computer comp = new Computer(resultset.getLong("id"),resultset.getString("name"));
+		Computer comp = new Computer(resultset.getLong(ATTRIBUT_ID_COMPUTER),resultset.getString(ATTRIBUT_NAME));
 		
 		comp.setCompanyName(resultset.getString("company_name"));
 
 		comp.setCompanyName(resultset.getString("company_name"));
-		if(Long.valueOf(resultset.getLong("company_id"))!=0L) {
-			comp.setCompanyId(resultset.getLong("company_id"));
+		if(Long.valueOf(resultset.getLong(ATTRIBUT_COMPANY_ID))!=0L) {
+			comp.setCompanyId(resultset.getLong(ATTRIBUT_COMPANY_ID));
 		}
-		if(resultset.getDate("introduced") != null) {
-			comp.setIntroduced(resultset.getDate("introduced").toLocalDate());
+		if(resultset.getDate(ATTRIBUT_INTRODUCED) != null) {
+			comp.setIntroduced(resultset.getDate(ATTRIBUT_INTRODUCED).toLocalDate());
 		}
-		if(resultset.getDate("discontinued") != null) {
-			comp.setDiscontinued(resultset.getDate("discontinued").toLocalDate());
+		if(resultset.getDate(ATTRIBUT_DISCONTINUED) != null) {
+			comp.setDiscontinued(resultset.getDate(ATTRIBUT_DISCONTINUED).toLocalDate());
 		}
 		return comp;
 	}
