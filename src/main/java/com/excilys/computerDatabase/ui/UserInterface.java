@@ -6,6 +6,8 @@ import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.services.CompanyService;
@@ -14,8 +16,11 @@ import com.excilys.computerDatabase.services.ComputerService;
 public class UserInterface {
 	static Scanner input =new Scanner(System.in);
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-	static ComputerService computerService = ComputerService.getInstance();
-	static CompanyService companyService = CompanyService.getInstance();
+	@Autowired
+	static CompanyService companyService;
+	
+	@Autowired
+	static ComputerService computerService;
 
 	public static void main(String[] args) {
 		while(true) {

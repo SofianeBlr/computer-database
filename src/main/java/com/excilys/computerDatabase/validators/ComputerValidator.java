@@ -22,7 +22,7 @@ public class ComputerValidator {
 		if (computerDto.getDiscontinued()!=null) {
 			comp.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued()));
 		}
-		if (computerDto.getCompany()!=null) {
+		if (computerDto.getCompany()!=null && computerDto.getCompany().getId()!=null) {
 			comp.setCompanyId(Long.parseLong(computerDto.getCompany().getId()));
 		}
 		return comp;

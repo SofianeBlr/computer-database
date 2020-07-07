@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.dtos.CompanyDto;
 import com.excilys.computerDatabase.dtos.ComputerDto;
@@ -28,9 +31,20 @@ import com.excilys.computerDatabase.services.ComputerService;
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(AddComputer.class);
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private ComputerService computerService;
+	
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+   	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CompanyService companyService = CompanyService.getInstance();
+
 		List<Company> allCompanies = companyService.getAll();
 		List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
 		for (Company c : allCompanies) {
@@ -59,14 +73,13 @@ public class AddComputer extends HttpServlet {
 		}
 		try {
 			Computer computer = ComputerMapper.toComputer(computerDto);
-			ComputerService computerService = ComputerService.getInstance();
 			computerService.create(computer);
 		} catch (DateTimeParseException e) {
-			logger.error("invalid date format ");
-			logger.error("computer creation not allowed");
+			logger.error("invalid date format ",e);
+			logger.error("computer creation not allowed",e);
 		} catch (IllegalArgumentException e) {
-			logger.error("Illegal arguments");
-			logger.error("computer creation not allowed");
+			logger.error("Illegal arguments",e);
+			logger.error("computer creation not allowed",e);
 		}
 		doGet(request, response);
 	}

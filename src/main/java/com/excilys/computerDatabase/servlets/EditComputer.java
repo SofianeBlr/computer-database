@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.dtos.CompanyDto;
 import com.excilys.computerDatabase.dtos.ComputerDto;
@@ -29,11 +32,21 @@ public class EditComputer extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(EditComputer.class);
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private ComputerService computerService;
+	
+	
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+   	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ComputerService computerService = ComputerService.getInstance();
 		
-		CompanyService companyService = CompanyService.getInstance();
 		List<Company> allCompanies = companyService.getAll();
 		List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
 		for (Company c : allCompanies) {
@@ -88,7 +101,6 @@ public class EditComputer extends HttpServlet {
 		}
 		try {
 			Computer computer = ComputerMapper.toComputer(computerDto);
-			ComputerService computerService = ComputerService.getInstance();
 			computerService.update(computer);
 			request.setAttribute("computerDto", computerDto);
 			request.setAttribute("sucess", "computer updated");

@@ -8,9 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.computerDatabase.mappers.CompanyMapper;
 import com.excilys.computerDatabase.models.Company;
 
+@Repository
 public class CompanyDao extends DAO<Company> {
 	
 	
@@ -24,20 +27,7 @@ public class CompanyDao extends DAO<Company> {
 	private final static String GET_PAGE = "select * from company LIMIT ?,?";
 	private final static String GET_COMPANY_COMPUTERS = "select id from computer where company_id = ?";
 	private final static String DELETE_COMPUTERS = "DELETE FROM computer WHERE id IN (";
-	
-    private static CompanyDao companyDao;
-	
-    
-    /**
-     * Instance of the singleton CompanyDao.
-     * @return the instance of CompanyDao
-     */
-    public static synchronized CompanyDao getInstance() {
-        if (companyDao == null) {
-            companyDao = new CompanyDao();
-        }
-        return companyDao;
-    }
+
 
 
 

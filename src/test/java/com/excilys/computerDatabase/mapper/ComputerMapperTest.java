@@ -124,6 +124,15 @@ public class ComputerMapperTest {
 		assertEquals(fromDto, computer);
 
 	}
+	@Test
+	public void testMapComputerDtoToComputerWithNull() {		
+
+		Computer computer = new Computer(idComputer,computerName,introduced.toLocalDate(),discontinued.toLocalDate(),null);
+		ComputerDto computerDto = ComputerMapper.mapComputerDto(computer);
+		Computer fromDto = ComputerMapper.toComputer(computerDto);
+		assertEquals(fromDto, computer);
+
+	}
 	
 
 }

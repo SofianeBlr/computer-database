@@ -10,10 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.computerDatabase.mappers.ComputerMapper;
 import com.excilys.computerDatabase.models.Computer;
 
-
+@Repository
 public class ComputerDao extends DAO<Computer> {
 
 	private final static String INSERT = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES(?,?,?,?);";
@@ -36,22 +38,6 @@ public class ComputerDao extends DAO<Computer> {
 			+ "where computer.name like ? or cp.name like ?;";
 		
 			
-
-	private static ComputerDao computerDao;
-
-
-	/**
-	 * Instance of the singleton ComputerDao.
-	 * @return the instance of ComputerDao
-	 */
-	public static synchronized ComputerDao getInstance() {
-		if (computerDao == null) {
-			computerDao = new ComputerDao();
-		}
-		return computerDao;
-	}
-
-
 	@Override
 	public ArrayList<Computer> getAll() {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
