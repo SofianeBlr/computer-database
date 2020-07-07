@@ -8,10 +8,12 @@ import com.excilys.computerDatabase.models.Company;
 
 
 public abstract class CompanyMapper {
+	private static final String ATTRIBUT_ID_COMPANY = "id";
+    private static final String ATTRIBUT_NAME = "name";
 
 	public static Company mapCompany(ResultSet resultset) throws SQLException {
-		Long id = Long.valueOf(resultset.getLong("id"));
-		Company company=new Company(id,resultset.getString("name"));
+		Long id = Long.valueOf(resultset.getLong(ATTRIBUT_ID_COMPANY));
+		Company company=new Company(id,resultset.getString(ATTRIBUT_NAME));
 		return company;
 	}
 	public static CompanyDto mapCompanyDto(Company company) {
