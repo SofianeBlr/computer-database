@@ -4,38 +4,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 
 
 
 
+@Repository
 public abstract class DAO<T> {
 	protected static Logger logger = LoggerFactory.getLogger(DAO.class);
 	protected static Connection connect = null;
-    private static HikariDataSource dataSource;
+	
+	@Autowired
+    private HikariDataSource dataSource;
 
 	public DAO(){
-		if (connect== null) {
-			init();
-		}
 	}
-	private void init() {
-		try {
-			HikariConfig config = new HikariConfig("/datasource.properties");
-            dataSource = new HikariDataSource(config);
-			connect = dataSource.getConnection();
-		} catch (SQLException e) {
-			logger.error("Unable to establish connection to database");
-		}
-	}
+	
 
 
 
 	protected Connection getConnection() throws SQLException {
-		if(connect.isClosed()) {
+		if(connect==null || connect.isClosed()) {
 			connect = dataSource.getConnection();
 		}
 		return connect;
