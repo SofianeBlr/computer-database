@@ -7,22 +7,28 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.services.CompanyService;
 import com.excilys.computerDatabase.services.ComputerService;
+import com.excilys.springConfiguration.SpringConfiguration;
 
 public class UserInterface {
 	static Scanner input =new Scanner(System.in);
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-	@Autowired
+	
 	static CompanyService companyService;
 	
-	@Autowired
+	
 	static ComputerService computerService;
 
 	public static void main(String[] args) {
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+		companyService =  ctx.getBean(CompanyService.class);
+		computerService =  ctx.getBean(ComputerService.class);
 		while(true) {
 			int d =mainMenu();
 			switch (d) {
