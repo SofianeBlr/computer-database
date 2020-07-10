@@ -1,190 +1,169 @@
 package com.excilys.computerDatabase.daos;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.excilys.computerDatabase.mappers.CompanyMapper;
 import com.excilys.computerDatabase.models.Company;
 
 @Repository
 public class CompanyDao extends DAO<Company> {
-	
-	
-	private final static String INSERT = "INSERT INTO company(name) VALUES(?);";
-	private final static String DELETE = "DELETE FROM company WHERE id = ?;";
-	private final static String UPDATE = "UPDATE company SET name = ? WHERE id = ?;";
-	private final static String FINDALL = "select * from company";
-	private final static String FIND = "select * from company where id=";
+
+
+	private final static String INSERT = "INSERT INTO company(name) VALUES(:name);";
+	private final static String DELETE = "DELETE FROM company WHERE id = :id;";
+	private final static String UPDATE = "UPDATE company SET name = :name WHERE id = :id;";
+	private final static String FIND_ALL = "select id , name from company";
+	private final static String FIND = "select id , name from company where id=:id";
 	private final static String MAXID = "select MAX(id) from company ";
-	private final static String SIZE = "select count(*) from company";
-	private final static String GET_PAGE = "select * from company LIMIT ?,?";
-	private final static String GET_COMPANY_COMPUTERS = "select id from computer where company_id = ?";
-	private final static String DELETE_COMPUTERS = "DELETE FROM computer WHERE id IN (";
+	private final static String SIZE = "select count(id) from company";
+	private final static String GET_PAGE = "select id , name from company LIMIT :start,:number";
+	private final static String DELETE_COMPANY_COMPUTERS = "DELETE FROM computer where company_id = :id";
 
 
 
 
-	
+
 	@Override
 	public ArrayList<Company> getAll() {
-		ArrayList<Company> comps = new ArrayList<Company>();
-		try (Connection connect = getConnection();
-				Statement myStmt = connect.createStatement();
-				ResultSet myRs= myStmt.executeQuery(FINDALL)){
-			while(myRs.next()) {
-				comps.add(CompanyMapper.mapCompany(myRs));
-			}
-		} catch (SQLException e) {
-			logger.error("error get all companies");
+
+		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return (ArrayList<Company>) vJdbcTemplate.query(FIND_ALL,  new CompanyMapper());
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get all companies",dae);
+			return new ArrayList<Company>();
 		}
-		
-		return comps;
 	}
-	
+
 	@Override
 	public Company create(Company obj) {
-		try (Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(INSERT)){
-            preparedStatement.setString(1, obj.getName());
-            preparedStatement.executeUpdate();
-            return find(maxId());
-        } catch (SQLException e) {
-        	logger.error("error in create");
-        }
-		return null;
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
+
+		vParams.addValue("name", obj.getName(),Types.VARCHAR);
+
+		try {
+			vJdbcTemplate.update(INSERT,vParams);
+			return obj;
+
+		}catch (DataAccessException dae) {
+			logger.error("Not able to add company",dae);
+			return null;
+		}	
+
 	}
 
 	@Override
 	public boolean delete(Long id) {
-		try (Connection connect = getConnection()){
-			connect.setAutoCommit(false);
-			//computers ids
-			PreparedStatement getComputers = connect.prepareStatement(GET_COMPANY_COMPUTERS);
-			getComputers.setLong(1, id);
-            ResultSet getComputersRs= getComputers.executeQuery();
-            String ids = getComputersRs.next() ? String.valueOf(getComputersRs.getLong("id"))  :"";
-			while(getComputersRs.next()) {
-				ids+= "," + getComputersRs.getLong("id");
+		boolean deleted = false;
+		TransactionTemplate transactionTemplate =new TransactionTemplate();
+		transactionTemplate.executeWithoutResult(status->{
+			try {
+				NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+				MapSqlParameterSource vParams = new MapSqlParameterSource();
+				vParams.addValue("id", id,Types.BIGINT);
+				vJdbcTemplate.update(DELETE_COMPANY_COMPUTERS, vParams);
+				vJdbcTemplate.update(DELETE,vParams);
+
+			}catch (Exception e) {
+				status.setRollbackOnly();
 			}
-			close(getComputers);
-			close(getComputersRs);
-			//delete computers
-			
-			PreparedStatement deleteComputers = connect.prepareStatement(DELETE_COMPUTERS+ids+");");
-			deleteComputers.executeUpdate();
-			close(deleteComputers);
-			//delete companies
-			PreparedStatement deleteCompany = connect.prepareStatement(DELETE);
-			deleteCompany.setLong(1, id);
-			deleteCompany.executeUpdate();
-			close(deleteCompany);
-			//commit
-			connect.commit();
-			
-            return true;
-        } catch (SQLException e) {
-        	logger.error("error in delete",e);
-        	
-        	//if no commit the connection rollback on connection.close()
-        }
-		
-		return false;
+		});
+		return deleted;
 	}
 
 	@Override
 	public Company update(Company obj) {
-		try (Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(UPDATE)){
-            preparedStatement.setString(1, obj.getName());
-            preparedStatement.setLong(2, obj.getId());
-            preparedStatement.executeUpdate();
-            return find(obj.getId());
-        } catch (SQLException e) {
-        	logger.error("error in update");
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
+		vParams.addValue("id", obj.getId());
+		vParams.addValue("name", obj.getName(),Types.VARCHAR);
+		try {
+			vJdbcTemplate.update(UPDATE,vParams);
+			return obj;
 
-        }
-		return null;
+		}catch (DataAccessException dae) {
+			logger.error("Not able to update computer",dae);
+			return null;
+		}	
 	}
 
 	@Override
 	public Company find(Long id) {
-		Company company = null;
-		try (Connection connect = getConnection();
-				Statement myStmt= connect.createStatement();
-				ResultSet myRs = myStmt.executeQuery(FIND + id);){
-			myRs.next();
-			company= CompanyMapper.mapCompany(myRs);
-		} catch (SQLException e) {
-        	logger.error("error in find(id");
-		}
-		
-		return company;
-	}
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
 
-	@Override
-	public Long maxId() throws SQLException{
-		try(Connection connect = getConnection();
-				Statement myStmt= connect.createStatement();
-				ResultSet myRs = myStmt.executeQuery(MAXID);) {
-			myRs.next();
-			return myRs.getLong("MAX(id)");
-		}
-	}
-	@Override
-	public Long size() {
-		try (Connection connect = getConnection();
-				Statement myStmt= connect.createStatement();
-				ResultSet myRs = myStmt.executeQuery(SIZE);) {
-			myRs.next();
-			return myRs.getLong("count(*)");
-		} catch (SQLException e) {
-			logger.error("error in size()");
+		vParams.addValue("id", id,Types.BIGINT);
+
+		try {
+			return vJdbcTemplate.queryForObject(FIND, vParams, new CompanyMapper());
+		}catch (DataAccessException dae) {
+			logger.error("Not able to find company",dae);
 			return null;
 		}
 	}
 
-	@Override
-	public ArrayList<Company> getPage(int debut, int number,String orderBy) {
-		ArrayList<Company> comps = new ArrayList<Company>();
-		try(Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(GET_PAGE);) {
-	        preparedStatement.setInt(1, debut);
-	        preparedStatement.setInt(2, number);
-			ResultSet myRs = preparedStatement.executeQuery();
-			while(myRs.next()) {
-				comps.add(CompanyMapper.mapCompany(myRs));
+		@Override
+		public Long maxId() throws SQLException{
+			JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+			try {
+				return vJdbcTemplate.queryForObject(MAXID, Long.class);
+			}catch (DataAccessException dae) {
+				logger.error("Not able to get maxId",dae);
+				return 0L;
 			}
-			close(myRs);
-		} catch (SQLException e) {
-			logger.error("error in getPage()");		
+		}
+		@Override
+		public Long size() {
+			JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+			try {
+				return vJdbcTemplate.queryForObject(SIZE, Long.class);
+			}catch (DataAccessException dae) {
+				logger.error("Not able to get size",dae);
+				return 0L;
 			}
-		
-		return comps;
+		}
+
+		@Override
+		public ArrayList<Company> getPage(int start, int number,String orderBy) {
+			NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+			MapSqlParameterSource vParams = new MapSqlParameterSource();
+			vParams.addValue("number", number);
+			vParams.addValue("start", start);
+
+			try {
+				return (ArrayList<Company>) vJdbcTemplate.query(GET_PAGE,vParams,  new CompanyMapper());
+			}catch (DataAccessException dae) {
+				logger.error("Not able to get page",dae);
+				return new ArrayList<Company>();
+			}
+		}
+
+
+
+
+		@Override
+		public ArrayList<Company> getPageWithSearch(int debut, int number, String search,String orderBy) {
+			return null;
+		}
+
+
+
+
+		@Override
+		public Long sizeWithSearch(String search) {
+			return null;
+		}
+
+
 	}
-
-
-
-
-	@Override
-	public ArrayList<Company> getPageWithSearch(int debut, int number, String search,String orderBy) {
-		return null;
-	}
-
-
-
-
-	@Override
-	public Long sizeWithSearch(String search) {
-		return null;
-	}
-
-	
-
-}

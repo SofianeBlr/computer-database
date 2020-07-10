@@ -19,7 +19,7 @@ public abstract class DAO<T> {
 	protected static Connection connect = null;
 	
 	@Autowired
-    private HikariDataSource dataSource;
+	protected HikariDataSource dataSource;
 
 	public DAO(){
 	}
@@ -92,6 +92,7 @@ public abstract class DAO<T> {
 	public abstract ArrayList<T> getPage(int debut,int number,String orderBy);
 	
 	public abstract ArrayList<T> getPageWithSearch(int debut,int number,String search,String orderBy);
+	
 
 
 

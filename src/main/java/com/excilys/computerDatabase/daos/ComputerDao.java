@@ -1,15 +1,17 @@
 package com.excilys.computerDatabase.daos;
 
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Types;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.mappers.ComputerMapper;
@@ -18,238 +20,199 @@ import com.excilys.computerDatabase.models.Computer;
 @Repository
 public class ComputerDao extends DAO<Computer> {
 
-	private final static String INSERT = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES(?,?,?,?);";
-	private final static String DELETE = "DELETE FROM computer WHERE id = ?;";
-	private final static String UPDATE = "UPDATE computer SET name = ?, introduced = ? , discontinued = ? , company_id = ? WHERE id = ?;";
-	private final static String FINDALL = "select * from computer";
-	private final static String FIND = "select * from computer where id=";
+	private final static String INSERT = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES(:name,:introduced,:discontinued,:companyId);";
+	private final static String DELETE = "DELETE FROM computer WHERE id = :id;";
+	private final static String UPDATE = "UPDATE computer SET name = :name, introduced = :introduced , discontinued = :discontinued , company_id = :companyId WHERE id = :id;";
+	private final static String FIND_ALL = "select computer.id,computer.name,introduced,discontinued,company_id from computer";
+	private final static String FIND = "select computer.id,computer.name,introduced,discontinued,company_id from computer where id=:id";
 	private final static String MAXID = "select MAX(id) from computer ";
-	private final static String SIZE = "select count(*) from computer";
+	private final static String SIZE = "select count(id) from computer";
 	//private final static String GET_PAGE = "select * from computer LIMIT ?,?";
 	private final static String GET_PAGE_W_COMPANY = "select computer.id,computer.name,introduced,discontinued,company_id,cp.name as company_name"
 			+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
-			+ "Order By %s LIMIT ?,?";
+			+ "Order By %s LIMIT :start,:number";
 	private final static String GET_PAGE_W_SEARCH = "select computer.id,computer.name,introduced,discontinued,company_id,cp.name as company_name"
 			+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
-			+ "where computer.name like ? or cp.name like ?"
-			+" Order By %s LIMIT ?,?;";
+			+ "where computer.name like :search or cp.name like :search"
+			+" Order By %s LIMIT :start,:number;";
 	private final static String GET_MAX_PAGE_W_SEARCH = "select count(computer.id)" 
 			+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "  
-			+ "where computer.name like ? or cp.name like ?;";
-		
-			
+			+ "where computer.name like :search or cp.name like :search;";
+
+
 	@Override
 	public ArrayList<Computer> getAll() {
-		ArrayList<Computer> computers = new ArrayList<Computer>();
-
-
-		try(Connection connect = getConnection();
-				Statement myStmt = connect.createStatement();
-				ResultSet myRs= myStmt.executeQuery(FINDALL)) {
-			while(myRs.next()) {
-				Computer computer = ComputerMapper.mapComputer(myRs);
-				computers.add(computer);
-			}
-		} catch (SQLException e) {
-			logger.error("error in getAll()");
-			e.printStackTrace();
+		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return (ArrayList<Computer>) vJdbcTemplate.query(FIND_ALL,  new ComputerMapper());
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get all computers",dae);
+			return new ArrayList<Computer>();
 		}
-
-
-		return computers;
 	}
 
 	@Override
 	public Computer create(Computer obj) {
-		try (Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(INSERT)){
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
 
+		Date introduced = obj.getIntroduced()!=null?Date.valueOf(obj.getIntroduced()):null;
+		Date discontinued = obj.getDiscontinued()!=null?Date.valueOf(obj.getDiscontinued()):null;
 
+		vParams.addValue("name", obj.getName(),Types.VARCHAR);
+		vParams.addValue("introduced", introduced,Types.DATE);
+		vParams.addValue("discontinued",discontinued ,Types.DATE);
+		vParams.addValue("companyId", obj.getCompanyId(),Types.BIGINT);
 
-			preparedStatement.setString(1, obj.getName());
-			if( obj.getIntroduced()!=null) {
-				preparedStatement.setDate(2, Date.valueOf(obj.getIntroduced()));
-			}
-			else {
-				preparedStatement.setNull(2, Types.DATE);;
-			}
-			if( obj.getDiscontinued()!=null) {
-				preparedStatement.setDate(3, Date.valueOf(obj.getDiscontinued()));
-			}
-			else {
-				preparedStatement.setNull(3, Types.DATE);
-			}
-			if( obj.getCompanyId()!=null) {
-				preparedStatement.setLong(4,obj.getCompanyId());
-			}
-			else {
-				preparedStatement.setNull(4, Types.BIGINT);
-			}
+		try {
+			vJdbcTemplate.update(INSERT,vParams);
+			return obj;
 
-			preparedStatement.executeUpdate();
-			return find(maxId());
-		} catch (SQLException e) {
-			logger.error("error in create()");
-		}
-		return null;
+		}catch (DataAccessException dae) {
+			logger.error("Not able to add computer",dae);
+			return null;
+		}	
+
 	}
 
 	@Override
 	public boolean delete(Long id) {
-		try (Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(DELETE)){
-			preparedStatement.setLong(1, id);
-			preparedStatement.executeUpdate();
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
+		vParams.addValue("id", id,Types.BIGINT);
+
+		try {
+			vJdbcTemplate.update(DELETE,vParams);
 			return true;
-		} catch (SQLException e) {
-			logger.error("error in delete()");
+
+		}catch (DataAccessException dae) {
+			logger.error("Not able to delete computer",dae);
+			return false;
 		}
-		return false;
 	}
 
 	@Override
 	public Computer update(Computer obj) {
-		try(Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(UPDATE)) {
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
 
-			preparedStatement.setString(1, obj.getName());
-			if( obj.getIntroduced()!=null) {
-				preparedStatement.setDate(2, Date.valueOf(obj.getIntroduced()));
-			}
-			else {
-				preparedStatement.setNull(2, Types.DATE);
-			}
-			if( obj.getDiscontinued()!=null) {
-				preparedStatement.setDate(3, Date.valueOf(obj.getDiscontinued()));
-			}
-			else {
-				preparedStatement.setNull(3, Types.DATE);
-			}
-			if( obj.getCompanyId()!=null) {
-				preparedStatement.setLong(4,obj.getCompanyId());
-			}
-			else {
-				preparedStatement.setNull(4, Types.BIGINT);
-			}
-			preparedStatement.setLong(5,obj.getId());
+		Date introduced = obj.getIntroduced()!=null?Date.valueOf(obj.getIntroduced()):null;
+		Date discontinued = obj.getDiscontinued()!=null?Date.valueOf(obj.getDiscontinued()):null;
 
-			preparedStatement.executeUpdate();
-			return find(obj.getId());
-		} catch (SQLException e) {
-			logger.error("error in update()");
-		}
-		return null;
+
+		vParams.addValue("id", obj.getId());
+		vParams.addValue("name", obj.getName(),Types.VARCHAR);
+		vParams.addValue("introduced",introduced,Types.DATE);
+		vParams.addValue("discontinued", discontinued,Types.DATE);
+		vParams.addValue("companyId", obj.getCompanyId(),Types.BIGINT);
+
+		try {
+			vJdbcTemplate.update(UPDATE,vParams);
+			return obj;
+
+		}catch (DataAccessException dae) {
+			logger.error("Not able to update computer",dae);
+			return null;
+		}	
 	}
 
 	@Override
 	public Computer find(Long id) {
 		Computer comp = null;
 
-		try(Connection connect = getConnection();
-				Statement myStmt= connect.createStatement();
-				ResultSet myRs = myStmt.executeQuery(FIND + id);) { 
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
 
-			myRs.next();
-			comp =  ComputerMapper.mapComputer(myRs);
-		} catch (SQLException e) {
-			logger.error("error in fin(id)");
-		}
+		vParams.addValue("id", id,Types.BIGINT);
 
-		return comp;
+		RowMapper<Computer> vRowMapper = new RowMapper<Computer>() {
+			public Computer mapRow(ResultSet rs, int pRowNum) throws SQLException {
+				return ComputerMapper.mapComputer(rs);
+			}
+		};
+		try {
+			comp =vJdbcTemplate.queryForObject(FIND, vParams, vRowMapper);
+			return comp;
+		}catch (DataAccessException dae) {
+			logger.error("Not able to find computer",dae);
+			return null;
+		}	
+
 	}
 
 	@Override
-	public Long maxId() throws SQLException  {
-		try(Connection connect = getConnection();
-				Statement myStmt= connect.createStatement();
-				ResultSet myRs = myStmt.executeQuery(MAXID);) {
-			myRs.next();
-			return myRs.getLong("MAX(id)");
+	public Long maxId()  {
+		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return vJdbcTemplate.queryForObject(MAXID, Long.class);
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get maxId",dae);
+			return 0L;
 		}
 	}
 
 	@Override
 	public Long size() {
-		try(Connection connect = getConnection();
-				Statement myStmt= connect.createStatement();
-				ResultSet myRs = myStmt.executeQuery(SIZE);) {
-			myRs.next();
-			return myRs.getLong("count(*)");
-		} catch (SQLException e) {
-			logger.error("error in size()");
-			return null;
+		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return vJdbcTemplate.queryForObject(SIZE, Long.class);
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get size",dae);
+			return 0L;
 		}
-
 	}
 
 	@Override
-	public ArrayList<Computer> getPage(int debut, int number,String orderBy) {
-		ArrayList<Computer> computers = new ArrayList<Computer>();
+	public ArrayList<Computer> getPage(int start, int number,String orderBy) {
 		orderBy=orderByConversion(orderBy);
-		ResultSet myRs;
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
+		vParams.addValue("number", number);
+		vParams.addValue("start", start);
 
-		try(Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(String.format(GET_PAGE_W_COMPANY, orderBy==null?"computer.id":orderBy));) {
-			preparedStatement.setInt(1, debut);
-			preparedStatement.setInt(2, number); 
-			myRs = preparedStatement.executeQuery();
-
-			while(myRs.next()) {
-				Computer computer = ComputerMapper.mapComputerWithCompany(myRs);
-				computers.add(computer);
-			}
-
-
-		} catch (SQLException e) {
-			logger.error("error in getPage()" + orderBy,e);
+		try {
+			return (ArrayList<Computer>) vJdbcTemplate.query(String.format(GET_PAGE_W_COMPANY, orderBy==null?"computer.id":orderBy),vParams,  new ComputerMapper());
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get page",dae);
+			return new ArrayList<Computer>();
 		}
-
-		return computers;
 	}
-	
+
 	@Override
-	public ArrayList<Computer> getPageWithSearch(int debut, int number,String search,String orderBy) {
-		ArrayList<Computer> computers = new ArrayList<Computer>();
-		ResultSet myRs;
+	public ArrayList<Computer> getPageWithSearch(int start, int number,String search,String orderBy) {
+
 		orderBy=orderByConversion(orderBy);
-		try(Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(String.format(GET_PAGE_W_SEARCH, orderBy!=null?orderBy:"computer.id"));) {
-			preparedStatement.setString(1, search!=null?"%"+search+"%":"%%");
-			preparedStatement.setString(2, search!=null?"%"+search+"%":"%%");
-			preparedStatement.setInt(3, debut);
-			preparedStatement.setInt(4, number);
-			myRs = preparedStatement.executeQuery();
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
+		vParams.addValue("number", number);
+		vParams.addValue("start", start);
+		vParams.addValue("search", search!=null?"%"+search+"%":"%%");
 
-			while(myRs.next()) {
-				Computer computer = ComputerMapper.mapComputerWithCompany(myRs);
-				computers.add(computer);
-			}
-
-
-		} catch (SQLException e) {
-			logger.error("error in getPage()");
-			e.printStackTrace();
+		try {
+			return (ArrayList<Computer>) vJdbcTemplate.query(String.format(GET_PAGE_W_SEARCH, orderBy==null?"computer.id":orderBy),vParams, new ComputerMapper());
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get page with search",dae);
+			return new ArrayList<Computer>();
 		}
-
-		return computers;
 	}
 
 
 	@Override
 	public Long sizeWithSearch(String search) {
-		try(Connection connect = getConnection();
-				PreparedStatement preparedStatement = connect.prepareStatement(GET_MAX_PAGE_W_SEARCH);) {
-			preparedStatement.setString(1, search!=null?"%"+search+"%":"%%");
-			preparedStatement.setString(2, search!=null?"%"+search+"%":"%%");
-			ResultSet myRs = preparedStatement.executeQuery();
-			myRs.next();
-			return myRs.getLong("count(computer.id)");
-		} catch (SQLException e) {
-			logger.error("error in size()");
-			e.printStackTrace();
-			return 0l;
+
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
+		vParams.addValue("search", search!=null?"%"+search+"%":"%%");
+		try {
+			return vJdbcTemplate.queryForObject(GET_MAX_PAGE_W_SEARCH, vParams, Long.class);
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get size with search",dae);
+			return 0L;
 		}
+
 	}
+
+
 	private String orderByConversion(String order) {
 		if(order==null ||order.length()!=5) {
 			return null;
@@ -275,5 +238,4 @@ public class ComputerDao extends DAO<Computer> {
 		}
 		return converted;
 	}
-
 }

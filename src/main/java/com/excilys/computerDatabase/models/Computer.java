@@ -29,7 +29,7 @@ public class Computer {
 		if(introduced == null || this.discontinued == null) {
 			this.introduced = introduced;
 		}
-		else if(this.introduced.isBefore(discontinued)) {
+		else if(introduced.isBefore(discontinued) || introduced.equals(discontinued)) {
 			this.introduced = introduced;
 		}
 		else {
@@ -43,7 +43,7 @@ public class Computer {
 		if(this.introduced == null || discontinued==null) {
 			this.discontinued = discontinued;
 		}
-		else if(this.introduced.isBefore(discontinued)) {
+		else if(this.introduced.isBefore(discontinued) || this.introduced.isEqual(discontinued)) {
 			this.discontinued = discontinued;
 		}
 		else {
