@@ -15,6 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.dtos.CompanyDto;
@@ -27,10 +33,10 @@ import com.excilys.computerDatabase.services.CompanyService;
 import com.excilys.computerDatabase.services.ComputerService;
 
 
-@WebServlet("/editComputer")
-public class EditComputer extends HttpServlet {
+@Controller()
+@RequestMapping("/editComputer")
+public class EditComputer{
 
-	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(EditComputer.class);
 	
 	@Autowired
@@ -39,26 +45,22 @@ public class EditComputer extends HttpServlet {
 	@Autowired
 	private ComputerService computerService;
 	
-	
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-   	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@GetMapping
+	public String getEditComputer(@RequestParam(required=false, name="idComputer",defaultValue = "") String idComputer,
+			Model model){
 		
 		List<Company> allCompanies = companyService.getAll();
 		List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
 		for (Company c : allCompanies) {
 			companyDtos.add(CompanyMapper.mapCompanyDto(c));
 		}
-		request.setAttribute("companies", companyDtos);
+		model.addAttribute("companies", companyDtos);
 		
 		ComputerDto computerDto= new ComputerDto();
 		Long computerId = null;
-		if (request.getParameter("idComputer") != null) {
+		if (!idComputer.isEmpty()) {
 			try {
-				computerId = Long.parseLong(request.getParameter("idComputer"));
+				computerId = Long.parseLong(idComputer);
 			}
 			catch (NumberFormatException e) {
 				logger.error("NumberFormatException",e);
@@ -70,50 +72,44 @@ public class EditComputer extends HttpServlet {
 				computerDto = ComputerMapper.mapComputerDto(comp);
 			}
 		}
-		if(request.getAttribute("computerDto")==null) {
-			request.setAttribute("computerDto", computerDto);
+		if(model.getAttribute("computerDto")==null) {
+			model.addAttribute("computerDto", computerDto);
 		}
 		
-		request.getRequestDispatcher("/views/editComputer.jsp").forward(request, response);
+		return "editComputer";
 
 	}
 	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@PostMapping
+	protected String postEditComputer(@RequestParam(required=false, name="id",defaultValue = "") String id,
+			@RequestParam(required =true, name="computerName") String computerName,
+			@RequestParam(required=false, name="introduced") String introduced,
+			@RequestParam(required=false, name="discontinued") String discontinued,
+			@RequestParam(required=false, name="companyId") String companyId,
+			Model model){
 		ComputerDto computerDto= new ComputerDto();
 		computerDto.setId("null");
-		if (request.getParameter("id")!=null && !request.getParameter("id").isEmpty()) {
-			computerDto.setId(request.getParameter("id"));
-		}
-		if (request.getParameter("computerName")!=null && !request.getParameter("computerName").isEmpty()) {
-			computerDto.setName(request.getParameter("computerName"));
-		}
-		if (request.getParameter("companyId")!=null &&!request.getParameter("companyId").isEmpty() && !request.getParameter("companyId").equals("0")) {
-			CompanyDto company = new CompanyDto();
-			company.setId(request.getParameter("companyId"));
-			computerDto.setCompany(company);
-		}
-		if (request.getParameter("introduced")!=null && !request.getParameter("introduced").isEmpty()) {
-			computerDto.setIntroduced(request.getParameter("introduced"));
-		}
-		if (request.getParameter("discontinued")!=null && !request.getParameter("discontinued").isEmpty()) {
-			computerDto.setDiscontinued(request.getParameter("discontinued"));
-		}
+		computerDto.setId(id);
+		computerDto.setName(computerName);
+		computerDto.getCompany().setId(companyId);
+		computerDto.setIntroduced(introduced);
+		computerDto.setDiscontinued(discontinued);
+		
 		try {
 			Computer computer = ComputerMapper.toComputer(computerDto);
 			computerService.update(computer);
-			request.setAttribute("computerDto", computerDto);
-			request.setAttribute("sucess", "computer updated");
+			model.addAttribute("computerDto", computerDto);
+			model.addAttribute("sucess", "computer updated");
 		} catch (DateTimeParseException e) {
 			logger.error("invalid date format ");
 			logger.error("computer update not allowed",e);
-			request.setAttribute("error", "computer update not allowed");
+			model.addAttribute("error", "computer update not allowed");
 		} catch (IllegalArgumentException e) {
 			logger.error("Illegal arguments");
 			logger.error("computer update not allowed",e);
-			request.setAttribute("error", "computer update not allowed");
+			model.addAttribute("error", "computer update not allowed");
 		}
-		doGet(request, response);
+		return getEditComputer(id, model);
 	}
 	
 

@@ -1,64 +1,63 @@
 package com.excilys.computerDatabase.servlets;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerDatabase.dtos.ComputerDto;
 import com.excilys.computerDatabase.mappers.ComputerMapper;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.services.ComputerService;
 
-@WebServlet("/dashboard")
-public class Dashboard extends HttpServlet{
+@Controller()
+@RequestMapping("/dashboard")
+public class Dashboard{
 
-	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(Dashboard.class);
-	
+
 	@Autowired
 	public ComputerService computerService;
 
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-   	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@GetMapping
+	public String getDashboard(@RequestParam(required=false, name="numberPerPage" ,defaultValue = "10") String numberPerPageParam,
+			@RequestParam(required=false, name="page",defaultValue = "1") String currentPageParam,
+			@RequestParam(required=false, name="orderBy",defaultValue = "") String orderByPram,
+			@RequestParam(required=false, name="search",defaultValue = "") String searchParam,
+			Model model){
 
 		int currentPage=1;
 		int numberPerPage = 10;
 		int navMaxPageIndex=5;
 		int maxPage =0;
 		Long numberOfComputer= 0L;
-		String search = "";
 		String orderBy=null;
-		
-		if (request.getParameter("orderBy")!=null){
-			orderBy=request.getParameter("orderBy");
+
+		if (!orderByPram.isEmpty()){
+			orderBy=orderByPram;
 		}
-		if (request.getParameter("page") != null) {
-			currentPage = Integer.parseInt(request.getParameter("page"));
+		if(!currentPageParam.isEmpty()) {		
+			currentPage = Integer.parseInt(currentPageParam);
 		}
-		if (request.getParameter("numberPerPage") != null) {
-			numberPerPage = Integer.parseInt(request.getParameter("numberPerPage"));
+		if(!numberPerPageParam.isEmpty()) {		
+			numberPerPage = Integer.parseInt(numberPerPageParam);
 		}
+
 		if (currentPage < 1) {
 			currentPage = 1;
 		}
 		List<ComputerDto> computerDtoPage = new ArrayList<ComputerDto>();
-		if (request.getParameter("search") == null||request.getParameter("search").isEmpty()) {
+		if (searchParam.isEmpty()) {
 			maxPage =computerService.getMaxPage(numberPerPage);
 			if (currentPage>maxPage) {
 				currentPage = maxPage;
@@ -70,40 +69,48 @@ public class Dashboard extends HttpServlet{
 			}
 		}
 		else {
-			search =request.getParameter("search");
-			numberOfComputer = computerService.sizeWithSearch(search);
-			maxPage =computerService.getMaxPageWithSearch(numberPerPage, search);
+
+			numberOfComputer = computerService.sizeWithSearch(searchParam);
+			maxPage =computerService.getMaxPageWithSearch(numberPerPage, searchParam);
 			if (currentPage>maxPage) {
 				currentPage = maxPage;
 			}
-			List<Computer> computerPage = computerService.getPageWithSearch(currentPage-1,numberPerPage,search,orderBy);
+			List<Computer> computerPage = computerService.getPageWithSearch(currentPage-1,numberPerPage,searchParam,orderBy);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
 			}
 
 		}
-	
+
 		if(currentPage>2){
 			navMaxPageIndex =currentPage+2;
 		}
 		if (maxPage<navMaxPageIndex) {
 			navMaxPageIndex=maxPage;
 		}
-		request.setAttribute("numberOfComputer",numberOfComputer);
-		request.setAttribute("computers", computerDtoPage);
-		request.setAttribute("search", search);
-		request.setAttribute("maxPage", maxPage);
-		request.setAttribute("currentPage", currentPage);
-		request.setAttribute("navMaxPageIndex", navMaxPageIndex);
-		request.setAttribute("numberPerPage", numberPerPage);
-		request.setAttribute("orderBy", orderBy);
-		request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+		Map<String,Object> attributeValues = new HashMap<String, Object>();
+		attributeValues.put("numberOfComputer",numberOfComputer);
+		attributeValues.put("computers", computerDtoPage);
+		attributeValues.put("search", searchParam);
+		attributeValues.put("maxPage", maxPage);
+		attributeValues.put("currentPage", currentPage);
+		attributeValues.put("navMaxPageIndex", navMaxPageIndex);
+		attributeValues.put("numberPerPage", numberPerPage);
+		attributeValues.put("orderBy", orderBy);		
+		model.addAllAttributes(attributeValues);
+
+		return "dashboard";
 	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("selection")!=null) {
-			String[] computerIds =request.getParameter("selection").split(",");
+
+	@PostMapping
+	protected String postDashboard(@RequestParam(required=false, name="selection",defaultValue = "") String selection,
+			@RequestParam(required=false, name="numberPerPage" ,defaultValue = "10") String numberPerPageParam,
+			@RequestParam(required=false, name="page",defaultValue = "1") String currentPageParam,
+			@RequestParam(required=false, name="orderBy",defaultValue = "") String orderByPram,
+			@RequestParam(required=false, name="search",defaultValue = "") String searchParam,
+			Model model) {
+		if(!selection.isEmpty()) {
+			String[] computerIds =selection.split(",");
 			for(String c: computerIds) {
 				try {
 					computerService.delete(Long.parseLong(c));
@@ -113,7 +120,7 @@ public class Dashboard extends HttpServlet{
 				}
 			}
 		}
-		doGet(request, response);
+		return getDashboard(numberPerPageParam, currentPageParam, orderByPram, searchParam, model);
 	}
-	
+
 }
