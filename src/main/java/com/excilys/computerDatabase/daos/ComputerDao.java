@@ -27,7 +27,6 @@ public class ComputerDao extends DAO<Computer> {
 	private final static String FIND = "select computer.id,computer.name,introduced,discontinued,company_id from computer where id=:id";
 	private final static String MAXID = "select MAX(id) from computer ";
 	private final static String SIZE = "select count(id) from computer";
-	//private final static String GET_PAGE = "select * from computer LIMIT ?,?";
 	private final static String GET_PAGE_W_COMPANY = "select computer.id,computer.name,introduced,discontinued,company_id,cp.name as company_name"
 			+ " from computer LEFT JOIN company as cp on computer.company_id = cp.id "
 			+ "Order By %s LIMIT :start,:number";
