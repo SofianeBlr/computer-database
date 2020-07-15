@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -27,28 +28,39 @@
 	</c:if>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"><spring:message
+					code="label.title" /> </a>
+			<span class="btn-group btn-group-sm pull-right align-middle" role="group">
+				<button type="button" id="en" class="btn btn-default align-middle"
+					onclick="window.location.href='?${nbPerPage}${searchValue}${orderByValue}&lang=en'">EN</button>
+				<button type="button" id="fr" class="btn btn-default align-middle"
+				onclick="window.location.href='?${nbPerPage}${searchValue}${orderByValue}&lang=fr'">FR</button>
+			</span>
+
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${numberOfComputer} computers found</h1>
+			<h1 id="homeTitle">${numberOfComputer}
+				<spring:message code="dashboard.computerFound" />
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" value="${search}" />
-						<input type="submit" id="searchsubmit" value="Filter by name"
+						<spring:message code="dashboard.filter" var="valSubmit"></spring:message>
+						<input type="submit" id="searchsubmit" value="${valSubmit}"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
+							code="label.addComputer" /> </a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
+							code="label.edit" /> </a>
 				</div>
 			</div>
 		</div>
@@ -71,28 +83,50 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th onclick="window.location.href='?orderBy=${orderBy=='cnASC'?'cnDSC': 'cnASC'}${searchValue}${nbPerPage}'">Computer name 
-						<c:if test="${orderBy == 'cnASC'}"><span class="pull-right">⬆</span></c:if>
-						<c:if test="${orderBy == 'cnDSC'}"><span class="pull-right">⬇</span></c:if>
-						<c:if test="${orderBy != 'cnASC'&& orderBy != 'cnDSC'}"><span class="pull-right">⬆⬇</span></c:if>
+						<th
+							onclick="window.location.href='?orderBy=${orderBy=='cnASC'?'cnDSC': 'cnASC'}${searchValue}${nbPerPage}'">
+							<spring:message code="label.computerName" /> <c:if
+								test="${orderBy == 'cnASC'}">
+								<span class="pull-right">⬆</span>
+							</c:if> <c:if test="${orderBy == 'cnDSC'}">
+								<span class="pull-right">⬇</span>
+							</c:if> <c:if test="${orderBy != 'cnASC'&& orderBy != 'cnDSC'}">
+								<span class="pull-right">⬆⬇</span>
+							</c:if>
 						</th>
-						<th onclick="window.location.href='?orderBy=${orderBy=='diASC'?'diDSC': 'diASC'}${searchValue}${nbPerPage}'">Introduced date 
-						<c:if test="${orderBy == 'diASC'}"><span class="pull-right">⬆</span></c:if>
-						<c:if test="${orderBy == 'diDSC'}"><span class="pull-right">⬇</span></c:if>
-						<c:if test="${orderBy != 'diASC'&& orderBy != 'diDSC'}"><span class="pull-right">⬆⬇</span></c:if>
+						<th
+							onclick="window.location.href='?orderBy=${orderBy=='diASC'?'diDSC': 'diASC'}${searchValue}${nbPerPage}'">
+							<spring:message code="label.introduced" /> <c:if
+								test="${orderBy == 'diASC'}">
+								<span class="pull-right">⬆</span>
+							</c:if> <c:if test="${orderBy == 'diDSC'}">
+								<span class="pull-right">⬇</span>
+							</c:if> <c:if test="${orderBy != 'diASC'&& orderBy != 'diDSC'}">
+								<span class="pull-right">⬆⬇</span>
+							</c:if>
 						</th>
 						<!-- Table header for Discontinued Date -->
-						<th  onclick="window.location.href='?orderBy=${orderBy=='ddASC'?'ddDSC': 'ddASC'}${searchValue}${nbPerPage}'">Discontinued date 
-						<c:if test="${orderBy == 'ddASC'}"><span class="pull-right">⬆</span></c:if>
-						<c:if test="${orderBy == 'ddDSC'}"><span class="pull-right">⬇</span></c:if>
-						<c:if test="${orderBy != 'ddASC'&& orderBy != 'ddDSC'}"><span class="pull-right">⬆⬇</span></c:if>
+						<th
+							onclick="window.location.href='?orderBy=${orderBy=='ddASC'?'ddDSC': 'ddASC'}${searchValue}${nbPerPage}'">
+							<spring:message code="label.discontinued" /> <c:if
+								test="${orderBy == 'ddASC'}">
+								<span class="pull-right">⬆</span>
+							</c:if> <c:if test="${orderBy == 'ddDSC'}">
+								<span class="pull-right">⬇</span>
+							</c:if> <c:if test="${orderBy != 'ddASC'&& orderBy != 'ddDSC'}">
+								<span class="pull-right">⬆⬇</span>
+							</c:if>
 						</th>
 						<!-- Table header for Company -->
-						<th  onclick="window.location.href='?orderBy=${orderBy=='ciASC'?'ciDSC': 'ciASC'}${searchValue}${nbPerPage}'">Company
-						<c:if test="${orderBy == 'ciASC'}"><span class="pull-right">⬆</span></c:if>
-						<c:if test="${orderBy == 'ciDSC'}"><span class="pull-right">⬇</span></c:if>
-						<c:if test="${orderBy != 'ciASC'&& orderBy != 'ciDSC'}"><span class="pull-right">⬆⬇</span></c:if>
-						</th>
+						<th
+							onclick="window.location.href='?orderBy=${orderBy=='ciASC'?'ciDSC': 'ciASC'}${searchValue}${nbPerPage}'"><spring:message
+								code="label.company" /> <c:if test="${orderBy == 'ciASC'}">
+								<span class="pull-right">⬆</span>
+							</c:if> <c:if test="${orderBy == 'ciDSC'}">
+								<span class="pull-right">⬇</span>
+							</c:if> <c:if test="${orderBy != 'ciASC'&& orderBy != 'ciDSC'}">
+								<span class="pull-right">⬆⬇</span>
+							</c:if></th>
 
 					</tr>
 				</thead>

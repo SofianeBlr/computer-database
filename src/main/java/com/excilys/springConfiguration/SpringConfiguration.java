@@ -37,4 +37,5 @@ public class SpringConfiguration implements WebApplicationInitializer {
 	 public HikariDataSource getDatasource() {
 		 return new HikariDataSource(new HikariConfig("/datasource.properties"));
 	 }
+	 
 }
