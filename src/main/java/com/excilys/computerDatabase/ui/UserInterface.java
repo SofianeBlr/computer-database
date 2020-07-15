@@ -13,7 +13,7 @@ import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.services.CompanyService;
 import com.excilys.computerDatabase.services.ComputerService;
-import com.excilys.springConfiguration.SpringConfiguration;
+import com.excilys.springConfiguration.CliConfiguration;
 
 public class UserInterface {
 	static Scanner input =new Scanner(System.in);
@@ -25,7 +25,7 @@ public class UserInterface {
 	static ComputerService computerService;
 
 	public static void main(String[] args) {
-		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
 		companyService =  ctx.getBean(CompanyService.class);
 		computerService =  ctx.getBean(ComputerService.class);
 		while(true) {

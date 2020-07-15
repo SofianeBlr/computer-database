@@ -18,7 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.excilys")
+@ComponentScan(basePackages = "com.excilys.computerDatabase")
 public class SpringConfiguration implements WebApplicationInitializer {
 
 	  @Override
