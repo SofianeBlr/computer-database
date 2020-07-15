@@ -35,7 +35,6 @@ public class Dashboard{
 			@RequestParam(required=false, name="orderBy",defaultValue = "") String orderByPram,
 			@RequestParam(required=false, name="search",defaultValue = "") String searchParam,
 			Model model){
-
 		int currentPage=1;
 		int numberPerPage = 10;
 		int navMaxPageIndex=5;
