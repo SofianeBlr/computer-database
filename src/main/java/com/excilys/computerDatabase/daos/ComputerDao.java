@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.mappers.ComputerMapper;
 import com.excilys.computerDatabase.models.Computer;
+import com.excilys.computerDatabase.models.Page;
 
 @Repository
 public class ComputerDao extends DAO<Computer> {
@@ -162,12 +163,12 @@ public class ComputerDao extends DAO<Computer> {
 	}
 
 	@Override
-	public ArrayList<Computer> getPage(int start, int number,String orderBy) {
-		orderBy=orderByConversion(orderBy);
+	public ArrayList<Computer> getPage(Page page) {
+		String orderBy=orderByConversion(page.getOrderBy());
 		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		MapSqlParameterSource vParams = new MapSqlParameterSource();
-		vParams.addValue("number", number);
-		vParams.addValue("start", start);
+		vParams.addValue("number", page.getNumberPerPage());
+		vParams.addValue("start", page.getPage()*page.getNumberPerPage());
 
 		try {
 			return (ArrayList<Computer>) vJdbcTemplate.query(String.format(GET_PAGE_W_COMPANY, orderBy==null?"computer.id":orderBy),vParams,  new ComputerMapper());
@@ -178,14 +179,14 @@ public class ComputerDao extends DAO<Computer> {
 	}
 
 	@Override
-	public ArrayList<Computer> getPageWithSearch(int start, int number,String search,String orderBy) {
+	public ArrayList<Computer> getPageWithSearch(Page page) {
 
-		orderBy=orderByConversion(orderBy);
+		String orderBy=orderByConversion(page.getOrderBy());
 		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		MapSqlParameterSource vParams = new MapSqlParameterSource();
-		vParams.addValue("number", number);
-		vParams.addValue("start", start);
-		vParams.addValue("search", search!=null?"%"+search+"%":"%%");
+		vParams.addValue("number", page.getNumberPerPage());
+		vParams.addValue("start", page.getPage()*page.getNumberPerPage());
+		vParams.addValue("search", page.getSearch()!=null?"%"+page.getSearch()+"%":"%%");
 
 		try {
 			return (ArrayList<Computer>) vJdbcTemplate.query(String.format(GET_PAGE_W_SEARCH, orderBy==null?"computer.id":orderBy),vParams, new ComputerMapper());

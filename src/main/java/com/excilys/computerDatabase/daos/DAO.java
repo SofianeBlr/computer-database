@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.computerDatabase.models.Page;
 import com.zaxxer.hikari.HikariDataSource;
 
 
@@ -89,9 +90,9 @@ public abstract class DAO<T> {
 	 * @param number number of element to return
 	 * @return List<T> page
 	 */
-	public abstract ArrayList<T> getPage(int debut,int number,String orderBy);
+	public abstract ArrayList<T> getPage(Page page);
 	
-	public abstract ArrayList<T> getPageWithSearch(int debut,int number,String search,String orderBy);
+	public abstract ArrayList<T> getPageWithSearch(Page page);
 	
 
 

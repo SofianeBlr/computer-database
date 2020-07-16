@@ -8,10 +8,13 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.excilys.computerDatabase.daos.CompanyDao;
 import com.excilys.computerDatabase.daos.DAO;
 import com.excilys.computerDatabase.models.Company;
+import com.excilys.springConfiguration.CliConfiguration;
 
 public class CompanyDaoTest {
 	
@@ -20,11 +23,12 @@ public class CompanyDaoTest {
     @Before
     public void setup()
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-       
-        Field instanceDao = DAO.class.getDeclaredField("connect");
+    	Field instanceDao = DAO.class.getDeclaredField("connect");
         instanceDao.setAccessible(true);
         instanceDao.set(null, null);
-        companyDao = new CompanyDao();
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
+    	companyDao = ctx.getBean(CompanyDao.class);
+        
     }
 	
 

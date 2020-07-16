@@ -3,6 +3,7 @@ package com.excilys.computerDatabase.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.computerDatabase.models.Page;
 import com.excilys.computerDatabase.services.ServiceDao;
 
 
@@ -16,7 +17,8 @@ public class PageDisplay {
 		int numberOfPage= pageService.getMaxPage(NUMBER_PER_PAGE);
 		List<T> list;
 		while(true) {
-			list = pageService.getPage(page,NUMBER_PER_PAGE);
+			Page pageDisplay = new Page(page,NUMBER_PER_PAGE);
+			list = pageService.getPage(pageDisplay);
 			for (T l : list) {
 				System.out.print(l);
 			}

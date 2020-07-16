@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.excilys.computerDatabase.dtos.ComputerDto;
 import com.excilys.computerDatabase.mappers.ComputerMapper;
 import com.excilys.computerDatabase.models.Computer;
+import com.excilys.computerDatabase.models.Page;
 import com.excilys.computerDatabase.services.ComputerService;
 
 @Controller()
@@ -62,7 +63,8 @@ public class Dashboard{
 				currentPage = maxPage;
 			}
 			numberOfComputer = computerService.size();
-			List<Computer> computerPage = computerService.getPage(currentPage-1,numberPerPage,orderBy);
+			Page page= new Page(currentPage-1,numberPerPage,null,orderBy);
+			List<Computer> computerPage = computerService.getPage(page);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
 			}
@@ -74,7 +76,8 @@ public class Dashboard{
 			if (currentPage>maxPage) {
 				currentPage = maxPage;
 			}
-			List<Computer> computerPage = computerService.getPageWithSearch(currentPage-1,numberPerPage,searchParam,orderBy);
+			Page page= new Page(currentPage-1,numberPerPage,searchParam,orderBy);
+			List<Computer> computerPage = computerService.getPageWithSearch(page);
 			for (Computer c : computerPage) {
 				computerDtoPage.add(ComputerMapper.mapComputerDto(c));
 			}

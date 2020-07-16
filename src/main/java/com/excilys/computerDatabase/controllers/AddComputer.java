@@ -38,7 +38,7 @@ public class AddComputer{
 	private ComputerService computerService;
 
 	@GetMapping
-	public String getAddComputer(Model model) {
+	public String getAddComputer(@ModelAttribute ComputerDto computerDto,Model model) {
 
 		List<Company> allCompanies = companyService.getAll();
 		List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
@@ -64,7 +64,7 @@ public class AddComputer{
 			logger.error("Illegal arguments",e);
 			logger.error("computer creation not allowed",e);
 		}
-		return getAddComputer(model);
+		return getAddComputer(computerDto,model);
 	}
 	
 	@ModelAttribute

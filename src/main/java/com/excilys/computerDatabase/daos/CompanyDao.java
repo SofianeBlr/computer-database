@@ -14,6 +14,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.excilys.computerDatabase.mappers.CompanyMapper;
 import com.excilys.computerDatabase.models.Company;
+import com.excilys.computerDatabase.models.Page;
 
 @Repository
 public class CompanyDao extends DAO<Company> {
@@ -135,11 +136,11 @@ public class CompanyDao extends DAO<Company> {
 		}
 
 		@Override
-		public ArrayList<Company> getPage(int start, int number,String orderBy) {
+		public ArrayList<Company> getPage(Page page) {
 			NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 			MapSqlParameterSource vParams = new MapSqlParameterSource();
-			vParams.addValue("number", number);
-			vParams.addValue("start", start);
+			vParams.addValue("number", page.getNumberPerPage());
+			vParams.addValue("start", page.getPage()*page.getNumberPerPage());
 
 			try {
 				return (ArrayList<Company>) vJdbcTemplate.query(GET_PAGE,vParams,  new CompanyMapper());
@@ -153,7 +154,7 @@ public class CompanyDao extends DAO<Company> {
 
 
 		@Override
-		public ArrayList<Company> getPageWithSearch(int debut, int number, String search,String orderBy) {
+		public ArrayList<Company> getPageWithSearch(Page page) {
 			return null;
 		}
 

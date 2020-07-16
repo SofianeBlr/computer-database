@@ -10,10 +10,13 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.excilys.computerDatabase.daos.ComputerDao;
 import com.excilys.computerDatabase.daos.DAO;
 import com.excilys.computerDatabase.models.Computer;
+import com.excilys.springConfiguration.CliConfiguration;
 
 public class ComputerDaoTest {
 	private ComputerDao computerDao;
@@ -25,7 +28,8 @@ public class ComputerDaoTest {
         Field instanceDao = DAO.class.getDeclaredField("connect");
         instanceDao.setAccessible(true);
         instanceDao.set(null, null);
-        computerDao = new ComputerDao();
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
+        computerDao = ctx.getBean(ComputerDao.class);
     }
 	
 	

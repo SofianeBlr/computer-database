@@ -24,7 +24,7 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id:
-						${computerDto.id}</div>
+						${newComputerDto.id}</div>
 					<h1><spring:message code="editComputer.edit" /></h1>
 					<c:if test="${error!=null}">
 						<div class="alert alert-danger" role="alert">${error}</div>

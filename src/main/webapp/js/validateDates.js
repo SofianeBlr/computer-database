@@ -2,6 +2,7 @@ function validateDates() {
 	var valid = true;
 	var introduced = document.getElementById("introduced").value;
 	var discontinued = document.getElementById("discontinued").value;
+	var computerName = document.getElementById("computerName").value;
 
 	if (introduced != "") {
 		introduced = new Date(introduced);
@@ -25,6 +26,10 @@ function validateDates() {
 	} else if (discontinued != "") {
 		valid = false;
 		alert("introduced date must be defined to set discontinued date");
+	}
+	if(computerName == ""){
+		valid = false;
+		alert("Name is required");	
 	}
 	if(valid){
 		alert("Computer added");
