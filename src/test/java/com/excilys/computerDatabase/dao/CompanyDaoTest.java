@@ -14,6 +14,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.excilys.computerDatabase.daos.CompanyDao;
 import com.excilys.computerDatabase.daos.DAO;
 import com.excilys.computerDatabase.models.Company;
+import com.excilys.computerDatabase.models.Page;
 import com.excilys.springConfiguration.CliConfiguration;
 
 public class CompanyDaoTest {
@@ -64,7 +65,7 @@ public class CompanyDaoTest {
 	
 	@Test
 	public void testGetPageCompany() {
-		ArrayList<Company> c = companyDao.getPage(0, 10,null);
+		ArrayList<Company> c = companyDao.getPage(new Page(0,10));
 	    assertEquals(10, c.size());
 	    
 	}

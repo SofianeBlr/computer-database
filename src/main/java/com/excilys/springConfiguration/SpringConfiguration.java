@@ -7,6 +7,9 @@ import javax.servlet.ServletRegistration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -18,6 +21,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebMvc
+@EnableTransactionManagement
 @ComponentScan(basePackages = "com.excilys.computerDatabase")
 public class SpringConfiguration implements WebApplicationInitializer {
 
@@ -37,5 +41,11 @@ public class SpringConfiguration implements WebApplicationInitializer {
 	 public HikariDataSource getDatasource() {
 		 return new HikariDataSource(new HikariConfig("/datasource.properties"));
 	 }
+	 @Bean
+		public PlatformTransactionManager txManager(HikariDataSource hikariDataSource) {
+		    DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+		    dataSourceTransactionManager.setDataSource(hikariDataSource);
+		    return dataSourceTransactionManager;
+		}
 	 
 }

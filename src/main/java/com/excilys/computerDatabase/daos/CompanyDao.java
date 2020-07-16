@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.excilys.computerDatabase.mappers.CompanyMapper;
@@ -64,23 +65,19 @@ public class CompanyDao extends DAO<Company> {
 
 	}
 
+	@Transactional
 	@Override
 	public boolean delete(Long id) {
-		boolean deleted = false;
-		TransactionTemplate transactionTemplate =new TransactionTemplate();
-		transactionTemplate.executeWithoutResult(status->{
-			try {
-				NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-				MapSqlParameterSource vParams = new MapSqlParameterSource();
-				vParams.addValue("id", id,Types.BIGINT);
-				vJdbcTemplate.update(DELETE_COMPANY_COMPUTERS, vParams);
-				vJdbcTemplate.update(DELETE,vParams);
-
-			}catch (Exception e) {
-				status.setRollbackOnly();
-			}
-		});
-		return deleted;
+		try {
+			NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+			MapSqlParameterSource vParams = new MapSqlParameterSource();
+			vParams.addValue("id", id,Types.BIGINT);
+			vJdbcTemplate.update(DELETE_COMPANY_COMPUTERS, vParams);
+			vJdbcTemplate.update(DELETE,vParams);
+			return true;
+		}catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Override
@@ -114,57 +111,57 @@ public class CompanyDao extends DAO<Company> {
 		}
 	}
 
-		@Override
-		public Long maxId() throws SQLException{
-			JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
-			try {
-				return vJdbcTemplate.queryForObject(MAXID, Long.class);
-			}catch (DataAccessException dae) {
-				logger.error("Not able to get maxId",dae);
-				return 0L;
-			}
+	@Override
+	public Long maxId() throws SQLException{
+		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return vJdbcTemplate.queryForObject(MAXID, Long.class);
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get maxId",dae);
+			return 0L;
 		}
-		@Override
-		public Long size() {
-			JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
-			try {
-				return vJdbcTemplate.queryForObject(SIZE, Long.class);
-			}catch (DataAccessException dae) {
-				logger.error("Not able to get size",dae);
-				return 0L;
-			}
-		}
-
-		@Override
-		public ArrayList<Company> getPage(Page page) {
-			NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-			MapSqlParameterSource vParams = new MapSqlParameterSource();
-			vParams.addValue("number", page.getNumberPerPage());
-			vParams.addValue("start", page.getPage()*page.getNumberPerPage());
-
-			try {
-				return (ArrayList<Company>) vJdbcTemplate.query(GET_PAGE,vParams,  new CompanyMapper());
-			}catch (DataAccessException dae) {
-				logger.error("Not able to get page",dae);
-				return new ArrayList<Company>();
-			}
-		}
-
-
-
-
-		@Override
-		public ArrayList<Company> getPageWithSearch(Page page) {
-			return null;
-		}
-
-
-
-
-		@Override
-		public Long sizeWithSearch(String search) {
-			return null;
-		}
-
-
 	}
+	@Override
+	public Long size() {
+		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return vJdbcTemplate.queryForObject(SIZE, Long.class);
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get size",dae);
+			return 0L;
+		}
+	}
+
+	@Override
+	public ArrayList<Company> getPage(Page page) {
+		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource vParams = new MapSqlParameterSource();
+		vParams.addValue("number", page.getNumberPerPage());
+		vParams.addValue("start", page.getPage()*page.getNumberPerPage());
+
+		try {
+			return (ArrayList<Company>) vJdbcTemplate.query(GET_PAGE,vParams,  new CompanyMapper());
+		}catch (DataAccessException dae) {
+			logger.error("Not able to get page",dae);
+			return new ArrayList<Company>();
+		}
+	}
+
+
+
+
+	@Override
+	public ArrayList<Company> getPageWithSearch(Page page) {
+		return null;
+	}
+
+
+
+
+	@Override
+	public Long sizeWithSearch(String search) {
+		return null;
+	}
+
+
+}

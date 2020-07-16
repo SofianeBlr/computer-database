@@ -16,6 +16,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.excilys.computerDatabase.daos.ComputerDao;
 import com.excilys.computerDatabase.daos.DAO;
 import com.excilys.computerDatabase.models.Computer;
+import com.excilys.computerDatabase.models.Page;
 import com.excilys.springConfiguration.CliConfiguration;
 
 public class ComputerDaoTest {
@@ -69,7 +70,7 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void testGetPageComputer() {
-		ArrayList<Computer> c = computerDao.getPage(0, 10,null);
+		ArrayList<Computer> c = computerDao.getPage(new Page(0,10));
 	    assertEquals( 10, c.size());
 	    
 	}
@@ -82,7 +83,7 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void testGetPageWithSearchComputerWithOrderBy() {
-		ArrayList<Computer> c = computerDao.getPageWithSearch(0, 100, "App","cnASC");
+		ArrayList<Computer> c = computerDao.getPageWithSearch(new Page(0, 100, "App","cnASC"));
 		assertTrue(c.get(10).getName().compareTo(c.get(11).getName())<=0); 
 	}
 	@Test
@@ -94,7 +95,7 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void testGetMaxPageWithWithOrderBy() {
-		ArrayList<Computer> c = computerDao.getPage(0, 20, "cnDSC");
+		ArrayList<Computer> c = computerDao.getPage(new Page(0, 20,null, "cnDSC"));
 	    assertTrue(c.get(1).getName().compareTo(c.get(2).getName())>=0); 
 	}
 	@Test

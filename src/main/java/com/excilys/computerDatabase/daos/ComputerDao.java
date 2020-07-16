@@ -43,8 +43,13 @@ public class ComputerDao extends DAO<Computer> {
 	@Override
 	public ArrayList<Computer> getAll() {
 		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		RowMapper<Computer> vRowMapper = new RowMapper<Computer>() {
+			public Computer mapRow(ResultSet rs, int pRowNum) throws SQLException {
+				return ComputerMapper.mapComputer(rs);
+			}
+		};
 		try {
-			return (ArrayList<Computer>) vJdbcTemplate.query(FIND_ALL,  new ComputerMapper());
+			return (ArrayList<Computer>) vJdbcTemplate.query(FIND_ALL,  vRowMapper);
 		}catch (DataAccessException dae) {
 			logger.error("Not able to get all computers",dae);
 			return new ArrayList<Computer>();
