@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.servlets;
+package com.excilys.computerDatabase.controllers;
 
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,17 +51,8 @@ public class AddComputer{
 
 
 	@PostMapping
-	public String postAddComputer(@RequestParam(name="computerName") String computerName,
-			@RequestParam(required=false, name="introduced") String introduced,
-			@RequestParam(required=false, name="discontinued") String discontinued,
-			@RequestParam(required=false, name="companyId") String companyId,
+	public String postAddComputer(@ModelAttribute ComputerDto computerDto,
 			Model model) {
-		ComputerDto computerDto= new ComputerDto();
-		computerDto.setId("0");
-		computerDto.setName(computerName);
-		computerDto.getCompany().setId(companyId);
-		computerDto.setIntroduced(introduced);
-		computerDto.setDiscontinued(discontinued);
 		try {
 			Computer computer = ComputerMapper.toComputer(computerDto);
 			computerService.create(computer);
@@ -73,6 +65,21 @@ public class AddComputer{
 			logger.error("computer creation not allowed",e);
 		}
 		return getAddComputer(model);
+	}
+	
+	@ModelAttribute
+	public ComputerDto newComputerDto(@RequestParam(required=false,name="name") String computerName,
+			@RequestParam(required=false, name="introduced") String introduced,
+			@RequestParam(required=false, name="discontinued") String discontinued,
+			@RequestParam(required=false, name="companyId") String companyId,
+			Model model) {
+		ComputerDto computerDto= new ComputerDto();
+		computerDto.setId("0");
+		computerDto.setName(computerName);
+		computerDto.getCompany().setId(companyId);
+		computerDto.setIntroduced(introduced);
+		computerDto.setDiscontinued(discontinued);
+		return computerDto;
 	}
 
 }

@@ -53,4 +53,10 @@ public class ComputerDto {
 	public void setCompany(CompanyDto company) {
 		this.company = company;
 	}
+	public void setCompanyId(String id) {
+		this.company.setId(id);
+	}
+	public String getCompanyId() {
+		return this.company.getId();
+	}
 }

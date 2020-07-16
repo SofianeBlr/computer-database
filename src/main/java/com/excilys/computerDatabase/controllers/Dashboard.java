@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.servlets;
+package com.excilys.computerDatabase.controllers;
 
 import java.util.ArrayList;
 import java.util.HashMap;

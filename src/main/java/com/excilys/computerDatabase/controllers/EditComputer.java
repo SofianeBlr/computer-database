@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.servlets;
+package com.excilys.computerDatabase.controllers;
 
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,20 +82,8 @@ public class EditComputer{
 	}
 	
 	@PostMapping
-	protected String postEditComputer(@RequestParam(required=false, name="id",defaultValue = "") String id,
-			@RequestParam(required =true, name="computerName") String computerName,
-			@RequestParam(required=false, name="introduced") String introduced,
-			@RequestParam(required=false, name="discontinued") String discontinued,
-			@RequestParam(required=false, name="companyId") String companyId,
+	protected String postEditComputer(@ModelAttribute ComputerDto computerDto,
 			Model model){
-		ComputerDto computerDto= new ComputerDto();
-		computerDto.setId("null");
-		computerDto.setId(id);
-		computerDto.setName(computerName);
-		computerDto.getCompany().setId(companyId);
-		computerDto.setIntroduced(introduced);
-		computerDto.setDiscontinued(discontinued);
-		
 		try {
 			Computer computer = ComputerMapper.toComputer(computerDto);
 			computerService.update(computer);
@@ -109,7 +98,24 @@ public class EditComputer{
 			logger.error("computer update not allowed",e);
 			model.addAttribute("error", "computer update not allowed");
 		}
-		return getEditComputer(id, model);
+		return getEditComputer(computerDto.getId(), model);
+	}
+	
+	
+	@ModelAttribute
+	public ComputerDto newComputerDto(@RequestParam(required=false, name="id",defaultValue = "") String id,
+			@RequestParam(required =false, name="name") String computerName,
+			@RequestParam(required=false, name="introduced") String introduced,
+			@RequestParam(required=false, name="discontinued") String discontinued,
+			@RequestParam(required=false, name="companyId") String companyId
+			) {
+		ComputerDto computerDto= new ComputerDto();
+		computerDto.setId(id);
+		computerDto.setName(computerName);
+		computerDto.getCompany().setId(companyId);
+		computerDto.setIntroduced(introduced);
+		computerDto.setDiscontinued(discontinued);
+		return computerDto;
 	}
 	
 
