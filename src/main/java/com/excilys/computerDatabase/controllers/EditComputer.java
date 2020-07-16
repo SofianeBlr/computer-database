@@ -73,8 +73,8 @@ public class EditComputer{
 				computerDto = ComputerMapper.mapComputerDto(comp);
 			}
 		}
-		if(model.getAttribute("computerDto")==null) {
-			model.addAttribute("computerDto", computerDto);
+		if(model.getAttribute("newComputerDto")==null) {
+			model.addAttribute("newComputerDto", computerDto);
 		}
 		
 		return "editComputer";
@@ -87,7 +87,7 @@ public class EditComputer{
 		try {
 			Computer computer = ComputerMapper.toComputer(computerDto);
 			computerService.update(computer);
-			model.addAttribute("computerDto", computerDto);
+			model.addAttribute("newComputerDto", computerDto);
 			model.addAttribute("sucess", "computer updated");
 		} catch (DateTimeParseException e) {
 			logger.error("invalid date format ");

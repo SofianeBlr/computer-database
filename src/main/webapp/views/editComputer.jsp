@@ -38,27 +38,27 @@
 							</p>
 						</div>
 					</c:if>
-					<form:form action="editComputer?idComputer=${computerDto.id}"
+					<form:form action="editComputer?idComputer=${newComputerDto.id}"
 						method="POST" onsubmit="return validateDates()" modelAttribute="computerDto">
-						<form:input type="hidden" id="id" name="id" path="id" value="${computerDto.id}"   />
+						<form:input type="hidden" id="id" name="id" path="id" value="${newComputerDto.id}"   />
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName"><spring:message code="label.computerName" /></label> <form:input
 									type="text" class="form-control " id="computerName"
 									placeholder="Computer name" name="computerName"
-									value="${computerDto.name}"   path="name"/>
+									value="${newComputerDto.name}"   path="name"/>
 							</div>
 							<div class="form-group">
 								<label for="introduced"><spring:message code="label.introduced" /></label> <form:input
 									type="date" class="form-control" id="introduced"
 									name="introduced" placeholder="Introduced date"
-									value="${computerDto.introduced}" path="introduced"/>
+									value="${newComputerDto.introduced}" path="introduced"/>
 							</div>
 							<div class="form-group">
 								<label for="discontinued"><spring:message code="label.discontinued" /></label> <form:input
 									type="date" class="form-control" id="discontinued"
 									name="discontinued" placeholder="Discontinued date"
-									value="${computerDto.discontinued}" path="discontinued"/>
+									value="${newComputerDto.discontinued}" path="discontinued"/>
 							</div>
 							<div class="form-group">
 								<label for="companyId"><spring:message code="label.company" /></label> <form:select
@@ -66,7 +66,7 @@
 									<option value="0">--</option>
 									<c:forEach items="${companies}" var="company">
 										<c:set var="selected" value="" />
-										<c:if test="${company.id == computerDto.company.id}">
+										<c:if test="${company.id == newComputerDto.company.id}">
 											<c:set var="selected" value="selected" />
 										</c:if>
 										<option value="${company.id}" ${selected}><c:out
