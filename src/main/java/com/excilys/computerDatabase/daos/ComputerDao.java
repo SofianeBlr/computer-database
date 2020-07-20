@@ -6,7 +6,9 @@ import java.sql.Types;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.hibernate.Session;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,6 +19,9 @@ import org.springframework.stereotype.Repository;
 import com.excilys.computerDatabase.mappers.ComputerMapper;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.models.Page;
+import com.excilys.computerDatabase.models.QComputer;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAQuery;
 
 @Repository
 public class ComputerDao extends DAO<Computer> {
@@ -42,6 +47,14 @@ public class ComputerDao extends DAO<Computer> {
 
 	@Override
 	public ArrayList<Computer> getAll() {
+		
+		
+		QComputer computer = QComputer.computer;
+		
+		JPAQuery<Computer>  query = new JPAQuery<Computer> (entityManager);	
+		List<Computer> test = query.from(computer).fetch();
+		return  (ArrayList<Computer>) test;
+		/*
 		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
 		RowMapper<Computer> vRowMapper = new RowMapper<Computer>() {
 			public Computer mapRow(ResultSet rs, int pRowNum) throws SQLException {
@@ -53,7 +66,7 @@ public class ComputerDao extends DAO<Computer> {
 		}catch (DataAccessException dae) {
 			logger.error("Not able to get all computers",dae);
 			return new ArrayList<Computer>();
-		}
+		}*/
 	}
 
 	@Override
@@ -169,34 +182,32 @@ public class ComputerDao extends DAO<Computer> {
 
 	@Override
 	public ArrayList<Computer> getPage(Page page) {
-		String orderBy=orderByConversion(page.getOrderBy());
-		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		MapSqlParameterSource vParams = new MapSqlParameterSource();
-		vParams.addValue("number", page.getNumberPerPage());
-		vParams.addValue("start", page.getPage()*page.getNumberPerPage());
-
+		QComputer computer = QComputer.computer;
+		JPAQuery<Computer>  query = new JPAQuery<Computer>(entityManager);	
 		try {
-			return (ArrayList<Computer>) vJdbcTemplate.query(String.format(GET_PAGE_W_COMPANY, orderBy==null?"computer.id":orderBy),vParams,  new ComputerMapper());
-		}catch (DataAccessException dae) {
-			logger.error("Not able to get page",dae);
+		return  (ArrayList<Computer>) query.from(computer).offset(page.getPage()*page.getNumberPerPage()).orderBy(orderByConversionQ(page.getOrderBy()).nullsLast()).limit(page.getNumberPerPage()).fetch();
+		}
+		catch (Exception e) {
+			logger.error("Not able to get page",e);
 			return new ArrayList<Computer>();
 		}
+		
 	}
 
 	@Override
 	public ArrayList<Computer> getPageWithSearch(Page page) {
 
-		String orderBy=orderByConversion(page.getOrderBy());
-		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		MapSqlParameterSource vParams = new MapSqlParameterSource();
-		vParams.addValue("number", page.getNumberPerPage());
-		vParams.addValue("start", page.getPage()*page.getNumberPerPage());
-		vParams.addValue("search", page.getSearch()!=null?"%"+page.getSearch()+"%":"%%");
-
+		QComputer computer = QComputer.computer;
+		JPAQuery<Computer>  query = new JPAQuery<Computer>(entityManager);	
 		try {
-			return (ArrayList<Computer>) vJdbcTemplate.query(String.format(GET_PAGE_W_SEARCH, orderBy==null?"computer.id":orderBy),vParams, new ComputerMapper());
-		}catch (DataAccessException dae) {
-			logger.error("Not able to get page with search",dae);
+		return  (ArrayList<Computer>) query.from(computer).where(computer.name.like("%" + page.getSearch()+ "%").or(computer.company.name.like("%" + page.getSearch()+ "%")))
+					.offset(page.getPage()*page.getNumberPerPage())
+					.orderBy(orderByConversionQ(page.getOrderBy()).nullsLast())
+					.limit(page.getNumberPerPage())
+					.fetch();
+		}
+		catch (Exception e) {
+			logger.error("Not able to get page",e);
 			return new ArrayList<Computer>();
 		}
 	}
@@ -205,6 +216,19 @@ public class ComputerDao extends DAO<Computer> {
 	@Override
 	public Long sizeWithSearch(String search) {
 
+		/*
+		QComputer computer = QComputer.computer;
+		JPAQuery<Computer>  query = new JPAQuery<Computer>(entityManager);	
+		try {
+		return query.from(computer).where(computer.name.like(search!=null?"%"+search+"%":"%%").or(computer.company.name.like(search!=null?"%"+search+"%":"%%")))
+					.fetchCount();
+		}
+		catch (Exception e) {
+			logger.error("Not able to get size with search",e);
+			return 0L;
+		}
+		*/
+		
 		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		MapSqlParameterSource vParams = new MapSqlParameterSource();
 		vParams.addValue("search", search!=null?"%"+search+"%":"%%");
@@ -214,7 +238,6 @@ public class ComputerDao extends DAO<Computer> {
 			logger.error("Not able to get size with search",dae);
 			return 0L;
 		}
-
 	}
 
 
@@ -242,5 +265,44 @@ public class ComputerDao extends DAO<Computer> {
 			converted += "DESC";
 		}
 		return converted;
+	}
+	private OrderSpecifier orderByConversionQ(String order) {
+		if(order==null ||order.length()!=5) {
+			return QComputer.computer.id.asc();
+		}
+		String converted ="";
+		if(order.substring(0,2).equals("cn")) {
+			if(order.substring(2,5).equals("ASC")) {
+				return QComputer.computer.name.asc();
+			}
+			else if(order.substring(2,5).equals("DSC")) {
+				return QComputer.computer.name.desc();
+			}
+		}
+		else if(order.substring(0,2).equals("di")) {
+			if(order.substring(2,5).equals("ASC")) {
+				return QComputer.computer.introduced.asc();
+			}
+			else if(order.substring(2,5).equals("DSC")) {
+				return QComputer.computer.introduced.desc();
+			}
+		}
+		else if(order.substring(0,2).equals("dd")) {
+			if(order.substring(2,5).equals("ASC")) {
+				return QComputer.computer.discontinued.asc();
+			}
+			else if(order.substring(2,5).equals("DSC")) {
+				return QComputer.computer.discontinued.desc();
+			}
+		}
+		else if(order.substring(0,2).equals("ci")) {
+			if(order.substring(2,5).equals("ASC")) {
+				return QComputer.computer.company.id.asc();
+			}
+			else if(order.substring(2,5).equals("DSC")) {
+				return QComputer.computer.company.id.desc();
+			}
+		}
+		return QComputer.computer.id.asc();
 	}
 }

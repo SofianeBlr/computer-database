@@ -23,8 +23,10 @@ public class CompanyDto {
 		this.name = name;
 	}
 	public CompanyDto(Company company) {
+		if (company!=null)
 		if(company.getId()!=null) {
 			this.id = company.getId().toString();
+			if(company.getName()!=null) 
 			this.name= company.getName();
 		}
 	}

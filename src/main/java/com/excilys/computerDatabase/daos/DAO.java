@@ -2,6 +2,10 @@ package com.excilys.computerDatabase.daos;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +25,13 @@ public abstract class DAO<T> {
 	
 	@Autowired
 	protected HikariDataSource dataSource;
+	
+	@PersistenceContext
+	EntityManager entityManager;
 
 	public DAO(){
 	}
 	
-
-
-
-	protected Connection getConnection() throws SQLException {
-		if(connect==null || connect.isClosed()) {
-			connect = dataSource.getConnection();
-		}
-		return connect;
-	}
 	/**
 	 * GetAll database
 	 * @return list of object from database 
