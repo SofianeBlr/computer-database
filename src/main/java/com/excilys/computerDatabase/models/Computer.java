@@ -31,7 +31,7 @@ public class Computer {
 	@Column(name = "discontinued")
 	private LocalDate discontinued = null;
 	
-	@ManyToOne(cascade = {CascadeType.ALL})
+	@ManyToOne
 	@JoinColumn(name="company_id",nullable = true)
 	private Company company = new Company();
 	
@@ -91,6 +91,9 @@ public class Computer {
 	}
 	public Company getCompany() {
 		return company;
+	}
+	public void setCompany(Company c) {
+		this.company = c;
 	}
 	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) throws IllegalArgumentException {
 		this.id = id;

@@ -24,9 +24,7 @@ public class CompanyDaoTest {
     @Before
     public void setup()
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-    	Field instanceDao = DAO.class.getDeclaredField("connect");
-        instanceDao.setAccessible(true);
-        instanceDao.set(null, null);
+    	
         ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
     	companyDao = ctx.getBean(CompanyDao.class);
         

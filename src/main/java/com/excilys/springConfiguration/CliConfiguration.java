@@ -8,11 +8,13 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
+@EnableTransactionManagement
 @ComponentScan(basePackages = "com.excilys.computerDatabase")
 public class CliConfiguration {
 	@Bean
@@ -31,7 +33,7 @@ public class CliConfiguration {
 	      LocalContainerEntityManagerFactoryBean em
 	        = new LocalContainerEntityManagerFactoryBean();
 	      em.setDataSource(getDatasource());
-	      em.setPackagesToScan(new String[]{ "com.excilys.computerDatabase" });
+	      em.setPackagesToScan(new String[]{ "com.excilys.computerDatabase.models" });
 
 	      JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 	      em.setJpaVendorAdapter(vendorAdapter);

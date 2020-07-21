@@ -2,60 +2,44 @@ package com.excilys.computerDatabase.daos;
 
 
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import com.excilys.computerDatabase.mappers.CompanyMapper;
 import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Page;
+import com.excilys.computerDatabase.models.QCompany;
+import com.excilys.computerDatabase.models.QComputer;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 public class CompanyDao extends DAO<Company> {
 
 
-	private final static String INSERT = "INSERT INTO company(name) VALUES(:name);";
-	private final static String DELETE = "DELETE FROM company WHERE id = :id;";
-	private final static String UPDATE = "UPDATE company SET name = :name WHERE id = :id;";
-	private final static String FIND_ALL = "select id , name from company";
-	private final static String FIND = "select id , name from company where id=:id";
-	private final static String MAXID = "select MAX(id) from company ";
-	private final static String SIZE = "select count(id) from company";
-	private final static String GET_PAGE = "select id , name from company LIMIT :start,:number";
-	private final static String DELETE_COMPANY_COMPUTERS = "DELETE FROM computer where company_id = :id";
-
-
-
-
-
 	@Override
 	public ArrayList<Company> getAll() {
 
-		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		QCompany company = QCompany.company;
+		JPAQuery<Company>  query = new JPAQuery<Company> (entityManager);	
+		
 		try {
-			return (ArrayList<Company>) vJdbcTemplate.query(FIND_ALL,  new CompanyMapper());
-		}catch (DataAccessException dae) {
+			return  (ArrayList<Company>)  query.from(company).fetch();
+		}catch (Exception dae) {
 			logger.error("Not able to get all companies",dae);
 			return new ArrayList<Company>();
 		}
 	}
 
 	@Override
+	@Transactional
 	public Company create(Company obj) {
-		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		MapSqlParameterSource vParams = new MapSqlParameterSource();
-
-		vParams.addValue("name", obj.getName(),Types.VARCHAR);
-
+		
+		obj.setId(null);
 		try {
-			vJdbcTemplate.update(INSERT,vParams);
+			entityManager.persist(obj);
 			return obj;
 
 		}catch (DataAccessException dae) {
@@ -68,65 +52,71 @@ public class CompanyDao extends DAO<Company> {
 	@Transactional
 	@Override
 	public boolean delete(Long id) {
+		QCompany company = QCompany.company;
+		QComputer computer = QComputer.computer;
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
 		try {
-			NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-			MapSqlParameterSource vParams = new MapSqlParameterSource();
-			vParams.addValue("id", id,Types.BIGINT);
-			vJdbcTemplate.update(DELETE_COMPANY_COMPUTERS, vParams);
-			vJdbcTemplate.update(DELETE,vParams);
+			queryFactory.delete(computer).where(company.id.eq(id)).execute();
+			queryFactory.delete(company).where(company.id.eq(id)).execute();
 			return true;
-		}catch (Exception e) {
+
+		}catch (Exception dae) {
+			logger.error("Not able to delete computer",dae);
 			return false;
 		}
 	}
 
 	@Override
+	@Transactional
 	public Company update(Company obj) {
-		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		MapSqlParameterSource vParams = new MapSqlParameterSource();
-		vParams.addValue("id", obj.getId());
-		vParams.addValue("name", obj.getName(),Types.VARCHAR);
+		QCompany company = QCompany.company;
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
 		try {
-			vJdbcTemplate.update(UPDATE,vParams);
+			queryFactory.update(company)
+			.where(company.id.eq(obj.getId()))
+			.set(company.name, obj.getName())
+			.execute();
 			return obj;
 
-		}catch (DataAccessException dae) {
+		}catch (Exception dae) {
 			logger.error("Not able to update computer",dae);
-			return null;
-		}	
-	}
-
-	@Override
-	public Company find(Long id) {
-		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		MapSqlParameterSource vParams = new MapSqlParameterSource();
-
-		vParams.addValue("id", id,Types.BIGINT);
-
-		try {
-			return vJdbcTemplate.queryForObject(FIND, vParams, new CompanyMapper());
-		}catch (DataAccessException dae) {
-			logger.error("Not able to find company",dae);
 			return null;
 		}
 	}
 
 	@Override
-	public Long maxId() throws SQLException{
-		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+	public Company find(Long id) {
+		QCompany company = QCompany.company;
+		JPAQuery<Company>  query = new JPAQuery<Company>(entityManager);
 		try {
-			return vJdbcTemplate.queryForObject(MAXID, Long.class);
-		}catch (DataAccessException dae) {
+			return query.from(company)
+					.where(company.id.eq(id)).fetchOne();
+		}catch (Exception dae) {
+			logger.error("Not able to find computer",dae);
+			return null;
+		}	
+	}
+
+	@Override
+	public Long maxId() throws SQLException{
+		QCompany company = QCompany.company;
+		JPAQuery<Company>  query = new JPAQuery<Company>(entityManager);	
+		try {
+			return query.select(company.id.max()).from(company).fetchOne();
+		}catch (Exception dae) {
 			logger.error("Not able to get maxId",dae);
 			return 0L;
 		}
 	}
 	@Override
 	public Long size() {
-		JdbcTemplate vJdbcTemplate = new JdbcTemplate(dataSource);
+		QCompany company = QCompany.company;
+		JPAQuery<Company>  query = new JPAQuery<Company>(entityManager);
 		try {
-			return vJdbcTemplate.queryForObject(SIZE, Long.class);
-		}catch (DataAccessException dae) {
+			return query.from(company).fetchCount();
+		}catch (Exception dae) {
 			logger.error("Not able to get size",dae);
 			return 0L;
 		}
@@ -134,15 +124,17 @@ public class CompanyDao extends DAO<Company> {
 
 	@Override
 	public ArrayList<Company> getPage(Page page) {
-		NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		MapSqlParameterSource vParams = new MapSqlParameterSource();
-		vParams.addValue("number", page.getNumberPerPage());
-		vParams.addValue("start", page.getPage()*page.getNumberPerPage());
-
+		QCompany company = QCompany.company;
+		JPAQuery<Company>  query = new JPAQuery<Company>(entityManager);	
 		try {
-			return (ArrayList<Company>) vJdbcTemplate.query(GET_PAGE,vParams,  new CompanyMapper());
-		}catch (DataAccessException dae) {
-			logger.error("Not able to get page",dae);
+		return  (ArrayList<Company>) query.from(company)
+				.offset(page.getPage()*page.getNumberPerPage())
+				.orderBy(company.id.asc().nullsLast())
+				.limit(page.getNumberPerPage())
+				.fetch();
+		}
+		catch (Exception e) {
+			logger.error("Not able to get page",e);
 			return new ArrayList<Company>();
 		}
 	}

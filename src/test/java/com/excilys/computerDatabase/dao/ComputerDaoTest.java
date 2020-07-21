@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -14,7 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.excilys.computerDatabase.daos.ComputerDao;
-import com.excilys.computerDatabase.daos.DAO;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.models.Page;
 import com.excilys.springConfiguration.CliConfiguration;
@@ -26,9 +24,6 @@ public class ComputerDaoTest {
     public void setup()
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
        
-        Field instanceDao = DAO.class.getDeclaredField("connect");
-        instanceDao.setAccessible(true);
-        instanceDao.set(null, null);
 		ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
         computerDao = ctx.getBean(ComputerDao.class);
     }
@@ -37,6 +32,7 @@ public class ComputerDaoTest {
 	@Test
 	public void testCreateComputer() {
 		Computer computer = new Computer(0L,"test",LocalDate.now());
+		computer.setCompany(null);
 		Computer computerExc = computerDao.create(computer);
 	    assertEquals(computerExc, computer);
 	}

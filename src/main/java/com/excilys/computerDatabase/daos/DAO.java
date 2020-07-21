@@ -1,5 +1,4 @@
 package com.excilys.computerDatabase.daos;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -8,11 +7,9 @@ import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.models.Page;
-import com.zaxxer.hikari.HikariDataSource;
 
 
 
@@ -21,10 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Repository
 public abstract class DAO<T> {
 	protected static Logger logger = LoggerFactory.getLogger(DAO.class);
-	protected static Connection connect = null;
 	
-	@Autowired
-	protected HikariDataSource dataSource;
 	
 	@PersistenceContext
 	EntityManager entityManager;

@@ -58,7 +58,7 @@ public class SpringConfiguration implements WebApplicationInitializer {
 	      LocalContainerEntityManagerFactoryBean em
 	        = new LocalContainerEntityManagerFactoryBean();
 	      em.setDataSource(getDatasource());
-	      em.setPackagesToScan(new String[]{ "com.excilys.computerDatabase" });
+	      em.setPackagesToScan(new String[]{ "com.excilys.computerDatabase.models" });
 
 	      JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 	      em.setJpaVendorAdapter(vendorAdapter);

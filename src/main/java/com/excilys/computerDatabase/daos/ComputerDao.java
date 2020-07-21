@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -94,7 +95,7 @@ public class ComputerDao extends DAO<Computer> {
 		try {
 			return query.from(computer).leftJoin(company).on(computer.company.id.eq(company.id))
 					.where(computer.id.eq(id)).fetchOne();
-		}catch (DataAccessException dae) {
+		}catch (Exception dae) {
 			logger.error("Not able to find computer",dae);
 			return null;
 		}	
@@ -107,7 +108,7 @@ public class ComputerDao extends DAO<Computer> {
 		JPAQuery<Computer>  query = new JPAQuery<Computer>(entityManager);	
 		try {
 			return query.select(computer.id.max()).from(computer).fetchOne();
-		}catch (DataAccessException dae) {
+		}catch (Exception dae) {
 			logger.error("Not able to get maxId",dae);
 			return 0L;
 		}

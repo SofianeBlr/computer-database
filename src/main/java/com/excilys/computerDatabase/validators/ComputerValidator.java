@@ -25,6 +25,9 @@ public class ComputerValidator {
 		if (computerDto.getCompany().getId()!=null&&Long.parseLong(computerDto.getCompany().getId())!=0L&& !computerDto.getCompany().getId().isEmpty()) {
 			comp.setCompanyId(Long.parseLong(computerDto.getCompany().getId()));
 		}
+		else {
+			comp.setCompany(null);
+		}
 		return comp;
 	}
 
