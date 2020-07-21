@@ -18,7 +18,7 @@ import com.excilys.computerDatabase.daos.DAO;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.models.Page;
 import com.excilys.springConfiguration.CliConfiguration;
-
+@SuppressWarnings("resource")
 public class ComputerDaoTest {
 	private ComputerDao computerDao;
 	
@@ -29,7 +29,7 @@ public class ComputerDaoTest {
         Field instanceDao = DAO.class.getDeclaredField("connect");
         instanceDao.setAccessible(true);
         instanceDao.set(null, null);
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
         computerDao = ctx.getBean(ComputerDao.class);
     }
 	

@@ -2,21 +2,22 @@ package com.excilys.computerDatabase.models;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.google.inject.internal.Nullable;
 
 @Entity
 @Table(name = "computer")
 public class Computer {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	
 	private Long id;
@@ -26,10 +27,12 @@ public class Computer {
 	
 	@Column(name = "introduced")
 	private LocalDate introduced= null;
+	
 	@Column(name = "discontinued")
 	private LocalDate discontinued = null;
-	@ManyToOne
-	@JoinColumn(nullable = true,name="company_id")
+	
+	@ManyToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name="company_id",nullable = true)
 	private Company company = new Company();
 	
 	

@@ -1,17 +1,14 @@
 package com.excilys.springConfiguration;
 
-import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
-import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -50,11 +47,12 @@ public class SpringConfiguration implements WebApplicationInitializer {
 		 return new HikariDataSource(new HikariConfig("/datasource.properties"));
 	 }
 	 @Bean
-		public PlatformTransactionManager txManager(HikariDataSource hikariDataSource) {
-		    DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
-		    dataSourceTransactionManager.setDataSource(hikariDataSource);
-		    return dataSourceTransactionManager;
-		}
+	 public PlatformTransactionManager transactionManager() {
+	     JpaTransactionManager transactionManager = new JpaTransactionManager();
+	     transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+	  
+	     return transactionManager;
+	 }
 	 @Bean
 	   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 	      LocalContainerEntityManagerFactoryBean em
