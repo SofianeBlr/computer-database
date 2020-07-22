@@ -1,0 +1,5 @@
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/binding/src/main/java/com/excilys/computerDatabase/dtos/ComputerDto.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/binding/src/main/java/com/excilys/computerDatabase/mappers/ComputerMapper.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/binding/src/main/java/com/excilys/computerDatabase/mappers/CompanyMapper.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/binding/src/main/java/com/excilys/computerDatabase/dtos/CompanyDto.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/binding/src/main/java/com/excilys/computerDatabase/validators/ComputerValidator.java

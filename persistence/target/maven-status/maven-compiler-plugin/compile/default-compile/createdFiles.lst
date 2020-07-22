@@ -1,0 +1,4 @@
+com/excilys/computerDatabase/springConfiguration/CliConfiguration.class
+com/excilys/computerDatabase/daos/ComputerDao.class
+com/excilys/computerDatabase/daos/DAO.class
+com/excilys/computerDatabase/daos/CompanyDao.class

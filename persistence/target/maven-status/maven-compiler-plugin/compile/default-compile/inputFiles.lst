@@ -1,0 +1,5 @@
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/persistence/src/main/java/com/excilys/computerDatabase/springConfiguration/CliConfiguration.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/persistence/src/main/java/com/excilys/computerDatabase/daos/config/SpringConfigDao.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/persistence/src/main/java/com/excilys/computerDatabase/daos/CompanyDao.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/persistence/src/main/java/com/excilys/computerDatabase/daos/ComputerDao.java
+/home/s/eclipse-workspace/test-multiModule/computerDatabase/persistence/src/main/java/com/excilys/computerDatabase/daos/DAO.java
