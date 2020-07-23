@@ -9,11 +9,11 @@ import java.util.Scanner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.computerDatabase.config.CliConfiguration;
 import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.services.CompanyService;
 import com.excilys.computerDatabase.services.ComputerService;
-import com.excilys.computerDatabase.springConfiguration.CliConfiguration;
 
 public class UserInterface {
 	static Scanner input =new Scanner(System.in);
