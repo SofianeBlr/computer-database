@@ -78,7 +78,12 @@ public class Computer {
 
 	}
 	public Long getCompanyId() {
+		if (company!=null) {
 		return company.getId();
+		}
+		else {
+			return null;
+		}
 	}
 	public void setCompanyId(Long companyId) {
 		this.company.setId(companyId);
