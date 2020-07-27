@@ -1,0 +1,12 @@
+.metadata
+local.properties
+.settings/
+.project
+.classpath
+/db/
+/target/
+.settings/
+.project
+.classpath
+
+*/target/

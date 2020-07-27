@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>computerDatabase</artifactId>
-    <groupId>com.excilys</groupId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>computerDatabase</artifactId>
+		<groupId>com.excilys</groupId>
+		<version>${project.version}</version>
+	</parent>
 
-  <groupId>com.excilys.computerDatabase</groupId>
-  <artifactId>webApp</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+	<groupId>com.excilys.computerDatabase</groupId>
+	<artifactId>webApp</artifactId>
+	<packaging>war</packaging>
 
-  <name>webApp Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+	<name>webApp Maven Webapp</name>
+	<!-- FIXME change it to the project's website -->
+	<url>http://www.example.com</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 
-  <dependencies>
-    <dependency>
-        <groupId>com.excilys.computerDatabase</groupId>
-        <artifactId>service</artifactId>
-        <version>${project.version}</version>
-    </dependency>
-    
-    <dependency>
-			  <groupId>javax.servlet</groupId>
-			  <artifactId>javax.servlet-api</artifactId>
-			  <version>${javax.servlet-api.version}</version>
-			  <scope>provided</scope>
-	  </dependency>
-    <dependency>
-		  <groupId>javax.servlet</groupId>
-		  <artifactId>jstl</artifactId>
-		  <version>${jstl.version}</version>
-		  <scope>runtime</scope>
-	  </dependency>
+	<dependencies>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
+			<groupId>com.excilys.computerDatabase</groupId>
+			<artifactId>service</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-  </dependencies>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+			</dependency>
+		<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+			</dependency>
+	</dependencies>
 
 
 </project>

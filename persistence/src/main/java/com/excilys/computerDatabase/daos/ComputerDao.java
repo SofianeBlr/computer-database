@@ -4,9 +4,7 @@ package com.excilys.computerDatabase.daos;
 
 import java.util.ArrayList;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 

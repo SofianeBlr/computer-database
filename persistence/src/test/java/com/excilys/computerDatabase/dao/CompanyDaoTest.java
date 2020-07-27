@@ -23,7 +23,8 @@ public class CompanyDaoTest {
     public void setup()
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
     	
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfigDao.class);
+        @SuppressWarnings("resource")
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfigDao.class);
     	companyDao = ctx.getBean(CompanyDao.class);
         
     }

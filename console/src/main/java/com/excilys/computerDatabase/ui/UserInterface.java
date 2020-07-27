@@ -25,6 +25,7 @@ public class UserInterface {
 	static ComputerService computerService;
 
 	public static void main(String[] args) {
+		@SuppressWarnings("resource")
 		ApplicationContext ctx = new AnnotationConfigApplicationContext(CliConfiguration.class);
 		companyService =  ctx.getBean(CompanyService.class);
 		computerService =  ctx.getBean(ComputerService.class);

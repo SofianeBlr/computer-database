@@ -5,16 +5,16 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="service-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/service/service">
+        <dependent-module archiveName="service-4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/service/service">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="persistence-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/persistence/persistence">
+        <dependent-module archiveName="persistence-4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/persistence/persistence">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="core-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/core/core">
+        <dependent-module archiveName="binding-4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/binding/binding">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="binding-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/binding/binding">
+        <dependent-module archiveName="core-4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/core/core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="webApp"/>

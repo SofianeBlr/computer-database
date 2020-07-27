@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.excilys</groupId>
-  <artifactId>computerDatabase</artifactId>
-  <packaging>pom</packaging>
-  <version>1.0-SNAPSHOT</version>
+	<groupId>com.excilys</groupId>
+	<artifactId>computerDatabase</artifactId>
+	<packaging>pom</packaging>
+	<version>${project.version}</version>
 
-  <name>computerDatabase</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+	<name>computerDatabase</name>
+	<!-- FIXME change it to the project's website -->
+	<url>http://www.example.com</url>
 
-  <properties>
+	<properties>
+		<project.version>4.0-SNAPSHOT</project.version>
+		
+		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -29,6 +34,7 @@
 		<spring.version>5.2.6.RELEASE</spring.version>
 		<hibernate.version>5.4.18.Final</hibernate.version>
 		<querydsl.version>4.2.2</querydsl.version>
+		<spring-security.version>5.3.3.RELEASE</spring-security.version>
 	</properties>
 
 	<dependencyManagement>
@@ -84,13 +90,34 @@
 				<version>${h2.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring-security.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring-security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring-security.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-		
-		
+
+
 
 	<dependencies>
-	  <dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j-log4.version}</version>
@@ -100,11 +127,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-log4.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -131,76 +154,61 @@
 		</dependency>
 	</dependencies>
 
-  <build>
-    <pluginManagement>
-      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+	<build>
+		<pluginManagement>
+			<!-- lock down plugins versions to avoid using Maven defaults (may be 
+				moved to parent pom) -->
+			<plugins>
+				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.7.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
-      <plugin>
-			  <groupId>com.mysema.maven</groupId>
-			  <artifactId>apt-maven-plugin</artifactId>
-			  <version>1.1.3</version>
-			  <executions>
-				  <execution>
-					  <goals>
-						  <goal>process</goal>
-					  </goals>
-					  <configuration>
-						  <outputDirectory>target/generated-sources</outputDirectory>
-						  <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-					  </configuration>
-				  </execution>
-			  </executions>
-		  </plugin>
-    </plugins>
-  </build>
-<modules>  <module>persistence</module>
-    <module>service</module>
-    <module>core</module>
-    <module>binding</module>
-    <module>console</module>
-    <module>webApp</module>
-  </modules>
+	</build>
+	<modules>
+		<module>persistence</module>
+		<module>service</module>
+		<module>core</module>
+		<module>binding</module>
+		<module>console</module>
+		<module>webApp</module>
+	</modules>
 </project>
