@@ -9,4 +9,10 @@ local.properties
 .project
 .classpath
 
-*/target/
+.project
+.settings
+/*/.settings
+/*/.classpath
+/*/.project
+/*/target/
+/webapp/.tern-project
