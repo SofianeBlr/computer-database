@@ -1,21 +1,14 @@
 package com.excilys.computerDatabase.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.excilys.computerDatabase.services.UserService;
@@ -56,7 +49,7 @@ public class SpringConfigSecurity extends WebSecurityConfigurerAdapter {
          .deleteCookies("JSESSIONID");
             
     }
-
+/*
     DigestAuthenticationFilter digestAuthenticationFilter() throws Exception {
         DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
         digestAuthenticationFilter.setUserDetailsService(userService);
@@ -70,5 +63,5 @@ public class SpringConfigSecurity extends WebSecurityConfigurerAdapter {
         bauth.setRealmName("digest auth");
         bauth.setKey("MyKey");
         return bauth;
-    }
+    }*/
 }
