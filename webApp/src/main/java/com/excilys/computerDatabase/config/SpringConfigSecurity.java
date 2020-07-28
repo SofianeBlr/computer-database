@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.excilys.computerDatabase.services.UserService;
 
@@ -35,12 +36,16 @@ public class SpringConfigSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     	 http.authorizeRequests()
-    	 .antMatchers("/login").permitAll()
-         .antMatchers("/register").permitAll()
          .antMatchers(HttpMethod.GET, "/", "/dashboard/**").hasAnyRole("user", "admin")
          .antMatchers(HttpMethod.POST, "/", "/dashboard/**").hasRole("admin")
          .antMatchers("/addComputer/**").hasRole("admin")
          .antMatchers("/editComputer/**").hasRole("admin")
+         .and()
+         .logout()
+         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))            
+         .logoutSuccessUrl("/dashboard")
+         .invalidateHttpSession(true)
+         .deleteCookies("JSESSIONID")        
          .and()
          .httpBasic()
          .and()
