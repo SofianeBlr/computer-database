@@ -12,7 +12,11 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <span class="pull-right"> <a
+				class="navbar-brand" href="logout">Logout </a>
+			</span>
         </div>
+        
     </header>
 
     <section id="main">

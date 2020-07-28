@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -35,23 +36,24 @@ public class SpringConfigSecurity extends WebSecurityConfigurerAdapter {
        
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	 http.authorizeRequests()
+    	 http
+    	 .authorizeRequests()
          .antMatchers(HttpMethod.GET, "/", "/dashboard/**").hasAnyRole("user", "admin")
          .antMatchers(HttpMethod.POST, "/", "/dashboard/**").hasRole("admin")
          .antMatchers("/addComputer/**").hasRole("admin")
          .antMatchers("/editComputer/**").hasRole("admin")
          .and()
+         .formLogin()
+//         .and()
+//         .httpBasic()
+         .and()
+         .csrf()
+         .disable()
          .logout()
          .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))            
          .logoutSuccessUrl("/dashboard")
          .invalidateHttpSession(true)
-         .deleteCookies("JSESSIONID")        
-         .and()
-         .httpBasic()
-         .and()
-         .csrf()
-         .disable()
-         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+         .deleteCookies("JSESSIONID");
             
     }
 

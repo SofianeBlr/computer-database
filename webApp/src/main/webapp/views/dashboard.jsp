@@ -29,14 +29,9 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="dashboard"><spring:message
-					code="label.title" /> </a>
-			<span class="btn-group btn-group-sm pull-right align-middle" role="group">
-				<button type="button" id="en" class="btn btn-default align-middle"
-					onclick="window.location.href='?${nbPerPage}${searchValue}${orderByValue}&lang=en'">EN</button>
-				<button type="button" id="fr" class="btn btn-default align-middle"
-				onclick="window.location.href='?${nbPerPage}${searchValue}${orderByValue}&lang=fr'">FR</button>
+					code="label.title" /> </a> <span class="pull-right"> <a
+				class="navbar-brand" href="logout">Logout </a>
 			</span>
-
 		</div>
 	</header>
 
@@ -204,6 +199,12 @@
 				</c:if>
 				<button type="button" class="btn btn-default ${activeNumber}"
 					onclick="window.location.href='?numberPerPage=100&search=${search}${orderByValue}'">100</button>
+			</div>
+			<div class="btn-group btn-group-sm pull-left" role="group">
+				<button type="button" id="en" class="btn btn-default align-middle"
+					onclick="window.location.href='?${nbPerPage}${searchValue}${orderByValue}&lang=en'">EN</button>
+				<button type="button" id="fr" class="btn btn-default align-middle"
+					onclick="window.location.href='?${nbPerPage}${searchValue}${orderByValue}&lang=fr'">FR</button>
 			</div>
 		</div>
 	</footer>

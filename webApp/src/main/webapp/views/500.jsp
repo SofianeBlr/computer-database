@@ -13,6 +13,9 @@
 		<div class="container">
 			<a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
 		</div>
+		<span class="pull-right"> <a
+				class="navbar-brand" href="logout">Logout </a>
+			</span>
 	</header>
 
 	<section id="main">
