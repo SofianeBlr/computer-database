@@ -1,0 +1,145 @@
+package com.excilys.computerDatabase.restControllers;
+
+
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.excilys.computerDatabase.dtos.ComputerDto;
+import com.excilys.computerDatabase.mappers.ComputerMapper;
+import com.excilys.computerDatabase.models.Company;
+import com.excilys.computerDatabase.models.Computer;
+import com.excilys.computerDatabase.models.Page;
+import com.excilys.computerDatabase.services.ComputerService;
+
+@RestController
+@CrossOrigin
+@RequestMapping("computer")
+public class ComputerRestController {
+
+
+	public ComputerService computerService;
+	@Autowired
+	public ComputerRestController(ComputerService computerService) {
+		this.computerService=computerService;
+	}
+
+	@GetMapping(value="/test", produces = "application/json")
+	public Company test() {
+		return (new Company(1L,"sqd"));
+	}
+
+	@GetMapping(value = { "/page" }, produces = "application/json")
+	public List<ComputerDto> listComputersPage(@RequestParam(required=false, name="numberPerPage" ,defaultValue = "10") String numberPerPageParam,
+			@RequestParam(required=false, name="page",defaultValue = "1") String currentPageParam,
+			@RequestParam(required=false, name="orderBy",defaultValue = "") String orderByPram,
+			@RequestParam(required=false, name="search",defaultValue = "") String searchParam) { 
+		int currentPage=1;
+		int numberPerPage = 10;
+		String orderBy=null;
+
+		if (!orderByPram.isEmpty()){
+			orderBy=orderByPram;
+		}
+		if(!currentPageParam.isEmpty()) {		
+			currentPage = Integer.parseInt(currentPageParam);
+		}
+		if(!numberPerPageParam.isEmpty()) {		
+			numberPerPage = Integer.parseInt(numberPerPageParam);
+		}
+
+		if (currentPage < 1) {
+			currentPage = 1;
+		}
+		Page page= new Page(currentPage-1,numberPerPage,searchParam.isEmpty()?null:searchParam,orderBy);
+		List<ComputerDto> computerDtoPage = new ArrayList<ComputerDto>();
+		List<Computer> computerPage = new ArrayList<Computer>();
+		if (searchParam.isEmpty()) {
+			computerPage = computerService.getPage(page);
+		}
+		else {
+			computerPage = computerService.getPageWithSearch(page);
+		}
+		for (Computer c : computerPage) {
+			computerDtoPage.add(ComputerMapper.mapComputerDto(c));
+		}
+		return computerDtoPage;
+	}
+
+	@GetMapping(value = { "/number" }, produces = "application/json")
+	public Long numberComputers(@RequestParam(required=false, name="search",defaultValue = "") String searchParam) {
+		if(searchParam.isEmpty()) {
+			return computerService.size();
+		}
+		else {
+			return computerService.sizeWithSearch(searchParam);
+		}
+	}
+
+
+
+
+
+
+	@GetMapping(value ="/{id}", produces = "application/json")
+	public ComputerDto getComputer(@PathVariable Long id) {
+		Computer computer= computerService.find(id);
+
+		return ComputerMapper.mapComputerDto(computer);
+	}
+
+	@DeleteMapping(value = "/{id}", produces = "application/json")
+	public ResponseEntity<String> deleteComputer(@PathVariable Long id) {
+		if(computerService.delete(id)) {
+			return ResponseEntity.ok("{ok : true}");
+
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The Computer is not found is the database");
+		}
+	}
+
+	@PostMapping(value = { "", "/" }, produces = "application/json")
+	public ResponseEntity<String> createComputer(@RequestBody ComputerDto dto) {
+
+		if(computerService.create(ComputerMapper.toComputer(dto))!=null){
+
+			return ResponseEntity.ok("{ok : true}");
+		} else {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : insertion failed");
+		}
+	}
+
+	@PutMapping(value = { "", "/" }, produces = "application/json")
+	public ResponseEntity<String> updateComputer(@RequestBody ComputerDto dto) {
+		try {
+			if(computerService.update(ComputerMapper.toComputer(dto))!=null) {
+				return ResponseEntity.ok("{ok : true}");
+
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The Computer is not found is the database");
+			}
+		} catch (IllegalArgumentException e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : IllegalArgumentException");
+		}catch (DateTimeParseException e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : DateTimeParseException");
+		}
+	}
+}
