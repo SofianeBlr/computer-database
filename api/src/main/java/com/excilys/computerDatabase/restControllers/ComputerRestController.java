@@ -38,7 +38,7 @@ public class ComputerRestController {
 	}
 
 	
-
+	
 	@GetMapping(value = { "/page" }, produces = "application/json")
 	public List<ComputerDto> listComputersPage(@RequestParam(required=false, name="numberPerPage" ,defaultValue = "10") Integer numberPerPageParam,
 			@RequestParam(required=false, name="page",defaultValue = "1") Integer currentPageParam,
@@ -79,16 +79,22 @@ public class ComputerRestController {
 
 
 	@GetMapping(value ="/{id}", produces = "application/json")
-	public ComputerDto getComputer(@PathVariable Long id) {
+	public ResponseEntity<ComputerDto> getComputer(@PathVariable Long id) {
 		Computer computer= computerService.find(id);
+		if(computer!=null) {
+			return ResponseEntity.ok(ComputerMapper.mapComputerDto(computer));
 
-		return ComputerMapper.mapComputerDto(computer);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ComputerDto());
+
+		}
 	}
 
 	@DeleteMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<String> deleteComputer(@PathVariable Long id) {
 		if(computerService.delete(id)) {
-			return ResponseEntity.ok("{ok : true}");
+			return ResponseEntity.ok("{sucess:deleted}");
 
 		}
 		else {
@@ -98,13 +104,23 @@ public class ComputerRestController {
 
 	@PostMapping(value = { "", "/" }, produces = "application/json")
 	public ResponseEntity<String> createComputer(@RequestBody ComputerDto dto) {
-
+		if(dto.getCompanyId()==null) {
+			dto.setCompanyId("0");
+		}
+		try {
 		if(computerService.create(ComputerMapper.toComputer(dto))!=null){
 
-			return ResponseEntity.ok("{ok : true}");
+			return ResponseEntity.ok("{sucess: computer inserted}");
 		} else {
 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : insertion failed");
+		}
+		} catch (IllegalArgumentException e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : IllegalArgumentException");
+		}catch (DateTimeParseException e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : DateTimeParseException");
 		}
 	}
 
