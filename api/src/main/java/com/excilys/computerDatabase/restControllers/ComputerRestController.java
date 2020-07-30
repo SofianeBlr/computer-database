@@ -113,14 +113,14 @@ public class ComputerRestController {
 			return ResponseEntity.ok("{sucess: computer inserted}");
 		} else {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : insertion failed");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error : insertion failed");
 		}
 		} catch (IllegalArgumentException e) {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : IllegalArgumentException");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error : IllegalArgumentException");
 		}catch (DateTimeParseException e) {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : DateTimeParseException");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error : DateTimeParseException");
 		}
 	}
 

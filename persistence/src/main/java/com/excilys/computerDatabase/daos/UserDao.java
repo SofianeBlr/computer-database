@@ -33,5 +33,21 @@ public class UserDao {
 		entityManager.persist(user);
 		return user;
 	}
+	
+//	public User authenticateUser(String username,String password) {
+//
+//		QUser user= QUser.user;
+//		JPAQuery<User> query = new JPAQuery<User>(entityManager);
+//
+//		User ui = query.from(user)
+//				.where(user.username.eq(username).and(user.password.eq(password)))
+//				.fetchOne();
+//		if(ui!=null) {
+//			return ui;
+//		}
+//		else {
+//			return null;
+//		}
+//	}
 
 }

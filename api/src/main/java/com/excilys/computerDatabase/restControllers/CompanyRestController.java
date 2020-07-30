@@ -51,7 +51,6 @@ public class CompanyRestController {
 	public ResponseEntity<String> deleteComputer(@PathVariable Long id) {
 		if(companyService.delete(id)) {
 			return ResponseEntity.ok("{sucess:deleted}");
-
 		}
 		else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting company");
