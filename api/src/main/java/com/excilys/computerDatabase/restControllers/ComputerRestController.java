@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.computerDatabase.dtos.ComputerDto;
 import com.excilys.computerDatabase.mappers.ComputerMapper;
-import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.models.Page;
 import com.excilys.computerDatabase.services.ComputerService;
@@ -38,34 +37,18 @@ public class ComputerRestController {
 		this.computerService=computerService;
 	}
 
-	@GetMapping(value="/test", produces = "application/json")
-	public Company test() {
-		return (new Company(1L,"sqd"));
-	}
+	
 
 	@GetMapping(value = { "/page" }, produces = "application/json")
-	public List<ComputerDto> listComputersPage(@RequestParam(required=false, name="numberPerPage" ,defaultValue = "10") String numberPerPageParam,
-			@RequestParam(required=false, name="page",defaultValue = "1") String currentPageParam,
+	public List<ComputerDto> listComputersPage(@RequestParam(required=false, name="numberPerPage" ,defaultValue = "10") Integer numberPerPageParam,
+			@RequestParam(required=false, name="page",defaultValue = "1") Integer currentPageParam,
 			@RequestParam(required=false, name="orderBy",defaultValue = "") String orderByPram,
 			@RequestParam(required=false, name="search",defaultValue = "") String searchParam) { 
-		int currentPage=1;
-		int numberPerPage = 10;
-		String orderBy=null;
 
-		if (!orderByPram.isEmpty()){
-			orderBy=orderByPram;
+		if (currentPageParam < 1) {
+			currentPageParam = 1;
 		}
-		if(!currentPageParam.isEmpty()) {		
-			currentPage = Integer.parseInt(currentPageParam);
-		}
-		if(!numberPerPageParam.isEmpty()) {		
-			numberPerPage = Integer.parseInt(numberPerPageParam);
-		}
-
-		if (currentPage < 1) {
-			currentPage = 1;
-		}
-		Page page= new Page(currentPage-1,numberPerPage,searchParam.isEmpty()?null:searchParam,orderBy);
+		Page page= new Page(currentPageParam-1,numberPerPageParam,searchParam.isEmpty()?null:searchParam,orderByPram.isEmpty()?null:orderByPram);
 		List<ComputerDto> computerDtoPage = new ArrayList<ComputerDto>();
 		List<Computer> computerPage = new ArrayList<Computer>();
 		if (searchParam.isEmpty()) {
