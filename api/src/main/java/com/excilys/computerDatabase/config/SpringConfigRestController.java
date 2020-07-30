@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.excilys.computerDatabase.restControllers"})
+@ComponentScan(basePackages = {"com.excilys.computerDatabase.restControllers","com.excilys.computerDatabase.security"})
 public class SpringConfigRestController {
 
 }

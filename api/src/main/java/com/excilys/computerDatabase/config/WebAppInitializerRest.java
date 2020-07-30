@@ -14,7 +14,7 @@ public class WebAppInitializerRest implements WebApplicationInitializer {
 	 @Override
 	    public void onStartup(ServletContext ctx) throws ServletException {
 		  AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
-			webContext.register(WebAppInitializerRest.class,SpringConfigRestController.class, SpringConfigService.class,SpringConfigDao.class);
+			webContext.register(WebAppInitializerRest.class,SpringConfigRestController.class, SpringConfigService.class,SpringConfigDao.class,SpringConfigSecurity.class);
 			webContext.setServletContext(ctx);
 			
 			ServletRegistration.Dynamic servlet=ctx.addServlet("dynamicServlet",new DispatcherServlet(webContext));
