@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +48,7 @@ public class UserRestController {
 
 
 	@PostMapping("login")
-	public ResponseEntity<String> login( Map<String, String> log) {
+	public ResponseEntity<String> login( @RequestBody Map<String, String> log) {
 		try {
 			authenticate(log.get("login"),log.get("password"));
 		}
