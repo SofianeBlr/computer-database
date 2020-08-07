@@ -20,7 +20,7 @@ public class JwtTokenUtil {
     public long JWT_TOKEN_VALIDITY;
 
     @Value("${jwt.secret}")
-    private String secret;
+    private String secret ;
 
     // retrieve username from jwt token
     public String getUsernameFromToken(String token) {
