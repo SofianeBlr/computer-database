@@ -28,5 +28,8 @@ public class UserService implements UserDetailsService {
                 .roles(user.getRoleName())
                 .build();
 	}
+	public User createUser(User user) {
+		return userDao.createUser(user);
+	}
 	
 }

@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.daos;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -16,6 +17,8 @@ public class UserDao {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+	
+	private Long anonRole_id=4L;
 
 	public User getUserbyUserName(String userName){
 		
@@ -29,25 +32,17 @@ public class UserDao {
 		return ui;
 	}
 	
+	@Transactional
 	public User createUser(User user) {
-		entityManager.persist(user);
+		user.setRoleId(anonRole_id);
+		try{
+			entityManager.persist(user);
+		}catch (Exception e) {
+			return null;
+		}
 		return user;
 	}
 	
-//	public User authenticateUser(String username,String password) {
-//
-//		QUser user= QUser.user;
-//		JPAQuery<User> query = new JPAQuery<User>(entityManager);
-//
-//		User ui = query.from(user)
-//				.where(user.username.eq(username).and(user.password.eq(password)))
-//				.fetchOne();
-//		if(ui!=null) {
-//			return ui;
-//		}
-//		else {
-//			return null;
-//		}
-//	}
+
 
 }
