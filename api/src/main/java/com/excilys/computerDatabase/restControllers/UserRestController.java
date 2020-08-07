@@ -24,7 +24,7 @@ import com.excilys.computerDatabase.services.UserService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("user")
+@RequestMapping("auth")
 public class UserRestController {
 
 	@Autowired
