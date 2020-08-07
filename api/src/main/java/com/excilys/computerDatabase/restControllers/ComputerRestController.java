@@ -108,9 +108,9 @@ public class ComputerRestController {
 			dto.setCompanyId("0");
 		}
 		try {
-		if(computerService.create(ComputerMapper.toComputer(dto))!=null){
-
-			return ResponseEntity.ok("{sucess: computer inserted}");
+		Computer computer=computerService.create(ComputerMapper.toComputer(dto));
+		if(computer!=null){
+			return ResponseEntity.ok("{id: "+computer.getId()+"}");
 		} else {
 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error : insertion failed");

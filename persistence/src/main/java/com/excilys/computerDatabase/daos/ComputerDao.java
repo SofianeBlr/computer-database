@@ -38,6 +38,7 @@ public class ComputerDao extends DAO<Computer> {
 		obj.setId(null);
 		try {
 			entityManager.persist(obj);
+			entityManager.flush();
 			return obj;
 
 		}catch (Exception dae) {
@@ -211,12 +212,12 @@ public class ComputerDao extends DAO<Computer> {
 				return QComputer.computer.discontinued.desc();
 			}
 		}
-		else if(order.substring(0,2).equals("ci")) {
+		else if(order.substring(0,2).equals("in")) {
 			if(order.substring(2,5).equals("ASC")) {
-				return QComputer.computer.company.id.asc();
+				return QComputer.computer.company.name.asc();
 			}
 			else if(order.substring(2,5).equals("DSC")) {
-				return QComputer.computer.company.id.desc();
+				return QComputer.computer.company.name.desc();
 			}
 		}
 		return QComputer.computer.id.asc();
