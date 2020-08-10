@@ -88,7 +88,15 @@ public class UserInterface {
 		LocalDate introduced = getDate("introduced");
 		LocalDate discontinued = getDate("discontinued");
 		Long companyId = getLong("company id");
-		Computer comp = new Computer(0L,name,introduced,discontinued,companyId);
+		//Computer comp = new Computer(0L,name,introduced,discontinued,companyId);
+		Computer comp = new Computer.ComputerBuilder()
+				.setNameBuild(name)
+				.setIdBuild(0L)
+				.setIntroducedBuild(introduced)
+				.setDiscontinuedBuild(discontinued)
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(companyId).build())
+				.build();
+				
 		comp = computerService.create(comp);
 		displayComputer(comp);
 	}
@@ -113,7 +121,14 @@ public class UserInterface {
 		LocalDate introduced = getDate("new introduced");
 		LocalDate discontinued = getDate("new discontinued");
 		Long companyId = getLong("new company id");
-		comp = new Computer(computerId,name,introduced,discontinued,companyId);
+		//comp = new Computer(computerId,name,introduced,discontinued,companyId);
+		comp = new Computer.ComputerBuilder()
+				.setNameBuild(name)
+				.setIdBuild(0L)
+				.setIntroducedBuild(introduced)
+				.setDiscontinuedBuild(discontinued)
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(companyId).build())
+				.build();
 		comp = computerService.update(comp);
 		System.out.println("updated computer : ");
 		displayComputer(comp);
@@ -135,7 +150,8 @@ public class UserInterface {
 	public static void getComputer() {
 		System.out.println("  -Show a computer:");
 		Long computerId = getLong("the id of the computer to show");
-		Computer comp = new Computer(computerId);
+
+		Computer comp = new Computer.ComputerBuilder().setIdBuild(computerId).build();
 		comp = computerService.find(computerId);
 		displayComputer(comp);
 	}

@@ -16,8 +16,8 @@ public class ComputerMapper {
 	}
 
 	public static Computer toComputer(ComputerDto computerDto) throws IllegalArgumentException ,DateTimeParseException{
-		Computer computer = ComputerValidator.computerValidator(computerDto);
-		return computer;
+		
+		return ComputerValidator.computerValidator(computerDto);
 	}
 
 }

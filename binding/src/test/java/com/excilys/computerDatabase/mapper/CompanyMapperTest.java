@@ -1,6 +1,7 @@
 package com.excilys.computerDatabase.mapper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -19,11 +20,23 @@ public class CompanyMapperTest {
    
     @Test
     public void testMapToDto() {
-    	Company company = new Company(10L,"test");  
+    	Company company = new Company.CompanyBuilder()
+    			.setIdBuild(10L)
+    			.setNameBuild("testCompany")
+    			.build();
         CompanyDto companyDto = CompanyMapper.mapCompanyDto(company);
 
         assertEquals(companyDto.getId(), company.getId().toString());
         assertEquals(companyDto.getName(), company.getName());
+    }
+    @Test
+    public void testMapToDtoWNull() {
+    	Company company = new Company.CompanyBuilder()
+    			
+    			.setNameBuild("testCompany")
+    			.build();
+        CompanyDto companyDto = CompanyMapper.mapCompanyDto(company);
+        assertNull(companyDto.getName());
     }
 
    

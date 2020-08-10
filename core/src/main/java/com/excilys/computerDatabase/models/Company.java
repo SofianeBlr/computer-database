@@ -17,12 +17,10 @@ public class Company {
 	@Column(name = "name",nullable = true)
 	private String name;
 	
-	public Company(Long id, String name) {
-		this.id = id;
-		this.name = name;
+	private Company() {
+	
 	}
-	public Company() {
-	}
+
 	public Long getId() {
 		return id;
 	}
@@ -39,5 +37,30 @@ public class Company {
 	public String toString() {
 		return String.format("  %d  %50s%n",id,name);
 	}
+	
+	public static class CompanyBuilder {
+		
+		private Long idBuild;
+		private String nameBuild;
+		
+		public CompanyBuilder setIdBuild(Long id) {
+			this.idBuild = id;
+			return this;
+		}
+		
+		public CompanyBuilder setNameBuild(String name) {
+			this.nameBuild = name;
+			return this;
+		}
+		
+		public Company build() {
+			Company company = new Company();
+			company.id = this.idBuild;
+			company.name = this.nameBuild;
+			
+			return company;
+		}
+	}
+	
 
 }
