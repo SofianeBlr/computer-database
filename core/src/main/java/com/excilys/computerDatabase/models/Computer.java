@@ -200,8 +200,8 @@ public class Computer {
 			computer.name = this.nameBuild;
 			computer.id = this.idBuild;
 			
-			computer.introduced = this.introducedBuild;
-			computer.discontinued = this.discontinuedBuild;
+			computer.setIntroduced(this.introducedBuild);
+			computer.setDiscontinued(this.discontinuedBuild);
 			computer.company = this.companyBuild;
 			
 			return computer;
