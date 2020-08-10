@@ -26,7 +26,7 @@ import com.excilys.computerDatabase.models.Page;
 import com.excilys.computerDatabase.services.ComputerService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("computer")
 public class ComputerRestController {
 

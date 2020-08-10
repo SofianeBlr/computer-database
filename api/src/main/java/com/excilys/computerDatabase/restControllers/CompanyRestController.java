@@ -21,7 +21,7 @@ import com.excilys.computerDatabase.models.Page;
 import com.excilys.computerDatabase.services.CompanyService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("company")
 public class CompanyRestController {
 	public CompanyService companyService;

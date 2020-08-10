@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ import com.excilys.computerDatabase.security.JwtTokenUtil;
 import com.excilys.computerDatabase.services.UserService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("auth")
 public class AuthentificationController {
 	@Autowired
@@ -50,12 +51,28 @@ public class AuthentificationController {
 
 		final UserDetails userDetails = userService
 				.loadUserByUsername(log.get("login"));
-
+		
 		final String token = jwtTokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(token);
 	}
-	
+//	@GetMapping("getCurrent")
+//	public ResponseEntity<String> getCurrentUser() {
+//		try {
+//			authenticate(log.get("login"),log.get("password"));
+//		}
+//		catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid credentials");
+//		}
+//
+//		final UserDetails userDetails = userService
+//				.loadUserByUsername(log.get("login"));
+//		
+//		final String token = jwtTokenUtil.generateToken(userDetails);
+//
+//		return ResponseEntity.ok(token);
+//	}
+//	
 	@PutMapping("changePassword")
 	public ResponseEntity<String> changePassword( @RequestBody Map<String, String> log) {
 		try {
