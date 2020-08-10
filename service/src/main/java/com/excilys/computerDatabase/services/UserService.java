@@ -5,16 +5,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 
 import com.excilys.computerDatabase.daos.UserDao;
 import com.excilys.computerDatabase.models.User;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService extends ServiceDao<User> implements UserDetailsService{
 	private UserDao userDao;
 	@Autowired
-    public UserService(UserDao userDAO) {
-        this.userDao = userDAO;
+    public UserService(UserDao userDao) {
+		super(userDao);
+        this.userDao = userDao;
     }
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,8 +30,12 @@ public class UserService implements UserDetailsService {
                 .roles(user.getRoleName())
                 .build();
 	}
-	public User createUser(User user) {
-		return userDao.createUser(user);
+	public User createUser(User user) throws UnexpectedRollbackException{
+		return userDao.create(user);
+	}
+	
+	public boolean updatePassword(String username,String newPass) {
+		return userDao.updatePassword(username, newPass);
 	}
 	
 }

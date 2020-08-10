@@ -94,11 +94,11 @@ public class ComputerRestController {
 	@DeleteMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<String> deleteComputer(@PathVariable Long id) {
 		if(computerService.delete(id)) {
-			return ResponseEntity.ok("{sucess:deleted}");
+			return ResponseEntity.ok("{\"sucess\":\"computer deleted\"}");
 
 		}
 		else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The Computer is not found is the database");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"The Computer is not found is the database\"}");
 		}
 	}
 
@@ -113,14 +113,14 @@ public class ComputerRestController {
 			return ResponseEntity.ok("{id: "+computer.getId()+"}");
 		} else {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error : insertion failed");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" : \"insertion failed\"}");
 		}
 		} catch (IllegalArgumentException e) {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error : IllegalArgumentException");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" : \"IllegalArgumentException\"}");
 		}catch (DateTimeParseException e) {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error : DateTimeParseException");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" : \"DateTimeParseException\"}");
 		}
 	}
 
@@ -128,17 +128,17 @@ public class ComputerRestController {
 	public ResponseEntity<String> updateComputer(@RequestBody ComputerDto dto) {
 		try {
 			if(computerService.update(ComputerMapper.toComputer(dto))!=null) {
-				return ResponseEntity.ok("{ok : true}");
+				return ResponseEntity.ok("{\"sucess\" : \"computer updated\"}");
 
 			} else {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The Computer is not found is the database");
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"The Computer is not found is the database\"}");
 			}
 		} catch (IllegalArgumentException e) {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : IllegalArgumentException");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" : \"IllegalArgumentException\"}");
 		}catch (DateTimeParseException e) {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error : DateTimeParseException");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" : \"DateTimeParseException\"}");
 		}
 	}
 }

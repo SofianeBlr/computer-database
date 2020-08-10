@@ -53,7 +53,7 @@ public class CompanyRestController {
 			return ResponseEntity.ok("{sucess:deleted}");
 		}
 		else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting company");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Company not found\"}");
 		}
 	}
 }

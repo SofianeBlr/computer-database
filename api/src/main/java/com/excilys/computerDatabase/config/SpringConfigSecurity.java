@@ -2,7 +2,6 @@ package com.excilys.computerDatabase.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
@@ -48,10 +47,10 @@ public class SpringConfigSecurity extends WebSecurityConfigurerAdapter {
          .antMatchers(HttpMethod.PUT,  "/computer/**","/company/**").hasRole("admin")
          .antMatchers(HttpMethod.DELETE,  "/computer/**","/company/**").hasRole("admin")
          .antMatchers(HttpMethod.POST,  "/auth/**").permitAll()
-         .antMatchers(HttpMethod.POST,  "/user/**").permitAll()
-         .antMatchers(HttpMethod.PUT,  "/user/**").permitAll()
-         .antMatchers(HttpMethod.DELETE,  "/user/**").permitAll()
-         .antMatchers(HttpMethod.GET,  "/user/**").permitAll()
+         .antMatchers(HttpMethod.POST,  "/user/**").hasRole("superadmin")
+         .antMatchers(HttpMethod.PUT,  "/user/**").hasRole("superadmin")
+         .antMatchers(HttpMethod.DELETE,  "/user/**").hasRole("superadmin")
+         .antMatchers(HttpMethod.GET,  "/user/**").hasRole("superadmin")
          .and()
          .csrf()
          .disable()
