@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.excilys.computerDatabase.dtos.ComputerDto;
 import com.excilys.computerDatabase.mappers.ComputerMapper;
+import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Computer;
 
 
@@ -24,8 +25,17 @@ public class ComputerMapperTest {
 	@Test
 	public void testMapComputerToComputerDto() {		
 
-		Computer computer = new Computer(idComputer,computerName,introduced.toLocalDate(),discontinued.toLocalDate());
+		
+		Computer computer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)		
+				.setIntroducedBuild(introduced.toLocalDate())
+				.setDiscontinuedBuild(discontinued.toLocalDate())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L).setNameBuild("testCompany").build())
+				.build();
+		
 		ComputerDto computerDto = ComputerMapper.mapComputerDto(computer);
+		
 		assertEquals(computerDto.getId(), computer.getId().toString());
 		assertEquals(computerDto.getName(), computer.getName());
 		assertEquals(computerDto.getIntroduced(), computer.getIntroduced().toString());
@@ -36,8 +46,18 @@ public class ComputerMapperTest {
 	@Test
 	public void testMapComputerDtoToComputer() {		
 
-		Computer computer = new Computer(idComputer,computerName,introduced.toLocalDate(),discontinued.toLocalDate(),idCompany);
+		Computer computer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)		
+				.setIntroducedBuild(introduced.toLocalDate())
+				.setDiscontinuedBuild(discontinued.toLocalDate())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L)
+						.setNameBuild("testCompany")
+						.build())
+				.build();
+		
 		ComputerDto computerDto = ComputerMapper.mapComputerDto(computer);
+		
 		Computer fromDto = ComputerMapper.toComputer(computerDto);
 		assertEquals(fromDto, computer);
 
@@ -45,7 +65,11 @@ public class ComputerMapperTest {
 	@Test
 	public void testMapComputerDtoToComputerWithNull() {		
 
-		Computer computer = new Computer(idComputer,computerName,introduced.toLocalDate(),discontinued.toLocalDate(),null);
+		Computer computer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)						
+				.setDiscontinuedBuild(discontinued.toLocalDate())
+				.build();
 		ComputerDto computerDto = ComputerMapper.mapComputerDto(computer);
 		Computer fromDto = ComputerMapper.toComputer(computerDto);
 		assertEquals(fromDto, computer);

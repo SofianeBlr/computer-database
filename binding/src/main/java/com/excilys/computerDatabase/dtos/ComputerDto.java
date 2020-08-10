@@ -59,4 +59,10 @@ public class ComputerDto {
 	public String getCompanyId() {
 		return this.company.getId();
 	}
+	@Override
+	public String toString() {
+		return "ComputerDto [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", company=" + company + "]";
+	}
+	
 }

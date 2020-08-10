@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.excilys.computerDatabase.config.SpringConfigDao;
 import com.excilys.computerDatabase.daos.ComputerDao;
+import com.excilys.computerDatabase.models.Company;
 import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.models.Page;
 @SuppressWarnings("resource")
@@ -31,37 +33,84 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void testCreateComputer() {
-		Computer computer = new Computer(0L,"test",LocalDate.now());
-		computer.setCompany(null);
-		Computer computerExc = computerDao.create(computer);
-	    assertEquals(computerExc, computer);
+		Computer testComputer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)				
+				.setDiscontinuedBuild(LocalDate.now())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L).setNameBuild("testCompany").build())
+				.build();		
+		Computer computerExc = computerDao.create(testComputer);
+	    assertEquals(computerExc, testComputer);	
 	}
+	
+	@Test
+	public void testCreateComputerNoId() {
+		Computer testComputer = new Computer.ComputerBuilder()
+				.setNameBuild("test")	
+				.setDiscontinuedBuild(LocalDate.now())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L).setNameBuild("testCompany").build())
+				.build();		
+		Computer computerExc = computerDao.create(testComputer);
+	    assertEquals(computerExc, testComputer);	
+	}
+	
 	@Test
 	public void testCreateComputerWNull() {
-		Computer computer = new Computer(0L,"test",null,LocalDate.now(),10L);
-		Computer computerExc = computerDao.create(computer);
-	    assertEquals(computerExc, computer);
+		Computer testComputer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)				
+				.setDiscontinuedBuild(LocalDate.now())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L).setNameBuild("testCompany").build())
+				.build();
+		Computer computerExc = computerDao.create(testComputer);
+	    assertEquals(computerExc, testComputer);
+	}
+	@Test
+	public void testCreateComputerNoCompany() {
+		Computer testComputer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)	
+				.setIntroducedBuild(LocalDate.of(2010, 4, 20))
+				.setDiscontinuedBuild(LocalDate.now())
+				.build();
+		Computer computerExc = computerDao.create(testComputer);
+	    assertEquals(computerExc, testComputer);
 	}
 	
 	@Test
 	public void testUpdateComputer() {
-		Computer computer = new Computer(10L,"test",null,LocalDate.now(),10L);
-		Computer computerExc = computerDao.update(computer);
-	    assertEquals(computerExc, computer);
+		Computer testComputer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)				
+				.setDiscontinuedBuild(LocalDate.now())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L).setNameBuild("testCompany").build())
+				.build();
+		Computer computerExc = computerDao.update(testComputer);
+	    assertEquals(computerExc, testComputer);
 	}
 	
 	@Test
 	public void testUpdateComputerWNull() {
-		Computer computer = new Computer(10L,"test",LocalDate.now(),null,null);
-		Computer computerExc = computerDao.update(computer);
-	    assertEquals(computerExc, computer);
+		Computer testComputer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(0L)				
+				.setDiscontinuedBuild(LocalDate.now())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L).setNameBuild("testCompany").build())
+				.build();
+		Computer computerExc = computerDao.update(testComputer);
+	    assertEquals(computerExc, testComputer);
 	}
 	
 	@Test
 	public void testDeleteComputer() {
-		Computer computer = new Computer(42L,"test");
-		computerDao.delete(computer.getId());
-	    assertNull(computerDao.find(computer.getId()));
+		Computer testComputer = new Computer.ComputerBuilder()
+				.setNameBuild("test")
+				.setIdBuild(42L)				
+				.setDiscontinuedBuild(LocalDate.now())
+				.setCompanyBuild(new Company.CompanyBuilder().setIdBuild(10L).setNameBuild("testCompany").build())
+				.build();
+		computerDao.delete(testComputer.getId());
+	    assertNull(computerDao.find(testComputer.getId()));
 	}
 	
 	@Test

@@ -34,14 +34,21 @@ public class CompanyDaoTest {
 	
 	@Test
 	public void testCreateCompany() {
-		Company company = new Company(0L,"test");
+
+		Company company = new Company.CompanyBuilder()
+				.setIdBuild(10L)
+				.setNameBuild("test")
+				.build();
 		Company companyExc = companyDao.create(company);
 	    assertEquals(companyExc.getName(), company.getName());
 	}
 	
 	@Test
 	public void testDeleteCompany() {
-		Company company = new Company(42L,"test");
+		Company company = new Company.CompanyBuilder()
+				.setIdBuild(10L)
+				.setNameBuild("test")
+				.build();
 		companyDao.delete(company.getId());
 	    assertNull(companyDao.find(company.getId()));
 	}
