@@ -59,7 +59,7 @@ public class AuthentificationController {
 	}
 	@GetMapping(value = "getCurrentUser", produces = "application/json" )
 	public ResponseEntity<String> getCurrentUser(@RequestHeader (name="Authorization") String token) {
-		return ResponseEntity.ok(jwtTokenUtil.getUsernameFromToken(token.replace("Bearer ", "")));
+		return ResponseEntity.ok("{\"username\": \""+jwtTokenUtil.getUsernameFromToken(token.replace("Bearer ", ""))+"\"}");
 	}
 	
 	@PutMapping("changePassword")
