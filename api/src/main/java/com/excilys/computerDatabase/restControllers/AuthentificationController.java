@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,23 +57,11 @@ public class AuthentificationController {
 
 		return ResponseEntity.ok(token);
 	}
-//	@GetMapping("getCurrent")
-//	public ResponseEntity<String> getCurrentUser() {
-//		try {
-//			authenticate(log.get("login"),log.get("password"));
-//		}
-//		catch (Exception e) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid credentials");
-//		}
-//
-//		final UserDetails userDetails = userService
-//				.loadUserByUsername(log.get("login"));
-//		
-//		final String token = jwtTokenUtil.generateToken(userDetails);
-//
-//		return ResponseEntity.ok(token);
-//	}
-//	
+	@GetMapping(value = "getCurrentUser", produces = "application/json" )
+	public ResponseEntity<String> getCurrentUser(@RequestHeader (name="Authorization") String token) {
+		return ResponseEntity.ok(jwtTokenUtil.getUsernameFromToken(token.replace("Bearer ", "")));
+	}
+	
 	@PutMapping("changePassword")
 	public ResponseEntity<String> changePassword( @RequestBody Map<String, String> log) {
 		try {
