@@ -42,10 +42,10 @@ public class SpringConfigSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	 http
     	 .authorizeRequests()
-         .antMatchers(HttpMethod.GET, "/computer/**","/company/**").hasAnyRole("user", "admin")
-         .antMatchers(HttpMethod.POST,  "/computer/**","/company/**").hasRole("admin")
-         .antMatchers(HttpMethod.PUT,  "/computer/**","/company/**").hasRole("admin")
-         .antMatchers(HttpMethod.DELETE,  "/computer/**","/company/**").hasRole("admin")
+         .antMatchers(HttpMethod.GET, "/computer/**","/company/**").hasAnyRole("user", "admin", "superadmin")
+         .antMatchers(HttpMethod.POST,  "/computer/**","/company/**").hasAnyRole("admin", "superadmin")
+         .antMatchers(HttpMethod.PUT,  "/computer/**","/company/**").hasAnyRole("admin", "superadmin")
+         .antMatchers(HttpMethod.DELETE,  "/computer/**","/company/**").hasAnyRole("admin", "superadmin")
          .antMatchers(HttpMethod.POST,  "/auth/**").permitAll()
          .antMatchers(HttpMethod.POST,  "/user/**").hasRole("superadmin")
          .antMatchers(HttpMethod.PUT,  "/user/**").hasRole("superadmin")
