@@ -100,7 +100,7 @@ public class CompanyRestController {
 		try {
 		Company company=companyService.create(CompanyMapper.toCompany(dto));
 		if(company!=null){
-			return ResponseEntity.ok("{id: "+company.getId()+"}");
+			return ResponseEntity.ok("{\"id\": "+company.getId()+"}");
 		} else {
 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" : \"insertion failed\"}");

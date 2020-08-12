@@ -111,7 +111,7 @@ public class ComputerRestController {
 		try {
 		Computer computer=computerService.create(ComputerMapper.toComputer(dto));
 		if(computer!=null){
-			return ResponseEntity.ok("{id: "+computer.getId()+"}");
+			return ResponseEntity.ok("{\"id\": "+computer.getId()+"}");
 		} else {
 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" : \"insertion failed\"}");
