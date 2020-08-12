@@ -104,6 +104,7 @@ public class ComputerRestController {
 
 	@PostMapping(value = { "", "/" }, produces = "application/json")
 	public ResponseEntity<String> createComputer(@RequestBody ComputerDto dto) {
+		dto.setId("0");
 		if(dto.getCompanyId()==null) {
 			dto.setCompanyId("0");
 		}

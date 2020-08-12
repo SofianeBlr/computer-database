@@ -96,9 +96,7 @@ public class CompanyRestController {
 	}
 	@PostMapping(value = { "", "/" }, produces = "application/json")
 	public ResponseEntity<String> createCompany(@RequestBody CompanyDto dto) {
-		if(dto.getId()==null) {
-			dto.setId("0");
-		}
+		dto.setId("0");
 		try {
 		Company company=companyService.create(CompanyMapper.toCompany(dto));
 		if(company!=null){
