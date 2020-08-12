@@ -9,9 +9,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerDatabase.models.Company;
+import com.excilys.computerDatabase.models.Computer;
 import com.excilys.computerDatabase.models.Page;
 import com.excilys.computerDatabase.models.QCompany;
 import com.excilys.computerDatabase.models.QComputer;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -26,7 +28,7 @@ public class CompanyDao extends DAO<Company> {
 		JPAQuery<Company>  query = new JPAQuery<Company> (entityManager);	
 		
 		try {
-			return  (ArrayList<Company>)  query.from(company).fetch();
+			return  (ArrayList<Company>)  query.from(company).orderBy(company.name.asc().nullsLast()).fetch();
 		}catch (Exception dae) {
 			logger.error("Not able to get all companies",dae);
 			return new ArrayList<Company>();
@@ -144,7 +146,19 @@ public class CompanyDao extends DAO<Company> {
 
 	@Override
 	public ArrayList<Company> getPageWithSearch(Page page) {
-		return null;
+		QCompany company = QCompany.company;
+		JPAQuery<Company>  query = new JPAQuery<Company>(entityManager);	
+		try {
+		return (ArrayList<Company>) query.from(company).where(company.name.contains(page.getSearch()))
+				.offset(page.getPage()*page.getNumberPerPage())
+				.orderBy(orderByConversionQ(page.getOrderBy()).nullsLast())
+				.limit(page.getNumberPerPage())
+				.fetch();
+		}
+		catch (Exception e) {
+			logger.error("Not able to get size with search",e);
+			return new ArrayList<Company>();
+		}
 	}
 
 
@@ -152,8 +166,39 @@ public class CompanyDao extends DAO<Company> {
 
 	@Override
 	public Long sizeWithSearch(String search) {
-		return null;
+		QCompany company = QCompany.company;
+		JPAQuery<Company>  query = new JPAQuery<Company>(entityManager);	
+		try {
+		return query.from(company).where(company.name.contains(search))
+					.fetchCount();
+		}
+		catch (Exception e) {
+			logger.error("Not able to get size with search",e);
+			return 0L;
+		}
 	}
-
+	
+	private OrderSpecifier<?> orderByConversionQ(String order) {
+		if(order==null) {
+			return QCompany.company.id.asc();
+		}
+		if(order.substring(0,2).equals("cn")) {
+			if(order.substring(2,5).equals("ASC")) {
+				return QCompany.company.name.asc();
+			}
+			else if(order.substring(2,5).equals("DSC")) {
+				return QCompany.company.name.desc();
+			}
+		}
+		else if(order.substring(0,2).equals("ci")) {
+			if(order.substring(2,5).equals("ASC")) {
+				return QCompany.company.id.asc();
+			}
+			else if(order.substring(2,5).equals("DSC")) {
+				return QCompany.company.id.desc();
+			}
+		}
+		return QCompany.company.id.asc();
+	}
 
 }

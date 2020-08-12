@@ -17,7 +17,7 @@ public class Company {
 	@Column(name = "name",nullable = true)
 	private String name;
 	
-	private Company() {
+	public Company() {
 	
 	}
 

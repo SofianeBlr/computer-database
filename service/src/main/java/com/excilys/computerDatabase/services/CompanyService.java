@@ -2,6 +2,8 @@
 
 
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ public class CompanyService extends ServiceDao<Company> {
 	public CompanyService(CompanyDao companyDao) {
 		super(companyDao);
 	}
+	
 
 
 }

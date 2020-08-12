@@ -50,7 +50,7 @@ public class ComputerRestController {
 		}
 		Page page= new Page(currentPageParam-1,numberPerPageParam,searchParam.isEmpty()?null:searchParam,orderByPram.isEmpty()?null:orderByPram);
 		List<ComputerDto> computerDtoPage = new ArrayList<ComputerDto>();
-		List<Computer> computerPage = new ArrayList<Computer>();
+		List<Computer> computerPage;
 		if (searchParam.isEmpty()) {
 			computerPage = computerService.getPage(page);
 		}

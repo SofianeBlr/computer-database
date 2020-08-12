@@ -14,4 +14,14 @@ public class CompanyMapper{
 		CompanyDto companyDto= new CompanyDto(company);
 		return companyDto;
 	}
+	public static Company toCompany(CompanyDto companyDto) {
+		if (companyDto.getName() == null || companyDto.getName().isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		Company company= new Company();
+		company.setId(Long.valueOf(companyDto.getId()));
+		company.setName(companyDto.getName());
+		return company;
+		
+	}
 }
