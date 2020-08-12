@@ -69,9 +69,9 @@ public class CompanyRestController {
 	@GetMapping(value = { "/number" }, produces = "application/json")
 	public Long numberCompany(@RequestParam(required=false, name="search",defaultValue = "") String searchParam) {
 		if(searchParam.isEmpty()) {
-			return companyService.sizeWithSearch(searchParam);
+			return companyService.size();
 		}
-		return companyService.size();
+		return companyService.sizeWithSearch(searchParam);
 	}
 	@GetMapping(value ="/{id}", produces = "application/json")
 	public ResponseEntity<CompanyDto> getCompany(@PathVariable Long id) {

@@ -59,6 +59,7 @@ public class UserRestController {
 
 	@GetMapping(value = { "/number" }, produces = "application/json")
 	public Long numberUsers(@RequestParam(required=false, name="search",defaultValue = "") String searchParam) {
+		System.out.println(searchParam);
 		if(searchParam.isEmpty()) {
 			return userService.size();
 		}

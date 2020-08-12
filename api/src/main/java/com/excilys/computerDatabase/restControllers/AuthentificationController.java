@@ -1,5 +1,6 @@
 package com.excilys.computerDatabase.restControllers;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,12 @@ public class AuthentificationController {
 		return ResponseEntity.ok(token);
 	}
 	@GetMapping(value = "getCurrentUser", produces = "application/json" )
-	public ResponseEntity<String> getCurrentUser(@RequestHeader (name="Authorization") String token) {
-		return ResponseEntity.ok("{\"username\": \""+jwtTokenUtil.getUsernameFromToken(token.replace("Bearer ", ""))+"\"}");
+	public ResponseEntity<Map<String, Object>> getCurrentUser(@RequestHeader (name="Authorization") String token) {
+		 Map<String, Object> response = new HashMap<>();
+		String username = jwtTokenUtil.getUsernameFromToken(token.replace("Bearer ", ""));
+		response.put("username", username);
+		response.put("role", userService.loadUserByUsername(username).getAuthorities());
+		return ResponseEntity.ok(response);
 	}
 	
 	@PutMapping("changePassword")
