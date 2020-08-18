@@ -131,7 +131,7 @@ public class CompanyDao extends DAO<Company> {
 		try {
 		return  (ArrayList<Company>) query.from(company)
 				.offset(page.getPage()*page.getNumberPerPage())
-				.orderBy(company.id.asc().nullsLast())
+				.orderBy(orderByConversionQ(page.getOrderBy()).nullsLast())
 				.limit(page.getNumberPerPage())
 				.fetch();
 		}
