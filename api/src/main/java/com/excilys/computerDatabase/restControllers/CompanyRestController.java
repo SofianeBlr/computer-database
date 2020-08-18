@@ -2,7 +2,9 @@ package com.excilys.computerDatabase.restControllers;
 
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -93,6 +95,15 @@ public class CompanyRestController {
 		else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Company not found\"}");
 		}
+	}
+	@PostMapping(value = "/deleteList", produces = "application/json")
+	public ResponseEntity<Map<String,String>> deleteCompanies(@RequestBody Map<String, List<Long>> map) {
+		for(Long id:map.get("ids")) {
+			companyService.delete(id);
+		}
+		Map<String,String> res = new HashMap<>();
+		res.put("success", "companies deleted");
+		return ResponseEntity.ok(res);
 	}
 	@PostMapping(value = { "", "/" }, produces = "application/json")
 	public ResponseEntity<String> createCompany(@RequestBody CompanyDto dto) {

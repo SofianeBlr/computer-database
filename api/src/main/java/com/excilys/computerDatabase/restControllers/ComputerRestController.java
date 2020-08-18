@@ -3,7 +3,9 @@ package com.excilys.computerDatabase.restControllers;
 
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -100,6 +102,15 @@ public class ComputerRestController {
 		else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"The Computer is not found is the database\"}");
 		}
+	}
+	@PostMapping(value = "/deleteList", produces = "application/json")
+	public ResponseEntity<Map<String,String>> deleteCompanies(@RequestBody Map<String, List<Long>> map) {
+		for(Long id:map.get("ids")) {
+			computerService.delete(id);
+		}
+		Map<String,String> res = new HashMap<>();
+		res.put("success", "computers deleted");
+		return ResponseEntity.ok(res);
 	}
 
 	@PostMapping(value = { "", "/" }, produces = "application/json")

@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.restControllers;
 
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,6 +97,15 @@ public class UserRestController {
 		else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"The User is not found is the database\"}");
 		}
+	}
+	@PostMapping(value = "/deleteList", produces = "application/json")
+	public ResponseEntity<Map<String,String>> deleteCompanies(@RequestBody Map<String, List<Long>> map) {
+		for(Long id:map.get("ids")) {
+			userService.delete(id);
+		}
+		Map<String,String> res = new HashMap<>();
+		res.put("success", "users deleted");
+		return ResponseEntity.ok(res);
 	}
 
 	
