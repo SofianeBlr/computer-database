@@ -34,7 +34,7 @@
 		<spring.version>5.2.6.RELEASE</spring.version>
 		<hibernate.version>5.4.18.Final</hibernate.version>
 		<querydsl.version>4.2.2</querydsl.version>
-		<spring-security.version>5.3.3.RELEASE</spring-security.version>
+		<spring-security.version>5.3.10.RELEASE</spring-security.version>
 		
 		<spring-data.version>3.3.2.RELEASE</spring-data.version>
 	</properties>
